@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtGui>
 
 #include "databasemanager.h"
 #include "filemanager.h"
@@ -26,11 +27,19 @@ private slots:
 
     void on_pushButtonAddToDB_clicked();
 
+    void on_comboBoxSystems_ModelItemChanged(QStandardItem *item);
+    void on_comboBoxFeatures_ModelItemChanged(QStandardItem *item);
+
 private:
     QString GetProjectNo();
     QDateTime GetDateTime();
     QString GetSelectedCategories();
     QStringList& GetFileList();
+
+    void ClearComboboxChecked(const QAbstractItemModel* model);
+    void ClearInterface();
+
+    template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
 
     template <typename T> QString CreateIDsList(const QVector<T>& elems);
     template <typename T> QString GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);

@@ -16,35 +16,15 @@ MainWindow::MainWindow(QWidget *parent) :
     _dbm = new DatabaseManager();
     _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
 
-    _dbm->SelectFormworkSystems(_formworkSystems);
-
     //create combobox with cheking elems for formworks
-    QStandardItemModel* formworkModel = new QStandardItemModel(_formworkSystems.length(), 1);
-    for (int i = 0; i < _formworkSystems.length(); i++)
-    {
-        QStandardItem* item = new QStandardItem(_formworkSystems[i].GetName());
-
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-        formworkModel->setItem(i, 0, item);
-    }
-    ui->comboBoxSystems->setModel(formworkModel);
-
-    _dbm->SelectFeatures(_features);
+    _dbm->SelectFormworkSystems(_formworkSystems);
+    FillCombobox(_formworkSystems, ui->comboBoxSystems);
+    connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
 
     //create combobox with cheking elems for features
-    QStandardItemModel* featuresModel = new QStandardItemModel(_features.length(), 1);
-    for (int i = 0; i < _features.length(); i++)
-    {
-        QStandardItem* item = new QStandardItem(_features[i].GetName());
-
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-        featuresModel->setItem(i, 0, item);
-    }
-    ui->comboBoxFeatures->setModel(featuresModel);
+    _dbm->SelectFeatures(_features);
+    FillCombobox(_features, ui->comboBoxFeatures);
+    connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
 
     _dbm->SelectCategories(_categories);
 
@@ -76,10 +56,16 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
     ;
     ui->listWidgetPhotos->clear();
 
-    _files = QFileDialog::getOpenFileNames(this,
-                                                      "Open images",
-                                                      "/home",
-                                                      "Images (*.jpg)" );
+    QFileDialog fileDialog(this,"Open images",_cfg->GetLastFolder(), "Images (*.jpg)" );
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    if (!fileDialog.exec())
+    {
+        return;
+    }
+
+    _files = fileDialog.selectedFiles();
+    _cfg->SetLastFolder(fileDialog.directory().absolutePath());
+
     if (!_files.empty())
     {
         ui->listWidgetPhotos->addItems(_files);
@@ -136,8 +122,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     if (result)
     {
         QMessageBox::information(this, "Successfully", "Photos were added to DB");
-        ui->listWidgetPhotos->clear();
-        _files.clear();
+        ClearInterface();
     }
 }
 
@@ -166,15 +151,43 @@ template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
     return result;
 }
 
+template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, const QComboBox* comboBox)
+{
+    QStandardItemModel* model = new QStandardItemModel(elems.length() + 1, 1);
+
+    QStandardItem* itemDisableAll = new QStandardItem("Disable all");
+
+    itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
+
+    model->setItem(0, 0, itemDisableAll);
+
+    for (int i = 1; i < elems.length() + 1; i++)
+    {
+        T elem = elems[i - 1];
+        QStandardItem* item = new QStandardItem(elem.GetName());
+
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item->setData(Qt::Unchecked, Qt::CheckStateRole);
+
+        model->setItem(i, 0, item);
+    }
+
+    QComboBox* cb = const_cast<QComboBox*>(comboBox);
+    cb->setModel(model);
+    cb->setCurrentIndex(1);
+}
+
 template <typename T> QString MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
 {
     QVector<T> selected;
     QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
-    for (int i = 0; i < standardModel->rowCount(); i++)
+    int length = standardModel->rowCount();
+    for (int i = 1; i < length; i++)
     {
         if (standardModel->item(i)->checkState() == Qt::Checked)
         {
-            selected.push_back(elems[i]);
+            selected.push_back(elems[i - 1]);
         }
     }
     return CreateIDsList(selected);
@@ -195,3 +208,40 @@ QStringList& MainWindow::GetFileList()
 {
     return _files;
 }
+
+void MainWindow::ClearComboboxChecked(const QAbstractItemModel *model)
+{
+    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
+    for (int i = 0; i < standardModel->rowCount(); i++)
+    {
+        if (standardModel->item(i)->checkState() == Qt::Checked)
+        {
+            standardModel->item(i)->setCheckState(Qt::Unchecked);
+        }
+    }
+}
+
+void MainWindow::ClearInterface()
+{
+    ui->listWidgetPhotos->clear();
+    _files.clear();
+    //ClearComboboxChecked(ui->comboBoxFeatures->model());
+    //ClearComboboxChecked(ui->comboBoxSystems->model());
+}
+
+void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
+{
+    if (item->index().row() == 0)
+    {
+        ClearComboboxChecked(ui->comboBoxSystems->model());
+    }
+}
+
+void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
+{
+    if (item->index().row() == 0)
+    {
+        ClearComboboxChecked(ui->comboBoxFeatures->model());
+    }
+}
+

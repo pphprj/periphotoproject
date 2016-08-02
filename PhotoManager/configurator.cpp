@@ -15,6 +15,16 @@ Configurator::Configurator()
     settings.endGroup();
     settings.beginGroup("Files");
     _projectsDirectory = settings.value("Directory").toString();
+    _lastFolder = settings.value("LastFolder").toString();
+    settings.endGroup();
+}
+
+Configurator::~Configurator()
+{
+    QString settingsFile = QApplication::applicationDirPath() + "/settings.ini";
+    QSettings settings(settingsFile, QSettings::IniFormat);
+    settings.beginGroup("Files");
+    settings.setValue("LastFolder", _lastFolder);
     settings.endGroup();
 }
 
@@ -36,4 +46,14 @@ QString Configurator::GetPassword()
 QString Configurator::GetProjectsDirectory()
 {
     return _projectsDirectory;
+}
+
+QString Configurator::GetLastFolder()
+{
+    return _lastFolder;
+}
+
+void Configurator::SetLastFolder(const QString &value)
+{
+    _lastFolder = value;
 }

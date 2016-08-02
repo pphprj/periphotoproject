@@ -59,12 +59,15 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="labelProjectFeatures">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>100</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -140,19 +143,6 @@
     </property>
     <property name="text">
      <string>Load photo</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButtonTestSQL">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Test SQL</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonAddToDB">
