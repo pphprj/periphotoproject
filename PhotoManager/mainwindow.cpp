@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setAcceptDrops(true);
+
     _cfg = new Configurator();
 
     _dbm = new DatabaseManager();
@@ -245,3 +247,43 @@ void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
     }
 }
 
+
+void MainWindow::EnableDranNDrop()
+{
+    ui->listWidgetPhotos->setDragDropMode(QAbstractItemView::InternalMove);
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->acceptProposedAction();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QRect r = ui->groupBoxPhotos->geometry();
+    QPoint pos = event->pos();
+    if (r.contains(pos))
+    {
+        if ((event->mimeData()->text().contains(".jpg", Qt::CaseInsensitive)) ||
+            (event->mimeData()->text().contains(".jpeg", Qt::CaseInsensitive)))
+        {
+            QString fileName = event->mimeData()->text().remove(0, 8);
+            ui->listWidgetPhotos->addItem(fileName);
+            _files.push_back(fileName);
+        }
+    }
+    event->acceptProposedAction();
+}

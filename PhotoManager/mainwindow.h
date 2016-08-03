@@ -20,6 +20,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
+
 private slots:
     void on_pushButtonTestSQL_clicked();
 
@@ -38,6 +44,8 @@ private:
 
     void ClearComboboxChecked(const QAbstractItemModel* model);
     void ClearInterface();
+
+    void EnableDranNDrop();
 
     template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
 

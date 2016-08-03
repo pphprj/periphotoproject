@@ -163,8 +163,11 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     for (int i = 0; i < photos.length(); i++)
     {
         QString filepath = photos.at(i);
-        QString temp = queryString.arg(filepath);
-        result &= query.exec(temp);
+        if (!filepath.isEmpty())
+        {
+            QString temp = queryString.arg(filepath);
+            result &= query.exec(temp);
+        }
     }
 
     return result;
