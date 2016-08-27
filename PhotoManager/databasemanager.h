@@ -20,9 +20,14 @@ public:
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
 
+    bool UpdateFormworkSystems(const QVector<FormworkSystem>& elems);
+    bool UpdateFeatures(const QVector<Feature>& elems);
+
     bool InsertTestValuesToCategoriesTable();
     bool InsertTestValuesToFormworkSystemsTable();
     bool InsertTestValuesToFeaturesTable();
+
+
 
     bool InsertValuesToPhotos(const QString& projectNo,
                                                     const QDateTime& time,
@@ -42,6 +47,8 @@ public:
 private:
 
     template <typename T> bool SelectElems(QVector<T>& elems, const QString& tableName);
+    template <typename T> bool InsertOrUpdateElems(const QVector<T>& elems);
+
 
 private:
     QSqlDatabase _db;

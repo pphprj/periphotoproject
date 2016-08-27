@@ -38,3 +38,18 @@ QString TableAbstractElem::GetInsertRequest()
 {
     return "";
 }
+
+QString TableAbstractElem::GetUpdateRequest()
+{
+    return "";
+}
+
+void TableAbstractElem::SetName(const QString &name)
+{
+    _name = name;
+}
+
+void TableAbstractElem::SetDescription(const QString &description)
+{
+    _description = description;
+}

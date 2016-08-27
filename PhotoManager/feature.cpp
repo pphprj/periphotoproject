@@ -19,8 +19,16 @@ Feature::~Feature()
 
 QString Feature::GetInsertRequest()
 {
-    return "INSERT Features (name, description) VALUES (" +
-            _name + "," +
-            _description +
+    return (QString)"INSERT Features (name, description) VALUES (" +
+            "'" + _name + "'" + "," +
+            "'" + _description + "'" +
             ")";
+}
+
+QString Feature::GetUpdateRequest()
+{
+    return (QString)"UPDATE Features SET " +
+            "name = " + "'" + _name + "'" + ", "
+            "description = " + "'" + _description + "'" + " "
+            "WHERE id = " + QString::number(_id);
 }

@@ -11,6 +11,7 @@ public:
     virtual ~FormworkSystem();
 
     virtual QString GetInsertRequest();
+    virtual QString GetUpdateRequest();
 };
 
 #endif // FORMWORKSYSTEM_H

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QTableWidgetItem>
 
 #include "databasemanager.h"
 #include "filemanager.h"
@@ -36,6 +37,22 @@ private slots:
     void on_comboBoxSystems_ModelItemChanged(QStandardItem *item);
     void on_comboBoxFeatures_ModelItemChanged(QStandardItem *item);
 
+    void on_tabWidgetSystem_currentChanged(int index);
+
+    void on_pushButtonApplySystem_clicked();
+
+    void on_tableWidgetSystems_itemChanged(QTableWidgetItem *item);
+
+    void on_pushButtonSystemsNew_clicked();
+
+    void on_pushButtonNewFeature_clicked();
+
+    void on_pushButtonApplyFeature_clicked();
+
+    void on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item);
+
+    void on_tabWidgetSystem_tabBarClicked(int index);
+
 private:
     QString GetProjectNo();
     QDateTime GetDateTime();
@@ -45,12 +62,24 @@ private:
     void ClearComboboxChecked(const QAbstractItemModel* model);
     void ClearInterface();
 
+    void LoadInterface();
+    void LoadDatabase();
+
+    void NewItem(QTableWidget* table);
+
     void EnableDranNDrop();
 
+    bool ConfirmWindow();
+
     template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
+    template <typename T> void FillTableWidget(const QVector<T>& elems, const QTableWidget* table);
 
     template <typename T> QString CreateIDsList(const QVector<T>& elems);
     template <typename T> QString GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);
+
+    template <typename T> void ApplyChanges(QVector<T>& elems, const QTableWidget* table);
+    template <typename T> void ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table);
+
 
 private:
     Ui::MainWindow *ui;

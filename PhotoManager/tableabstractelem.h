@@ -11,10 +11,14 @@ public:
     ~TableAbstractElem();
 
     virtual QString GetInsertRequest();
+    virtual QString GetUpdateRequest();
 
     int GetID();
     QString GetName();
     QString GetDesription();
+
+    void SetName(const QString& name);
+    void SetDescription(const QString& description);
 protected:
     int _id;
     QString _name;

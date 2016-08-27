@@ -18,9 +18,16 @@ FormworkSystem::~FormworkSystem()
 
 QString FormworkSystem::GetInsertRequest()
 {
-    return "INSERT FormworkSystems (name, description) VALUES (" +
-            _name + "," +
-            _description +
+    return (QString)"INSERT FormworkSystems (name, description) VALUES (" +
+            "'" + _name + "'" + "," +
+            "'" + _description + "'" +
             ")";
 }
 
+QString FormworkSystem::GetUpdateRequest()
+{
+    return (QString)"UPDATE FormworkSystems SET " +
+            "name = " + "'" + _name + "'" + ", "
+            "description = " + "'" + _description + "'" +" "
+            "WHERE id = " + QString::number(_id);
+}

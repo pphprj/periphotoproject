@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->statusBar->setVisible(false);
+    ui->menuBar->setVisible(false);
 
     setAcceptDrops(true);
 
@@ -18,17 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _dbm = new DatabaseManager();
     _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
 
-    //create combobox with cheking elems for formworks
-    _dbm->SelectFormworkSystems(_formworkSystems);
-    FillCombobox(_formworkSystems, ui->comboBoxSystems);
-    connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
-
-    //create combobox with cheking elems for features
-    _dbm->SelectFeatures(_features);
-    FillCombobox(_features, ui->comboBoxFeatures);
-    connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
-
-    _dbm->SelectCategories(_categories);
+    LoadDatabase();
+    LoadInterface();
 
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
 
@@ -41,6 +34,30 @@ MainWindow::~MainWindow()
     delete _dbm;
     delete _cfg;
     delete ui;
+}
+
+void MainWindow::LoadDatabase()
+{
+    if(_dbm)
+    {
+        _formworkSystems.clear();
+        _dbm->SelectFormworkSystems(_formworkSystems);
+        _features.clear();
+        _dbm->SelectFeatures(_features);
+        _categories.clear();
+        _dbm->SelectCategories(_categories);
+    }
+}
+
+void MainWindow::LoadInterface()
+{
+    //create combobox with cheking elems for formworks
+    FillCombobox(_formworkSystems, ui->comboBoxSystems);
+    connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
+
+    //create combobox with cheking elems for features
+    FillCombobox(_features, ui->comboBoxFeatures);
+    connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
 }
 
 void MainWindow::on_pushButtonTestSQL_clicked()
@@ -155,6 +172,10 @@ template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
 
 template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, const QComboBox* comboBox)
 {
+    QComboBox* cb = const_cast<QComboBox*>(comboBox);
+
+    cb->clear();
+
     QStandardItemModel* model = new QStandardItemModel(elems.length() + 1, 1);
 
     QStandardItem* itemDisableAll = new QStandardItem("Disable all");
@@ -175,9 +196,31 @@ template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, con
         model->setItem(i, 0, item);
     }
 
-    QComboBox* cb = const_cast<QComboBox*>(comboBox);
+
     cb->setModel(model);
     cb->setCurrentIndex(1);
+}
+
+template <typename T> void MainWindow::FillTableWidget(const QVector<T>& elems, const QTableWidget* table)
+{
+    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
+    tbWidget->setRowCount(elems.length());
+
+    tbWidget->setColumnCount(2);
+    for (int i = 0; i < elems.length(); i++)
+    {
+        T elem = elems[i];
+        QTableWidgetItem* itemName = new QTableWidgetItem(elem.GetName());
+        itemName->setFlags(itemName->flags() | Qt::ItemIsEditable);
+
+        QString str = elem.GetDesription();
+        QTableWidgetItem* itemDescription = new QTableWidgetItem(str);
+        itemDescription->setFlags(itemDescription->flags() | Qt::ItemIsEditable);
+
+        tbWidget->setItem(i, 0, itemName);
+        tbWidget->setItem(i, 1, itemDescription);
+    }
+    tbWidget->resizeColumnsToContents();
 }
 
 template <typename T> QString MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
@@ -193,6 +236,50 @@ template <typename T> QString MainWindow::GetSelectedListItems(const QVector<T>&
         }
     }
     return CreateIDsList(selected);
+}
+
+template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTableWidget* table)
+{
+    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
+    for (int i = 0; i < tbWidget->rowCount(); i++)
+    {
+       QTableWidgetItem* name = tbWidget->item(i, 0);
+       QTableWidgetItem* descr = tbWidget->item(i, 1);
+       if (i < elems.length())
+       {
+           elems[i].SetName(name->text());
+           elems[i].SetDescription(descr->text());
+       }
+       else
+       {
+           elems.push_back(T(0, name->text(), descr->text()));
+       }
+    }
+}
+
+template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table)
+{
+    if (item->text().isEmpty() && item->column() == 0)
+    {
+        if (item->row() < elems.length())
+        {
+            item->setText(elems[item->row()].GetName());
+        }
+        else
+        {
+            //if you no enter new name
+            table->removeRow(item->row());
+        }
+    }
+}
+
+void MainWindow::NewItem( QTableWidget* table)
+{
+    QTableWidgetItem* item = new QTableWidgetItem("New item");
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    table->insertRow(table->rowCount());
+    table->setItem(table->rowCount() - 1, 0, item);
+    table->setCurrentItem(item);
 }
 
 QString MainWindow::GetSelectedCategories()
@@ -286,4 +373,96 @@ void MainWindow::dropEvent(QDropEvent *event)
         }
     }
     event->acceptProposedAction();
+}
+
+void MainWindow::on_tabWidgetSystem_currentChanged(int index)
+{
+    if (index == 1)
+    {
+        FillTableWidget(_formworkSystems, ui->tableWidgetSystems);
+        FillTableWidget(_features, ui->tableWidgetFeatures);
+    }
+
+    if (index == 0)
+    {
+        ui->tableWidgetSystems->clear();
+        ui->tableWidgetFeatures->clear();
+    }
+}
+
+
+void MainWindow::on_pushButtonApplySystem_clicked()
+{
+    if (!ConfirmWindow())
+        return;
+
+    ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
+
+    _dbm->UpdateFormworkSystems(_formworkSystems);
+
+    LoadDatabase();
+    LoadInterface();
+}
+
+void MainWindow::on_tableWidgetSystems_itemChanged(QTableWidgetItem *item)
+{
+    ItemChanged(_formworkSystems, item, ui->tableWidgetSystems);
+}
+
+void MainWindow::on_pushButtonSystemsNew_clicked()
+{
+    NewItem(ui->tableWidgetSystems);
+}
+
+void MainWindow::on_pushButtonNewFeature_clicked()
+{
+    NewItem(ui->tableWidgetFeatures);
+}
+
+void MainWindow::on_pushButtonApplyFeature_clicked()
+{
+    if (!ConfirmWindow())
+        return;
+
+    ApplyChanges(_features, ui->tableWidgetFeatures);
+    _dbm->UpdateFeatures(_features);
+    LoadDatabase();
+    LoadInterface();
+}
+
+void MainWindow::on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item)
+{
+    ItemChanged(_features, item, ui->tableWidgetFeatures);
+}
+
+void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
+{
+    if (index == 0)
+    {
+        if (ui->tabWidgetSystem->currentIndex() == index)
+            return;
+
+        if (!ConfirmWindow())
+            return;
+
+        ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
+        _dbm->UpdateFormworkSystems(_formworkSystems);
+
+        ApplyChanges(_features, ui->tableWidgetFeatures);
+        _dbm->UpdateFeatures(_features);
+
+        LoadDatabase();
+        LoadInterface();
+    }
+}
+
+bool MainWindow::ConfirmWindow()
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Apply changes", "Would you have to apply changes?",
+                                    QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes)
+        return true;
+
+    return false;
 }

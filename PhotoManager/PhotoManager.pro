@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     categorie.cpp \
     feature.cpp \
     filemanager.cpp \
-    configurator.cpp
+    configurator.cpp \
+    sqlservermanager.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -29,6 +30,7 @@ HEADERS  += mainwindow.h \
     categorie.h \
     feature.h \
     filemanager.h \
-    configurator.h
+    configurator.h \
+    sqlservermanager.h
 
 FORMS    += mainwindow.ui

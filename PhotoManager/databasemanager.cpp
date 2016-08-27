@@ -99,6 +99,30 @@ template<typename T> bool DatabaseManager::SelectElems(QVector<T> &elems, const 
     return true;
 }
 
+template<typename T> bool DatabaseManager::InsertOrUpdateElems(const QVector<T>& elems)
+{
+    if (!_db.isOpen()) return false;
+
+    QSqlQuery query;
+    bool result = true;
+    for (int i = 0; i < elems.length(); i++)
+    {
+        T elem = elems[i];
+        if (elem.GetID() != 0)
+        {
+            QString request = elem.GetUpdateRequest();
+            result &= query.exec(request);
+        }
+        else
+        {
+            QString request = elem.GetInsertRequest();
+            result &= query.exec(request);
+        }
+    }
+
+    return result;
+}
+
 bool DatabaseManager::SelectFormworkSystems(QVector<FormworkSystem> &elems)
 {
     return SelectElems(elems, "FormworkSystems");
@@ -224,4 +248,22 @@ int DatabaseManager::CheckProjectNo(const QString &projectNo)
         result = query.value("ID").toInt();
     }
     return result;
+}
+
+bool DatabaseManager::UpdateFeatures(const QVector<Feature> &elems)
+{
+    if (!_db.isOpen()) return false;
+
+    InsertOrUpdateElems(elems);
+
+    return true;
+}
+
+bool DatabaseManager::UpdateFormworkSystems(const QVector<FormworkSystem> &elems)
+{
+    if (!_db.isOpen()) return false;
+
+    InsertOrUpdateElems(elems);
+
+    return true;
 }

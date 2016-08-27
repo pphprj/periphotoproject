@@ -10,6 +10,7 @@ public:
     Feature(int id, const QString& name, const QString& descr);
     virtual ~Feature();
     virtual QString GetInsertRequest();
+    virtual QString GetUpdateRequest();
 };
 
 #endif // FEATURES_H
