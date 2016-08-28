@@ -30,7 +30,9 @@ public:
 
 
     bool InsertValuesToPhotos(const QString& projectNo,
-                                                    const QDateTime& time,
+                              const QString& projectName,
+                              const QDate& projectDate,
+                                                    const QDate& photosDate,
                                                     const QString& formworkSystems,
                                                     const QString& features,
                                                     const QString& categories,
@@ -38,7 +40,7 @@ public:
 
     bool InsertProject(const QString& projectNo,
                        const QString& name,
-                       const QDateTime& creationTime,
+                       const QDate& creationDate,
                        const QString& description);
 
     //return Project ID

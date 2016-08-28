@@ -72,9 +72,6 @@ void MainWindow::on_pushButtonTestSQL_clicked()
 
 void MainWindow::on_pushButtonLoadPhoto_clicked()
 {
-    ;
-    ui->listWidgetPhotos->clear();
-
     QFileDialog fileDialog(this,"Open images",_cfg->GetLastFolder(), "Images (*.jpg)" );
     fileDialog.setFileMode(QFileDialog::ExistingFiles);
     if (!fileDialog.exec())
@@ -101,15 +98,17 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QString selectedFws =  GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
+    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
+    QString selectedFws = CreateIDsList(selectedSystems);
     if (selectedFws.isEmpty())
     {
         QMessageBox::critical(this, "Error!", "Please, select formworks!");
         return;
     }
 
-    QString selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
-    if (selectedFeatures.isEmpty())
+    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
+    QString selectedFts = CreateIDsList(selectedFeatures);
+    if (selectedFts.isEmpty())
     {
         QMessageBox::critical(this, "Error!", "Please, select features!");
         return;
@@ -128,13 +127,18 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    _fileManager->CreateProjectDirectory(projectNo, GetDateTime());
+    QString projectName = GetProjectName();
+    GetFilesDate();
+
+    _fileManager->CreateProjectDirectory(projectNo, _filesDate);
 
     QStringList destinationFiles = _fileManager->AddFilesToDirectory(GetFileList());
     bool result = _dbm->InsertValuesToPhotos(projectNo,
-                               GetDateTime(),
+                                             projectName,
+                                             GetProjectDate(),
+                               _filesDate,
                                selectedFws,
-                               selectedFeatures,
+                               selectedFts,
                                selectedCategories,
                                destinationFiles);
 
@@ -150,9 +154,39 @@ QString MainWindow::GetProjectNo()
     return ui->lineEditProjectNo->text();
 }
 
-QDateTime MainWindow::GetDateTime()
+QString MainWindow::GetProjectName()
 {
-    return ui->dateEditProjectDate->dateTime();
+    return ui->lineEditProjectName->text();
+}
+
+QDate MainWindow::GetProjectDate()
+{
+    return ui->dateEditProjectDate->date();
+}
+
+void MainWindow::GetFilesDate()
+{
+    for (int i = 0; i < _files.length(); i++)
+    {
+        QFileInfo info(_files[i]);
+        QDate selectedDate = GetProjectDate();
+        QDate lastModified = info.lastModified().date();
+        if (selectedDate != lastModified)
+        {
+            if ((_filesDate != lastModified) && (!_filesDate.isNull()))
+            {
+                _filesDate = selectedDate;
+            }
+            else
+            {
+                _filesDate = lastModified;
+            }
+        }
+        else
+        {
+            _filesDate = selectedDate;
+        }
+    }
 }
 
 template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
@@ -170,24 +204,43 @@ template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
     return result;
 }
 
+template <typename T> QString MainWindow::CreateNamesList(const QVector<T>& elems)
+{
+    QString result;
+
+    for(int i = 0; i < elems.length(); i++)
+    {
+        T elem = elems[i];
+        result += elem.GetName() + ";";
+    }
+
+    result.remove(result.length() - 1, 1);
+
+    return result;
+}
+
 template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, const QComboBox* comboBox)
 {
     QComboBox* cb = const_cast<QComboBox*>(comboBox);
 
     cb->clear();
 
-    QStandardItemModel* model = new QStandardItemModel(elems.length() + 1, 1);
+    QStandardItemModel* model = new QStandardItemModel(elems.length() + 2, 1);
+
+    QStandardItem* itemShowSelecatble = new QStandardItem("");
+    model->setItem(0, 0, itemShowSelecatble);
+
 
     QStandardItem* itemDisableAll = new QStandardItem("Disable all");
 
     itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
 
-    model->setItem(0, 0, itemDisableAll);
+    model->setItem(1, 0, itemDisableAll);
 
-    for (int i = 1; i < elems.length() + 1; i++)
+    for (int i = 2; i < elems.length() + 2; i++)
     {
-        T elem = elems[i - 1];
+        T elem = elems[i - 2];
         QStandardItem* item = new QStandardItem(elem.GetName());
 
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
@@ -198,7 +251,7 @@ template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, con
 
 
     cb->setModel(model);
-    cb->setCurrentIndex(1);
+    cb->setCurrentIndex(0);
 }
 
 template <typename T> void MainWindow::FillTableWidget(const QVector<T>& elems, const QTableWidget* table)
@@ -223,19 +276,19 @@ template <typename T> void MainWindow::FillTableWidget(const QVector<T>& elems, 
     tbWidget->resizeColumnsToContents();
 }
 
-template <typename T> QString MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
+template <typename T> QVector<T> MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
 {
     QVector<T> selected;
     QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
     int length = standardModel->rowCount();
-    for (int i = 1; i < length; i++)
+    for (int i = 2; i < length; i++)
     {
         if (standardModel->item(i)->checkState() == Qt::Checked)
         {
-            selected.push_back(elems[i - 1]);
+            selected.push_back(elems[i - 2]);
         }
     }
-    return CreateIDsList(selected);
+    return selected;
 }
 
 template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTableWidget* table)
@@ -282,6 +335,18 @@ void MainWindow::NewItem( QTableWidget* table)
     table->setCurrentItem(item);
 }
 
+template <typename T> void MainWindow::ShowSelection(const QVector<T>& elems, QComboBox *comboBox, QStandardItem *item)
+{
+    if (item->index().row() == 0)
+    {
+        return;
+    }
+
+    QVector<T> selected = GetSelectedListItems(elems, comboBox->model());
+    QString selectedList = CreateNamesList(selected);
+    comboBox->setItemText(0, selectedList);
+}
+
 QString MainWindow::GetSelectedCategories()
 {
     QVector<Categorie> selected;
@@ -298,9 +363,9 @@ QStringList& MainWindow::GetFileList()
     return _files;
 }
 
-void MainWindow::ClearComboboxChecked(const QAbstractItemModel *model)
+void MainWindow::ClearComboboxChecked(QComboBox* comboBox)
 {
-    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
+    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(comboBox->model());
     for (int i = 0; i < standardModel->rowCount(); i++)
     {
         if (standardModel->item(i)->checkState() == Qt::Checked)
@@ -308,6 +373,7 @@ void MainWindow::ClearComboboxChecked(const QAbstractItemModel *model)
             standardModel->item(i)->setCheckState(Qt::Unchecked);
         }
     }
+    comboBox->setItemText(0, "");
 }
 
 void MainWindow::ClearInterface()
@@ -320,17 +386,25 @@ void MainWindow::ClearInterface()
 
 void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
 {
-    if (item->index().row() == 0)
+    if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxSystems->model());
+        ClearComboboxChecked(ui->comboBoxSystems);
+    }
+    else
+    {
+        ShowSelection(_formworkSystems, ui->comboBoxSystems, item);
     }
 }
 
 void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
 {
-    if (item->index().row() == 0)
+    if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxFeatures->model());
+        ClearComboboxChecked(ui->comboBoxFeatures);
+    }
+    else
+    {
+        ShowSelection(_features, ui->comboBoxFeatures, item);
     }
 }
 
@@ -466,3 +540,4 @@ bool MainWindow::ConfirmWindow()
 
     return false;
 }
+

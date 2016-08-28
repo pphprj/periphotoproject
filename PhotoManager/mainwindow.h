@@ -55,17 +55,20 @@ private slots:
 
 private:
     QString GetProjectNo();
-    QDateTime GetDateTime();
+    QString GetProjectName();
+    QDate GetProjectDate();
     QString GetSelectedCategories();
     QStringList& GetFileList();
+    void GetFilesDate();
 
-    void ClearComboboxChecked(const QAbstractItemModel* model);
+    void ClearComboboxChecked(QComboBox* comboBox);
     void ClearInterface();
 
     void LoadInterface();
     void LoadDatabase();
 
     void NewItem(QTableWidget* table);
+
 
     void EnableDranNDrop();
 
@@ -75,10 +78,12 @@ private:
     template <typename T> void FillTableWidget(const QVector<T>& elems, const QTableWidget* table);
 
     template <typename T> QString CreateIDsList(const QVector<T>& elems);
-    template <typename T> QString GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);
+    template <typename T> QString CreateNamesList(const QVector<T>& elems);
+    template <typename T> QVector<T> GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);
 
     template <typename T> void ApplyChanges(QVector<T>& elems, const QTableWidget* table);
     template <typename T> void ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table);
+    template <typename T> void ShowSelection(const QVector<T>& elems, QComboBox* comboBox, QStandardItem* item);
 
 
 private:
@@ -88,6 +93,7 @@ private:
     QVector<Feature> _features;
     QVector<Categorie> _categories;
     QStringList _files;
+    QDate _filesDate;
 
     Filemanager* _fileManager;
     Configurator* _cfg;

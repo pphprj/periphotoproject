@@ -26,9 +26,9 @@ void Filemanager::CreateRootDirectory()
         CreateDirectory(_rootDirectory);
 }
 
-bool Filemanager::CreateProjectDirectory(const QString &projectNo, const QDateTime &time)
+bool Filemanager::CreateProjectDirectory(const QString &projectNo, const QDate &projectDate)
 {
-    _projectDirectory = _rootDirectory + "\\" + projectNo + "\\" + time.date().toString("yyyy-MM-dd") + "\\";
+    _projectDirectory = _rootDirectory + "\\" + projectNo + "\\" + projectDate.toString("yyyy-MM-dd") + "\\";
     if (!CheckDirectory(_projectDirectory))
         CreateDirectory(_projectDirectory);
     return true;

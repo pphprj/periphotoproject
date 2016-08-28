@@ -139,7 +139,9 @@ bool DatabaseManager::SelectCategories(QVector<Categorie> &elems)
 }
 
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
-                                           const QDateTime &time,
+                                           const QString &projectName,
+                                           const QDate  &projectDate,
+                                           const QDate &photosDate,
                                            const QString &formworkSystems,
                                            const QString &features,
                                            const QString &categories,
@@ -153,7 +155,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
 
     if (projectID == 0)
     {
-        if (InsertProject(projectNo, "", time, ""))
+        if (InsertProject(projectNo, projectName, projectDate, ""))
         {
             projectID = CheckProjectNo(projectNo);
         }
@@ -175,7 +177,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     queryString += " VALUES ";
     queryString += "(";
     queryString += QString::number(projectID) + ", ";
-    queryString += "'" + time.toString("yyyy-MM-dd hh:mm:ss") + "', ";
+    queryString += "'" + photosDate.toString("yyyy-MM-dd") + "', ";
     queryString += "'" + formworkSystems + "', ";
     queryString += (!features.isEmpty() ? "'" + features + "', ": "");
     queryString += "'" + categories + "', ";
@@ -199,7 +201,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
 
 bool DatabaseManager::InsertProject(const QString &projectNo,
                                     const QString &name,
-                                    const QDateTime &creationTime,
+                                    const QDate &creationDate,
                                     const QString &description)
 {
     if (!_db.isOpen()) return false;
@@ -210,7 +212,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += "(";
     queryString += "ProjectNo";
     queryString += (!name.isEmpty() ? ", Name" : "");
-    queryString += (!creationTime.isNull() ? ", CreationTime" : "");
+    queryString += (!creationDate.isNull() ? ", CreationTime" : "");
     queryString += (!description.isEmpty() ? ", Descriptiom" : "");
     queryString += ")";
 
@@ -220,7 +222,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += "(";
     queryString += "'" + projectNo + "'";
     queryString += (!name.isEmpty() ? ",'" + name + "'": "");
-    queryString += (!creationTime.isNull() ? ",'" + creationTime.toString("yyyy-MM-dd hh:mm:ss") + "'" : "");
+    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("yyyy-MM-dd") + "'" : "");
     queryString += (!description.isEmpty() ? ",'" + description + "'" : "");
     queryString += ")";
 

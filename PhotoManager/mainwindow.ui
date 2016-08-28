@@ -16,8 +16,11 @@
     <height>0</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Peri Photo Project</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -41,211 +44,182 @@
          <attribute name="title">
           <string>Add new photo</string>
          </attribute>
-         <widget class="QComboBox" name="comboBoxFeatures">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>100</y>
-            <width>261</width>
-            <height>22</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelProjectFeatures">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>100</y>
-            <width>47</width>
-            <height>13</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Features</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="lineEditProjectNo">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>10</y>
-            <width>261</width>
-            <height>20</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pushButtonLoadPhoto">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>130</y>
-            <width>75</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Load photo</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelProjectDate">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>40</y>
-            <width>81</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Project Date</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelSystems">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>70</y>
-            <width>47</width>
-            <height>13</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Systems</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelProjectNo">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>10</y>
-            <width>81</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Project No</string>
-          </property>
-         </widget>
-         <widget class="QDateEdit" name="dateEditProjectDate">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>40</y>
-            <width>261</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="comboBoxSystems">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>70</y>
-            <width>261</width>
-            <height>22</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QGroupBox" name="groupBoxPhotos">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>160</y>
-            <width>571</width>
-            <height>151</height>
-           </rect>
-          </property>
-          <property name="title">
-           <string>Photos</string>
-          </property>
-          <widget class="QListWidget" name="listWidgetPhotos">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>551</width>
-             <height>121</height>
-            </rect>
-           </property>
-           <property name="acceptDrops">
-            <bool>true</bool>
-           </property>
-           <property name="dragDropMode">
-            <enum>QAbstractItemView::DragDrop</enum>
-           </property>
-           <property name="defaultDropAction">
-            <enum>Qt::MoveAction</enum>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QGroupBox" name="groupBoxCategories">
-          <property name="geometry">
-           <rect>
-            <x>370</x>
-            <y>0</y>
-            <width>121</width>
-            <height>161</height>
-           </rect>
-          </property>
-          <property name="title">
-           <string>Categories</string>
-          </property>
-          <widget class="QCheckBox" name="checkBoxInProc">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>70</width>
-             <height>17</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>In process</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkBoxCurrentState">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>40</y>
-             <width>121</width>
-             <height>17</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Current state</string>
-           </property>
-          </widget>
-          <widget class="QCheckBox" name="checkBoxMarketing">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>60</y>
-             <width>70</width>
-             <height>17</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Marketing</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QPushButton" name="pushButtonAddToDB">
-          <property name="geometry">
-           <rect>
-            <x>500</x>
-            <y>140</y>
-            <width>75</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Add to DB</string>
-          </property>
-         </widget>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0" colspan="2">
+           <widget class="QGroupBox" name="groupBoxProject">
+            <property name="title">
+             <string>Project</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelProjectNo">
+               <property name="text">
+                <string>Project No</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEditProjectNo"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelProjectName">
+               <property name="text">
+                <string>Project Name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEditProjectName"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelSystems">
+               <property name="text">
+                <string>Systems</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelProjectDate">
+               <property name="text">
+                <string>Project Date</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDateEdit" name="dateEditProjectDate">
+               <property name="calendarPopup">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QComboBox" name="comboBoxSystems"/>
+             </item>
+             <item row="4" column="1">
+              <widget class="QComboBox" name="comboBoxFeatures"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelProjectFeatures">
+               <property name="text">
+                <string>Features</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QGroupBox" name="groupBoxCategories">
+            <property name="title">
+             <string>Categories</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QCheckBox" name="checkBoxInProc">
+               <property name="text">
+                <string>In process</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxCurrentState">
+               <property name="text">
+                <string>Current state</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxMarketing">
+               <property name="text">
+                <string>Marketing</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QGroupBox" name="groupBoxPhotos">
+            <property name="title">
+             <string>Photos</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QListWidget" name="listWidgetPhotos">
+               <property name="acceptDrops">
+                <bool>true</bool>
+               </property>
+               <property name="dragDropMode">
+                <enum>QAbstractItemView::DragDrop</enum>
+               </property>
+               <property name="defaultDropAction">
+                <enum>Qt::MoveAction</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="pushButtonAddToDB">
+            <property name="text">
+             <string>Add to DB</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonLoadPhoto">
+            <property name="text">
+             <string>Load photo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tabEditDB">
          <attribute name="title">
