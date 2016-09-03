@@ -53,6 +53,8 @@ private slots:
 
     void on_tabWidgetSystem_tabBarClicked(int index);
 
+    void on_checkBoxEnablePreview_clicked();
+
 private:
     QString GetProjectNo();
     QString GetProjectName();
@@ -68,6 +70,7 @@ private:
     void LoadDatabase();
 
     void NewItem(QTableWidget* table);
+    void AddFile(const QString& fileName);
 
 
     void EnableDranNDrop();

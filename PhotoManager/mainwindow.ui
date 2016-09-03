@@ -45,7 +45,34 @@
           <string>Add new photo</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0" colspan="2">
+          <item row="1" column="3">
+           <widget class="QPushButton" name="pushButtonAddToDB">
+            <property name="text">
+             <string>Add to DB</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonLoadPhoto">
+            <property name="text">
+             <string>Load photo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" colspan="3">
            <widget class="QGroupBox" name="groupBoxProject">
             <property name="title">
              <string>Project</string>
@@ -124,7 +151,7 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="0" column="3">
            <widget class="QGroupBox" name="groupBoxCategories">
             <property name="title">
              <string>Categories</string>
@@ -170,7 +197,7 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="0" colspan="3">
+          <item row="2" column="0" colspan="4">
            <widget class="QGroupBox" name="groupBoxPhotos">
             <property name="title">
              <string>Photos</string>
@@ -182,42 +209,22 @@
                 <bool>true</bool>
                </property>
                <property name="dragDropMode">
-                <enum>QAbstractItemView::DragDrop</enum>
+                <enum>QAbstractItemView::NoDragDrop</enum>
                </property>
                <property name="defaultDropAction">
-                <enum>Qt::MoveAction</enum>
+                <enum>Qt::CopyAction</enum>
                </property>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="pushButtonAddToDB">
-            <property name="text">
-             <string>Add to DB</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonLoadPhoto">
-            <property name="text">
-             <string>Load photo</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QCheckBox" name="checkBoxEnablePreview">
+            <property name="text">
+             <string>Preview</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>

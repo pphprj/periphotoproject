@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     LoadInterface();
 
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
+    ui->listWidgetPhotos->setIconSize(QSize(0, 0));
 
     _fileManager = new Filemanager(_cfg->GetProjectsDirectory());
 }
@@ -70,6 +71,22 @@ void MainWindow::on_pushButtonTestSQL_clicked()
     dbm.InsertTestValuesToFormworkSystemsTable();
 }
 
+void MainWindow::AddFile(const QString &fileName)
+{
+    if (!_files.contains(fileName, Qt::CaseInsensitive))
+    {
+        _files.push_back(fileName);
+        if (ui->checkBoxEnablePreview->isChecked())
+        {
+            ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(fileName), fileName));
+        }
+        else
+        {
+            ui->listWidgetPhotos->addItem(fileName);
+        }
+    }
+}
+
 void MainWindow::on_pushButtonLoadPhoto_clicked()
 {
     QFileDialog fileDialog(this,"Open images",_cfg->GetLastFolder(), "Images (*.jpg)" );
@@ -86,11 +103,7 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
     {
         foreach (QString str, selectedFiles)
         {
-            if (!_files.contains(str, Qt::CaseInsensitive))
-            {
-                _files.push_back(str);
-                ui->listWidgetPhotos->addItem(str);
-            }
+            AddFile(str);
         }
     }
 }
@@ -135,7 +148,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     }
 
     QString projectName = GetProjectName();
-//ss
+
     _fileManager->CreateProjectDirectory(projectNo);
     QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList());
 
@@ -455,14 +468,9 @@ void MainWindow::dropEvent(QDropEvent *event)
                 for (int i = 0; i < urlList.size(); i++)
                 {
                     QString fileName = urlList.at(i).toLocalFile();
-                    if (!_files.contains(fileName, Qt::CaseSensitive))
-                    {
-                        _files.push_back(fileName);
-                    }
+                    AddFile(fileName);
                 }
             }
-            ui->listWidgetPhotos->clear();
-            ui->listWidgetPhotos->addItems(_files);
         }
     }
     event->acceptProposedAction();
@@ -560,3 +568,19 @@ bool MainWindow::ConfirmWindow()
     return false;
 }
 
+
+void MainWindow::on_checkBoxEnablePreview_clicked()
+{
+    ;
+    if (ui->checkBoxEnablePreview->isChecked())
+    {
+        ui->listWidgetPhotos->setViewMode(QListWidget::IconMode);
+        ui->listWidgetPhotos->setIconSize(QSize(100, 100));
+        ui->listWidgetPhotos->setResizeMode(QListWidget::Adjust);
+    }
+    else
+    {
+        ui->listWidgetPhotos->setViewMode(QListWidget::ListMode);
+        ui->listWidgetPhotos->setIconSize(QSize(0, 0));
+    }
+}
