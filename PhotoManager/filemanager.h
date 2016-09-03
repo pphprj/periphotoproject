@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QVector>
+#include <QFileInfo>
 
 class Filemanager
 {
@@ -10,11 +12,12 @@ public:
     Filemanager(const QString& root);
 
     void CreateRootDirectory();
-    bool CreateProjectDirectory(const QString& projectNo, const QDate& projectDate);
+    bool CreateProjectDirectory(const QString& projectNo);
+    bool CreateFilesDirectory(const QDate& filesDate);
 
     //return destination file name
-    QString AddFileToDirectory(const QString& file);
-    QStringList AddFilesToDirectory(const QStringList& files);
+    QFileInfo AddFileToDirectory(const QString& file);
+    QVector<QFileInfo> AddFilesToDirectory(const QStringList& files);
 
     bool CheckDirectory(const QString& path);
 

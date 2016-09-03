@@ -79,12 +79,19 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
         return;
     }
 
-    _files = fileDialog.selectedFiles();
+    QStringList selectedFiles = fileDialog.selectedFiles();
     _cfg->SetLastFolder(fileDialog.directory().absolutePath());
 
-    if (!_files.empty())
+    if (!selectedFiles.empty())
     {
-        ui->listWidgetPhotos->addItems(_files);
+        foreach (QString str, selectedFiles)
+        {
+            if (!_files.contains(str, Qt::CaseInsensitive))
+            {
+                _files.push_back(str);
+                ui->listWidgetPhotos->addItem(str);
+            }
+        }
     }
 }
 
@@ -128,16 +135,14 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     }
 
     QString projectName = GetProjectName();
-    GetFilesDate();
+//ss
+    _fileManager->CreateProjectDirectory(projectNo);
+    QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList());
 
-    _fileManager->CreateProjectDirectory(projectNo, _filesDate);
-
-    QStringList destinationFiles = _fileManager->AddFilesToDirectory(GetFileList());
     bool result = _dbm->InsertValuesToPhotos(projectNo,
                                              projectName,
                                              GetProjectDate(),
-                               _filesDate,
-                               selectedFws,
+                                             selectedFws,
                                selectedFts,
                                selectedCategories,
                                destinationFiles);
@@ -166,7 +171,8 @@ QDate MainWindow::GetProjectDate()
 
 void MainWindow::GetFilesDate()
 {
-    for (int i = 0; i < _files.length(); i++)
+    return;
+   /* for (int i = 0; i < _files.length(); i++)
     {
         QFileInfo info(_files[i]);
         QDate selectedDate = GetProjectDate();
@@ -186,7 +192,7 @@ void MainWindow::GetFilesDate()
         {
             _filesDate = selectedDate;
         }
-    }
+    }*/
 }
 
 template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
@@ -441,9 +447,22 @@ void MainWindow::dropEvent(QDropEvent *event)
         if ((event->mimeData()->text().contains(".jpg", Qt::CaseInsensitive)) ||
             (event->mimeData()->text().contains(".jpeg", Qt::CaseInsensitive)))
         {
-            QString fileName = event->mimeData()->text().remove(0, 8);
-            ui->listWidgetPhotos->addItem(fileName);
-            _files.push_back(fileName);
+            if (event->mimeData()->hasUrls())
+            {
+                QList<QUrl> urlList = event->mimeData()->urls();
+
+                // extract the local paths of the files
+                for (int i = 0; i < urlList.size(); i++)
+                {
+                    QString fileName = urlList.at(i).toLocalFile();
+                    if (!_files.contains(fileName, Qt::CaseSensitive))
+                    {
+                        _files.push_back(fileName);
+                    }
+                }
+            }
+            ui->listWidgetPhotos->clear();
+            ui->listWidgetPhotos->addItems(_files);
         }
     }
     event->acceptProposedAction();

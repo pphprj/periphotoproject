@@ -32,11 +32,10 @@ public:
     bool InsertValuesToPhotos(const QString& projectNo,
                               const QString& projectName,
                               const QDate& projectDate,
-                                                    const QDate& photosDate,
-                                                    const QString& formworkSystems,
-                                                    const QString& features,
-                                                    const QString& categories,
-                                                    const QStringList& photos);
+                              const QString& formworkSystems,
+                              const QString& features,
+                              const QString& categories,
+                              const QVector<QFileInfo>& photos);
 
     bool InsertProject(const QString& projectNo,
                        const QString& name,

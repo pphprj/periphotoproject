@@ -141,11 +141,10 @@ bool DatabaseManager::SelectCategories(QVector<Categorie> &elems)
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &projectName,
                                            const QDate  &projectDate,
-                                           const QDate &photosDate,
                                            const QString &formworkSystems,
                                            const QString &features,
                                            const QString &categories,
-                                           const QStringList &photos)
+                                           const QVector<QFileInfo> &photos)
 {
     int projectID = CheckProjectNo(projectNo);
     if (projectID == -1)
@@ -177,21 +176,22 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     queryString += " VALUES ";
     queryString += "(";
     queryString += QString::number(projectID) + ", ";
-    queryString += "'" + photosDate.toString("yyyy-MM-dd") + "', ";
+    queryString += "'%1', "; //for filelist
     queryString += "'" + formworkSystems + "', ";
     queryString += (!features.isEmpty() ? "'" + features + "', ": "");
     queryString += "'" + categories + "', ";
-    queryString += "'%1'"; //for filelist
+    queryString += "'%2'"; //for filelist
     queryString += ")";
 
     QSqlQuery query;
     bool result = true;
     for (int i = 0; i < photos.length(); i++)
     {
-        QString filepath = photos.at(i);
-        if (!filepath.isEmpty())
+        QFileInfo file = photos[i];
+        if (!file.filePath().isEmpty())
         {
-            QString temp = queryString.arg(filepath);
+            QString fileDate = file.lastModified().date().toString("yyyy-MM-dd");
+            QString temp = queryString.arg(fileDate, file.filePath());
             result &= query.exec(temp);
         }
     }
