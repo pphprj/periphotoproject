@@ -2,6 +2,8 @@
 
 #include <QDir>
 #include <QFile>
+#include <QPixmap>
+
 
 Filemanager::Filemanager(const QString& root)
 {
@@ -44,13 +46,17 @@ bool Filemanager::CreateFilesDirectory(const QDate &filesDate)
 
 QFileInfo Filemanager::AddFileToDirectory(const QString &file)
 {
-    //int delimPos = file.lastIndexOf("/");
-    //QStringRef sourceFileName(&file, delimPos + 1, file.length() - delimPos - 1);
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
+
+    QPixmap sourceImage(file);
+    //QPixmap destinationImage = sourceImage.scaled(1024, 768, Qt::AspectRatioMode::KeepAspectRatioByExpanding, Qt::TransformationMode::SmoothTransformation);
+
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
-    QString destinationFileName = destination + sourceFile.fileName();
-    if (QFile::copy(file, destinationFileName))
+    QString destinationFileName = destination + sourceFile.fileName();    
+
+    //if (destinationImage.save(destinationFileName, "JPEG", 70))
+    if (sourceImage.save(destinationFileName, "JPEG", 70))
     {
         return QFileInfo(destinationFileName);
     }
