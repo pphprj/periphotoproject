@@ -44,7 +44,7 @@ bool Filemanager::CreateFilesDirectory(const QDate &filesDate)
     return true;
 }
 
-QFileInfo Filemanager::AddFileToDirectory(const QString &file)
+QFileInfo Filemanager::AddFileToDirectory(const QString &file, int compressionRate)
 {
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
@@ -55,20 +55,20 @@ QFileInfo Filemanager::AddFileToDirectory(const QString &file)
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
     QString destinationFileName = destination + sourceFile.fileName();    
 
-    //if (destinationImage.save(destinationFileName, "JPEG", 70))
-    if (sourceImage.save(destinationFileName, "JPEG", 70))
+    //if (destinationImage.save(destinationFileName, "JPEG", compressionRate))
+    if (sourceImage.save(destinationFileName, "JPEG", compressionRate))
     {
         return QFileInfo(destinationFileName);
     }
     return QFileInfo();
 }
 
-QVector<QFileInfo> Filemanager::AddFilesToDirectory(const QStringList &files)
+QVector<QFileInfo> Filemanager::AddFilesToDirectory(const QStringList &files, int compressionRate)
 {
     QVector<QFileInfo> result;
     for (int i = 0; i < files.length(); i++)
     {
-        result.push_back(AddFileToDirectory(files.at(i)));
+        result.push_back(AddFileToDirectory(files.at(i), compressionRate));
     }
     return result;
 }

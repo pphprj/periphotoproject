@@ -16,8 +16,8 @@ public:
     bool CreateFilesDirectory(const QDate& filesDate);
 
     //return destination file name
-    QFileInfo AddFileToDirectory(const QString& file);
-    QVector<QFileInfo> AddFilesToDirectory(const QStringList& files);
+    QFileInfo AddFileToDirectory(const QString& file, int compressionRate);
+    QVector<QFileInfo> AddFilesToDirectory(const QStringList& files, int compressionRate);
 
     bool CheckDirectory(const QString& path);
 

@@ -14,6 +14,7 @@ public:
     QString GetPassword();
     QString GetProjectsDirectory();
     QString GetLastFolder();
+    int GetCompressionRate();
 
     void SetLastFolder(const QString& value);
 private:
@@ -22,6 +23,7 @@ private:
     QString _password;
     QString _projectsDirectory;
     QString _lastFolder;
+    int _compressionRate;
 };
 
 #endif // CONFIGURATOR_H

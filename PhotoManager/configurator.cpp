@@ -16,6 +16,7 @@ Configurator::Configurator()
     settings.beginGroup("Files");
     _projectsDirectory = settings.value("Directory").toString();
     _lastFolder = settings.value("LastFolder").toString();
+    _compressionRate = settings.value("CompressionRate").toInt();
     settings.endGroup();
 }
 
@@ -56,4 +57,9 @@ QString Configurator::GetLastFolder()
 void Configurator::SetLastFolder(const QString &value)
 {
     _lastFolder = value;
+}
+
+int Configurator::GetCompressionRate()
+{
+    return _compressionRate;
 }

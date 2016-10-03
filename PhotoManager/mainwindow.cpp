@@ -150,7 +150,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString projectName = GetProjectName();
 
     _fileManager->CreateProjectDirectory(projectNo);
-    QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList());
+    QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList(), _cfg->GetCompressionRate());
 
     bool result = _dbm->InsertValuesToPhotos(projectNo,
                                              projectName,
