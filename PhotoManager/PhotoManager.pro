@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     feature.cpp \
     filemanager.cpp \
     configurator.cpp \
-    sqlservermanager.cpp
+    sqlservermanager.cpp \
+    filecopierthread.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -31,6 +32,7 @@ HEADERS  += mainwindow.h \
     feature.h \
     filemanager.h \
     configurator.h \
-    sqlservermanager.h
+    sqlservermanager.h \
+    filecopierthread.h
 
 FORMS    += mainwindow.ui

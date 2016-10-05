@@ -8,6 +8,7 @@
 #include "databasemanager.h"
 #include "filemanager.h"
 #include "configurator.h"
+#include "filecopierthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -88,6 +89,9 @@ private:
     template <typename T> void ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table);
     template <typename T> void ShowSelection(const QVector<T>& elems, QComboBox* comboBox, QStandardItem* item);
 
+public slots:
+    void setProgressBarValue(int value);
+    void finishedCopy();
 
 private:
     Ui::MainWindow *ui;
@@ -98,8 +102,9 @@ private:
     QStringList _files;
     QDate _filesDate;
 
-    Filemanager* _fileManager;
+    FileManager* _fileManager;
     Configurator* _cfg;
+    FilecopierThread* _copierThread;
 };
 
 #endif // MAINWINDOW_H

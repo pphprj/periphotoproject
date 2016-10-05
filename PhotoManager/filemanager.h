@@ -6,10 +6,10 @@
 #include <QVector>
 #include <QFileInfo>
 
-class Filemanager
+class FileManager
 {
 public:
-    Filemanager(const QString& root);
+    FileManager(const QString& root);
 
     void CreateRootDirectory();
     bool CreateProjectDirectory(const QString& projectNo);

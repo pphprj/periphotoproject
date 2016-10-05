@@ -5,30 +5,30 @@
 #include <QPixmap>
 
 
-Filemanager::Filemanager(const QString& root)
+FileManager::FileManager(const QString& root)
 {
     _rootDirectory = root;
 }
 
-bool Filemanager::CheckDirectory(const QString &path)
+bool FileManager::CheckDirectory(const QString &path)
 {
     QDir directory;
     return directory.exists(path);
 }
 
-bool Filemanager::CreateDirectory(const QString &path)
+bool FileManager::CreateDirectory(const QString &path)
 {
     QDir directory;
     return directory.mkpath(path);
 }
 
-void Filemanager::CreateRootDirectory()
+void FileManager::CreateRootDirectory()
 {
     if (!CheckDirectory(_rootDirectory))
         CreateDirectory(_rootDirectory);
 }
 
-bool Filemanager::CreateProjectDirectory(const QString &projectNo)
+bool FileManager::CreateProjectDirectory(const QString &projectNo)
 {
     _projectDirectory = _rootDirectory + "\\" + projectNo;
     if (!CheckDirectory(_projectDirectory))
@@ -36,7 +36,7 @@ bool Filemanager::CreateProjectDirectory(const QString &projectNo)
     return true;
 }
 
-bool Filemanager::CreateFilesDirectory(const QDate &filesDate)
+bool FileManager::CreateFilesDirectory(const QDate &filesDate)
 {
     QString filesDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\";
     if (!CheckDirectory(filesDirectory))
@@ -44,7 +44,7 @@ bool Filemanager::CreateFilesDirectory(const QDate &filesDate)
     return true;
 }
 
-QFileInfo Filemanager::AddFileToDirectory(const QString &file, int compressionRate)
+QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRate)
 {
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
@@ -63,7 +63,7 @@ QFileInfo Filemanager::AddFileToDirectory(const QString &file, int compressionRa
     return QFileInfo();
 }
 
-QVector<QFileInfo> Filemanager::AddFilesToDirectory(const QStringList &files, int compressionRate)
+QVector<QFileInfo> FileManager::AddFilesToDirectory(const QStringList &files, int compressionRate)
 {
     QVector<QFileInfo> result;
     for (int i = 0; i < files.length(); i++)

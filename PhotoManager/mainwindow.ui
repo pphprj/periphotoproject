@@ -52,13 +52,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonLoadPhoto">
-            <property name="text">
-             <string>Load photo</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="2">
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -72,12 +65,42 @@
             </property>
            </spacer>
           </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonLoadPhoto">
+            <property name="text">
+             <string>Load photo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="checkBoxEnablePreview">
+            <property name="text">
+             <string>Preview</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="3">
            <widget class="QGroupBox" name="groupBoxProject">
             <property name="title">
              <string>Project</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
+             <item row="6" column="1">
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="labelProjectNo">
                <property name="text">
@@ -98,6 +121,13 @@
              <item row="1" column="1">
               <widget class="QLineEdit" name="lineEditProjectName"/>
              </item>
+             <item row="2" column="1">
+              <widget class="QDateEdit" name="dateEditProjectDate">
+               <property name="calendarPopup">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="0">
               <widget class="QLabel" name="labelSystems">
                <property name="text">
@@ -112,18 +142,8 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QDateEdit" name="dateEditProjectDate">
-               <property name="calendarPopup">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="1">
               <widget class="QComboBox" name="comboBoxSystems"/>
-             </item>
-             <item row="4" column="1">
-              <widget class="QComboBox" name="comboBoxFeatures"/>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="labelProjectFeatures">
@@ -132,21 +152,8 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="1">
-              <spacer name="verticalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Expanding</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
+             <item row="4" column="1">
+              <widget class="QComboBox" name="comboBoxFeatures"/>
              </item>
             </layout>
            </widget>
@@ -197,7 +204,7 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="0" colspan="4">
+          <item row="4" column="0" colspan="4">
            <widget class="QGroupBox" name="groupBoxPhotos">
             <property name="title">
              <string>Photos</string>
@@ -219,10 +226,17 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBoxEnablePreview">
+          <item row="5" column="1" colspan="3">
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="labelFilesCopied">
             <property name="text">
-             <string>Preview</string>
+             <string>Files were copied</string>
             </property>
            </widget>
           </item>

@@ -26,11 +26,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
 
-    _fileManager = new Filemanager(_cfg->GetProjectsDirectory());
+    _fileManager = new FileManager(_cfg->GetProjectsDirectory());
+    _copierThread = new FilecopierThread(_fileManager);
+
+    QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
+    QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
+
 }
 
 MainWindow::~MainWindow()
 {
+    delete _copierThread;
     delete _fileManager;
     delete _dbm;
     delete _cfg;
@@ -110,7 +116,6 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
 
 void MainWindow::on_pushButtonAddToDB_clicked()
 {
-    ;
     QString projectNo = GetProjectNo();
     if (projectNo.isEmpty())
     {
@@ -150,7 +155,9 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString projectName = GetProjectName();
 
     _fileManager->CreateProjectDirectory(projectNo);
-    QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList(), _cfg->GetCompressionRate());
+    _copierThread->setFileList(GetFileList(), _cfg->GetCompressionRate());
+    _copierThread->start();
+   /* QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList(), _cfg->GetCompressionRate());
 
     bool result = _dbm->InsertValuesToPhotos(projectNo,
                                              projectName,
@@ -164,7 +171,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     {
         QMessageBox::information(this, "Successfully", "Photos were added to DB");
         ClearInterface();
-    }
+    }*/
 }
 
 QString MainWindow::GetProjectNo()
@@ -398,6 +405,7 @@ void MainWindow::ClearComboboxChecked(QComboBox* comboBox)
 void MainWindow::ClearInterface()
 {
     ui->listWidgetPhotos->clear();
+    ui->progressBar->setValue(0);
     _files.clear();
     //ClearComboboxChecked(ui->comboBoxFeatures->model());
     //ClearComboboxChecked(ui->comboBoxSystems->model());
@@ -582,5 +590,41 @@ void MainWindow::on_checkBoxEnablePreview_clicked()
     {
         ui->listWidgetPhotos->setViewMode(QListWidget::ListMode);
         ui->listWidgetPhotos->setIconSize(QSize(0, 0));
+    }
+}
+
+void MainWindow::setProgressBarValue(int value)
+{
+    ui->progressBar->setValue(value);
+}
+
+void MainWindow::finishedCopy()
+{
+    QVector<QFileInfo> files = _copierThread->getCopiedFiles();
+
+    QString projectName = GetProjectName();
+    QString projectNo = GetProjectNo();
+
+    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
+    QString selectedFws = CreateIDsList(selectedSystems);
+
+    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
+    QString selectedFts = CreateIDsList(selectedFeatures);
+
+    QString selectedCategories = GetSelectedCategories();
+
+
+    bool result = _dbm->InsertValuesToPhotos(projectNo,
+                                             projectName,
+                                             GetProjectDate(),
+                                             selectedFws,
+                               selectedFts,
+                               selectedCategories,
+                               files);
+
+    if (result)
+    {
+        QMessageBox::information(this, "Successfully", "Photos were added to DB");
+        ClearInterface();
     }
 }
