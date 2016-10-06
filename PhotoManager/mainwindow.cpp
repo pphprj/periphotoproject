@@ -95,7 +95,7 @@ void MainWindow::AddFile(const QString &fileName)
 
 void MainWindow::on_pushButtonLoadPhoto_clicked()
 {
-    QFileDialog fileDialog(this,"Open images",_cfg->GetLastFolder(), "Images (*.jpg)" );
+    QFileDialog fileDialog(this, tr("Open images"), _cfg->GetLastFolder(), tr("Images (*.jpg)"));
     fileDialog.setFileMode(QFileDialog::ExistingFiles);
     if (!fileDialog.exec())
     {
@@ -119,7 +119,8 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString projectNo = GetProjectNo();
     if (projectNo.isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "Please, input Project No!");
+
+        QMessageBox::critical(this, tr("Error!"), tr("Please, input Project No!"));
         return;
     }
 
@@ -127,7 +128,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString selectedFws = CreateIDsList(selectedSystems);
     if (selectedFws.isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "Please, select formworks!");
+        QMessageBox::critical(this, tr("Error!"), tr("Please, select formworks!"));
         return;
     }
 
@@ -135,20 +136,20 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString selectedFts = CreateIDsList(selectedFeatures);
     if (selectedFts.isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "Please, select features!");
+        QMessageBox::critical(this, tr("Error!"), tr("Please, select features!"));
         return;
     }
 
     QString selectedCategories = GetSelectedCategories();
     if (selectedCategories.isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "Please, select category!");
+        QMessageBox::critical(this, tr("Error!"), tr("Please, select category!"));
         return;
     }
 
     if (_files.isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "Please, select photos!");
+        QMessageBox::critical(this, tr("Error!"), tr("Please, select photos!"));
         return;
     }
 
@@ -568,7 +569,7 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
 bool MainWindow::ConfirmWindow()
 {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Apply changes", "Would you have to apply changes?",
+    reply = QMessageBox::question(this, tr("Apply changes"), tr("Would you have to apply changes?"),
                                     QMessageBox::Yes|QMessageBox::No);
     if (reply == QMessageBox::Yes)
         return true;
@@ -624,7 +625,7 @@ void MainWindow::finishedCopy()
 
     if (result)
     {
-        QMessageBox::information(this, "Successfully", "Photos were added to DB");
+        QMessageBox::information(this, tr("Successfully"), tr("Photos were added to DB"));
         ClearInterface();
     }
 }

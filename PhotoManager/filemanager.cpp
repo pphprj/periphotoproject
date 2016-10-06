@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QFile>
 #include <QPixmap>
+#include <QTemporaryFile>
+#include <QDebug>
 
 
 FileManager::FileManager(const QString& root)
@@ -51,13 +53,21 @@ QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRa
 
     QPixmap sourceImage(file);
     //QPixmap destinationImage = sourceImage.scaled(1024, 768, Qt::AspectRatioMode::KeepAspectRatioByExpanding, Qt::TransformationMode::SmoothTransformation);
+    //destinationImage.save(destinationFileName, "JPEG", compressionRate);
+    QTemporaryFile tmpFile;
+    tmpFile.setAutoRemove(true);
+    if (tmpFile.open())
+    {
+       bool res = sourceImage.save(&tmpFile, "JPEG", compressionRate);
+       qDebug() << "compression result " << res;
+    }
 
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
-    QString destinationFileName = destination + sourceFile.fileName();    
+    QString destinationFileName = destination + sourceFile.fileName();
 
-    //if (destinationImage.save(destinationFileName, "JPEG", compressionRate))
-    if (sourceImage.save(destinationFileName, "JPEG", compressionRate))
+    if (QFile::copy(tmpFile.fileName(), destinationFileName))
     {
+        qDebug() << "copy was successfull";
         return QFileInfo(destinationFileName);
     }
     return QFileInfo();

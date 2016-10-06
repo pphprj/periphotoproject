@@ -42,7 +42,7 @@
         </property>
         <widget class="QWidget" name="tabAdd">
          <attribute name="title">
-          <string>Add new photo</string>
+          <string>Add new photos</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="1" column="3">
