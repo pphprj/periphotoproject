@@ -107,14 +107,11 @@ void MainWindow::AddFile(const QString &fileName)
     if (!_files.contains(fileName, Qt::CaseInsensitive))
     {
         _files.push_back(fileName);
-        if (ui->checkBoxEnablePreview->isChecked())
-        {
-            ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(fileName), fileName));
-        }
-        else
-        {
-            ui->listWidgetPhotos->addItem(fileName);
-        }
+
+        QPixmap pm(fileName);
+        QPixmap scaled = pm.scaled(400, 300).scaled(100, 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
+
     }
 }
 
