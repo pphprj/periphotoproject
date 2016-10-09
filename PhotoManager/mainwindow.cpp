@@ -58,6 +58,31 @@ void MainWindow::LoadDatabase()
 
 void MainWindow::LoadInterface()
 {
+    //set captions for i18n
+    ui->groupBoxCategories->setTitle(tr("Categories"));
+    ui->groupBoxFeatures->setTitle(tr("Features"));
+    ui->groupBoxPhotos->setTitle(tr("Photos"));
+    ui->groupBoxProject->setTitle(tr("Project"));
+    ui->groupBoxSystems->setTitle(tr("Formwork systems"));
+    ui->labelFilesCopied->setText(tr("Files were copied"));
+    ui->labelProjectDate->setText(tr("Project creation date"));
+    ui->labelProjectFeatures->setText(tr("Features"));
+    ui->labelProjectName->setText(tr("Project name"));
+    ui->labelProjectNo->setText(tr("Project No"));
+    ui->labelSystems->setText(tr("Formwork systems"));
+    ui->checkBoxCurrentState->setText(tr("Current state"));
+    ui->checkBoxEnablePreview->setText(tr("Enable preview"));
+    ui->checkBoxInProc->setText(tr("In process"));
+    ui->checkBoxMarketing->setText(tr("Marketing"));
+    ui->pushButtonAddToDB->setText(tr("Add to DB"));
+    ui->pushButtonApplyFeature->setText(tr("Apply"));
+    ui->pushButtonApplySystem->setText(tr("Apply"));
+    ui->pushButtonLoadPhoto->setText(tr("Load photo"));
+    ui->pushButtonNewFeature->setText(tr("New feature"));
+    ui->pushButtonSystemsNew->setText(tr("New system"));
+    ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
+    ui->tabWidgetSystem->setTabText(1, tr("Edit database"));
+
     //create combobox with cheking elems for formworks
     FillCombobox(_formworkSystems, ui->comboBoxSystems);
     connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
@@ -258,7 +283,7 @@ template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, con
     model->setItem(0, 0, itemShowSelecatble);
 
 
-    QStandardItem* itemDisableAll = new QStandardItem("Disable all");
+    QStandardItem* itemDisableAll = new QStandardItem(tr("Disable all"));
 
     itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
@@ -355,7 +380,7 @@ template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidg
 
 void MainWindow::NewItem( QTableWidget* table)
 {
-    QTableWidgetItem* item = new QTableWidgetItem("New item");
+    QTableWidgetItem* item = new QTableWidgetItem(tr("New item"));
     item->setFlags(item->flags() | Qt::ItemIsEditable);
     table->insertRow(table->rowCount());
     table->setItem(table->rowCount() - 1, 0, item);

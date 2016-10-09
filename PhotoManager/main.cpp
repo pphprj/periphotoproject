@@ -13,8 +13,11 @@ void debugMessageOutput(QtMsgType type, const QMessageLogContext &context, const
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(debugMessageOutput);
+    QTranslator translator;
+    bool res = translator.load("mainwindow_ru.qm",".");
 
     QApplication a(argc, argv);
+    res = a.installTranslator(&translator);
     MainWindow w;
     w.show();
 

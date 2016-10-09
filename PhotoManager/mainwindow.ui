@@ -261,6 +261,20 @@
                <string>Formwork systems</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
+               <item row="1" column="0">
+                <widget class="QPushButton" name="pushButtonApplySystem">
+                 <property name="text">
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButtonSystemsNew">
+                 <property name="text">
+                  <string>New system</string>
+                 </property>
+                </widget>
+               </item>
                <item row="2" column="0">
                 <spacer name="verticalSpacer_3">
                  <property name="orientation">
@@ -273,20 +287,6 @@
                   </size>
                  </property>
                 </spacer>
-               </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="pushButtonSystemsNew">
-                 <property name="text">
-                  <string>New system</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="pushButtonApplySystem">
-                 <property name="text">
-                  <string>Apply</string>
-                 </property>
-                </widget>
                </item>
                <item row="0" column="1" rowspan="3">
                 <widget class="QTableWidget" name="tableWidgetSystems">

@@ -36,3 +36,5 @@ HEADERS  += mainwindow.h \
     filecopierthread.h
 
 FORMS    += mainwindow.ui
+
+TRANSLATIONS = mainwindow_en.ts mainwindow_ru.ts
