@@ -94,7 +94,7 @@
     <message>
         <location filename="mainwindow.cpp" line="82"/>
         <source>New system</source>
-        <translation type="unfinished">Новая система</translation>
+        <translation type="unfinished">Новая опл.система</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="83"/>

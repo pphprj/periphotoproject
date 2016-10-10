@@ -101,6 +101,7 @@ private:
     QVector<Categorie> _categories;
     QStringList _files;
     QDate _filesDate;
+    bool _dbChangesFlag;
 
     FileManager* _fileManager;
     Configurator* _cfg;

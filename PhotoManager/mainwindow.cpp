@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
     QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
 
+    _dbChangesFlag = false;
 }
 
 MainWindow::~MainWindow()
@@ -357,6 +358,7 @@ template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTa
            elems.push_back(T(0, name->text(), descr->text()));
        }
     }
+    _dbChangesFlag = false;
 }
 
 template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table)
@@ -373,6 +375,7 @@ template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidg
             table->removeRow(item->row());
         }
     }
+    _dbChangesFlag = true;
 }
 
 void MainWindow::NewItem( QTableWidget* table)
@@ -382,6 +385,7 @@ void MainWindow::NewItem( QTableWidget* table)
     table->insertRow(table->rowCount());
     table->setItem(table->rowCount() - 1, 0, item);
     table->setCurrentItem(item);
+    _dbChangesFlag = true;
 }
 
 template <typename T> void MainWindow::ShowSelection(const QVector<T>& elems, QComboBox *comboBox, QStandardItem *item)
@@ -513,6 +517,8 @@ void MainWindow::on_tabWidgetSystem_currentChanged(int index)
     {
         FillTableWidget(_formworkSystems, ui->tableWidgetSystems);
         FillTableWidget(_features, ui->tableWidgetFeatures);
+
+        _dbChangesFlag = false;
     }
 
     if (index == 0)
@@ -572,6 +578,9 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
     if (index == 0)
     {
         if (ui->tabWidgetSystem->currentIndex() == index)
+            return;
+
+        if (!_dbChangesFlag)
             return;
 
         if (!ConfirmWindow())

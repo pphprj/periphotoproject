@@ -270,6 +270,12 @@
                </item>
                <item row="0" column="0">
                 <widget class="QPushButton" name="pushButtonSystemsNew">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>New system</string>
                  </property>
@@ -335,6 +341,12 @@
               <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="0">
                 <widget class="QPushButton" name="pushButtonNewFeature">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>New feature</string>
                  </property>
