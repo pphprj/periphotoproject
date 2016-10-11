@@ -71,12 +71,14 @@ private:
     void LoadDatabase();
 
     void NewItem(QTableWidget* table);
-    void AddFile(const QString& fileName);
-
+    void AddFileToPreview(const QString& fileName);
+    void DeleteFileFromPreview(int num);
 
     void EnableDranNDrop();
 
     bool ConfirmWindow();
+
+    bool eventFilter(QObject *watched, QEvent *event);
 
     template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
     template <typename T> void FillTableWidget(const QVector<T>& elems, const QTableWidget* table);

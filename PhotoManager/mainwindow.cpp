@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
+    ui->listWidgetPhotos->installEventFilter(this);
 
     _fileManager = new FileManager(_cfg->GetProjectsDirectory());
     _copierThread = new FilecopierThread(_fileManager);
@@ -103,17 +104,27 @@ void MainWindow::on_pushButtonTestSQL_clicked()
     dbm.InsertTestValuesToFormworkSystemsTable();
 }
 
-void MainWindow::AddFile(const QString &fileName)
+void MainWindow::AddFileToPreview(const QString &fileName)
 {
     if (!_files.contains(fileName, Qt::CaseInsensitive))
     {
         _files.push_back(fileName);
 
         QPixmap pm(fileName);
-        QPixmap scaled = pm.scaled(400, 300).scaled(100, 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QPixmap scaled = pm.scaled(400, 300).scaled(100, 100, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
         ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
 
     }
+}
+
+void MainWindow::DeleteFileFromPreview(int num)
+{
+    if ((num < 0) || (num > _files.length()))
+    {
+        return;
+    }
+    delete ui->listWidgetPhotos->item(num);
+    _files.removeAt(num);
 }
 
 void MainWindow::on_pushButtonLoadPhoto_clicked()
@@ -132,7 +143,7 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
     {
         foreach (QString str, selectedFiles)
         {
-            AddFile(str);
+            AddFileToPreview(str);
         }
     }
 }
@@ -176,26 +187,9 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QString projectName = GetProjectName();
-
     _fileManager->CreateProjectDirectory(projectNo);
     _copierThread->setFileList(GetFileList(), _cfg->GetCompressionRate());
     _copierThread->start();
-   /* QVector<QFileInfo> destinationFiles = _fileManager->AddFilesToDirectory(GetFileList(), _cfg->GetCompressionRate());
-
-    bool result = _dbm->InsertValuesToPhotos(projectNo,
-                                             projectName,
-                                             GetProjectDate(),
-                                             selectedFws,
-                               selectedFts,
-                               selectedCategories,
-                               destinationFiles);
-
-    if (result)
-    {
-        QMessageBox::information(this, "Successfully", "Photos were added to DB");
-        ClearInterface();
-    }*/
 }
 
 QString MainWindow::GetProjectNo()
@@ -348,14 +342,26 @@ template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTa
     {
        QTableWidgetItem* name = tbWidget->item(i, 0);
        QTableWidgetItem* descr = tbWidget->item(i, 1);
+
+       if (name == nullptr)
+       {
+           continue;
+       }
+
+       QString nameText = name->text();
+       QString descrText = (descr != nullptr) ? descr->text() : "";
+
        if (i < elems.length())
        {
-           elems[i].SetName(name->text());
-           elems[i].SetDescription(descr->text());
+           elems[i].SetName(nameText);
+           elems[i].SetDescription(descrText);
        }
        else
        {
-           elems.push_back(T(0, name->text(), descr->text()));
+           if (nameText != tr("New item"))
+           {
+               elems.push_back(T(0, nameText, descrText));
+           }
        }
     }
     _dbChangesFlag = false;
@@ -503,7 +509,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 for (int i = 0; i < urlList.size(); i++)
                 {
                     QString fileName = urlList.at(i).toLocalFile();
-                    AddFile(fileName);
+                    AddFileToPreview(fileName);
                 }
             }
         }
@@ -659,4 +665,20 @@ void MainWindow::finishedCopy()
         QMessageBox::information(this, tr("Successfully"), tr("Photos were added to DB"));
         ClearInterface();
     }
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == ui->listWidgetPhotos && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_Delete)
+        {
+            DeleteFileFromPreview(ui->listWidgetPhotos->currentRow());
+            return true;
+        }
+        return false;
+    }
+    else
+        return false;
 }
