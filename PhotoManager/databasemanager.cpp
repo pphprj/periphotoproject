@@ -1,5 +1,7 @@
 #include "databasemanager.h"
 
+#include <QDebug>
+
 DatabaseManager::DatabaseManager()
 {
     _db = QSqlDatabase::addDatabase("QODBC");
@@ -149,6 +151,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     int projectID = CheckProjectNo(projectNo);
     if (projectID == -1)
     {
+        qDebug() << "projectID == -1";
         return false;
     }
 
@@ -192,11 +195,13 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         {
             QString fileDate = file.lastModified().date().toString("yyyy-MM-dd");
             QString temp = queryString.arg(fileDate, file.filePath());
-            result &= query.exec(temp);
+            qDebug() << temp;
+            result = query.exec(temp);
+            qDebug() << "insert result " << result;
         }
     }
 
-    return result;
+    return true;
 }
 
 bool DatabaseManager::InsertProject(const QString &projectNo,

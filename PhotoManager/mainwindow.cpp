@@ -18,7 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _cfg = new Configurator();
 
     _dbm = new DatabaseManager();
-    _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
+    bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
+
+    qDebug() << "db connect result " << result;
 
     LoadDatabase();
     LoadInterface();
@@ -638,6 +640,7 @@ void MainWindow::setProgressBarValue(int value)
 
 void MainWindow::finishedCopy()
 {
+    qDebug() << "finishedCopy start";
     QVector<QFileInfo> files = _copierThread->getCopiedFiles();
 
     QString projectName = GetProjectName();
@@ -665,6 +668,7 @@ void MainWindow::finishedCopy()
         QMessageBox::information(this, tr("Successfully"), tr("Photos were added to DB"));
         ClearInterface();
     }
+    qDebug() << "finishedCopy end" << result;
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
@@ -681,4 +685,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
     else
         return false;
+}
+
+void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
+{
+    QAbstractItemModel* model = ui->comboBoxSystems->model();
+    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
+    standardModel->item(index)->setCheckState(Qt::Checked);
 }

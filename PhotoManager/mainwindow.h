@@ -56,6 +56,8 @@ private slots:
 
     void on_checkBoxEnablePreview_clicked();
 
+    void on_comboBoxSystems_currentIndexChanged(int index);
+
 private:
     QString GetProjectNo();
     QString GetProjectName();
