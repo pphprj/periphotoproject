@@ -88,7 +88,7 @@ template<typename T> bool DatabaseManager::SelectElems(QVector<T> &elems, const 
     if (!_db.isOpen()) return false;
 
     QSqlQuery query;
-    if (query.exec("SELECT * FROM " + tableName))
+    if (query.exec("SELECT ID, Name, Description FROM " + tableName))
     {
         while (query.next())
         {
@@ -138,6 +138,25 @@ bool DatabaseManager::SelectFeatures(QVector<Feature> &elems)
 bool DatabaseManager::SelectCategories(QVector<Categorie> &elems)
 {
     return SelectElems(elems, "Categories");
+}
+
+bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
+{
+    if (!_db.isOpen()) return false;
+
+    QSqlQuery query;
+    if (query.exec("SELECT ID, ProjectNo, Name, Description FROM Projects"))
+    {
+        while (query.next())
+        {
+            int id = query.value("ID").toInt();
+            QString projectNo = query.value("ProjectNo").toString();
+            QString name = query.value("Name").toString();
+            QString description = query.value("Description").toString();
+            elems.push_back(ProjectName(id, projectNo, name, description));
+        }
+    }
+    return true;
 }
 
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,

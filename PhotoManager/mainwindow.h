@@ -58,7 +58,14 @@ private slots:
 
     void on_comboBoxSystems_currentIndexChanged(int index);
 
+    void on_lineEditProjectNo_textEdited(const QString &arg1);
+
+    void on_lineEditProjectName_textEdited(const QString &arg1);
+
 private:
+    void InitDatabase();
+    void InitInterface();
+
     QString GetProjectNo();
     QString GetProjectName();
     QDate GetProjectDate();
@@ -103,6 +110,8 @@ private:
     QVector<FormworkSystem> _formworkSystems;
     QVector<Feature> _features;
     QVector<Categorie> _categories;
+    QVector<ProjectName> _projectNames;
+    ProjectName _backup;
     QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;

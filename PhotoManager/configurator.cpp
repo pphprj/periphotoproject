@@ -2,17 +2,23 @@
 
 #include <QSettings>
 #include <QApplication>
+#include <QTextCodec>
 
 Configurator::Configurator()
 {
     QString settingsFile = QApplication::applicationDirPath() + "/settings.ini";
     QSettings settings(settingsFile, QSettings::IniFormat);
+
+    settings.setIniCodec("Windows-1251");
+
     QStringList l = settings.allKeys();
+
     settings.beginGroup("DBConnection");
     _host = settings.value("Host").toString();
     _username = settings.value("Username").toString();
     _password = settings.value("Password").toString();
     settings.endGroup();
+
     settings.beginGroup("Files");
     _projectsDirectory = settings.value("Directory").toString();
     _lastFolder = settings.value("LastFolder").toString();

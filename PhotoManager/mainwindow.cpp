@@ -5,29 +5,18 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    ui->statusBar->setVisible(false);
-    ui->menuBar->setVisible(false);
+    InitInterface();
 
-    setAcceptDrops(true);
-
-    _cfg = new Configurator();
-
-    _dbm = new DatabaseManager();
-    bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
-
-    qDebug() << "db connect result " << result;
+    InitDatabase();
 
     LoadDatabase();
-    LoadInterface();
 
-    ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
-    ui->listWidgetPhotos->setIconSize(QSize(0, 0));
-    ui->listWidgetPhotos->installEventFilter(this);
+    LoadInterface();
 
     _fileManager = new FileManager(_cfg->GetProjectsDirectory());
     _copierThread = new FilecopierThread(_fileManager);
@@ -47,21 +36,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::LoadDatabase()
+void MainWindow::InitDatabase()
 {
-    if(_dbm)
-    {
-        _formworkSystems.clear();
-        _dbm->SelectFormworkSystems(_formworkSystems);
-        _features.clear();
-        _dbm->SelectFeatures(_features);
-        _categories.clear();
-        _dbm->SelectCategories(_categories);
-    }
+    _cfg = new Configurator();
+
+    _dbm = new DatabaseManager();
+    bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
+
+    qDebug() << "db connect result " << result;
 }
 
-void MainWindow::LoadInterface()
+void MainWindow::InitInterface()
 {
+    ui->setupUi(this);
+    ui->statusBar->setVisible(false);
+    ui->menuBar->setVisible(false);
+
+    setAcceptDrops(true);
+
     //set captions for i18n
     ui->groupBoxCategories->setTitle(tr("Categories"));
     ui->groupBoxFeatures->setTitle(tr("Features"));
@@ -87,6 +79,28 @@ void MainWindow::LoadInterface()
     ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
     ui->tabWidgetSystem->setTabText(1, tr("Edit database"));
 
+    ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
+    ui->listWidgetPhotos->setIconSize(QSize(0, 0));
+    ui->listWidgetPhotos->installEventFilter(this);
+}
+
+void MainWindow::LoadDatabase()
+{
+    if(_dbm)
+    {
+        _formworkSystems.clear();
+        _dbm->SelectFormworkSystems(_formworkSystems);
+        _features.clear();
+        _dbm->SelectFeatures(_features);
+        _categories.clear();
+        _dbm->SelectCategories(_categories);
+        _projectNames.clear();
+        _dbm->SelectProjectNames(_projectNames);
+    }
+}
+
+void MainWindow::LoadInterface()
+{
     //create combobox with cheking elems for formworks
     FillCombobox(_formworkSystems, ui->comboBoxSystems);
     connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
@@ -113,9 +127,9 @@ void MainWindow::AddFileToPreview(const QString &fileName)
         _files.push_back(fileName);
 
         QPixmap pm(fileName);
-        QPixmap scaled = pm.scaled(400, 300).scaled(100, 100, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-        ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
+        QPixmap scaled = pm.scaled(400, 300, Qt::KeepAspectRatio).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
+        ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
     }
 }
 
@@ -692,4 +706,32 @@ void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
     QAbstractItemModel* model = ui->comboBoxSystems->model();
     QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
     standardModel->item(index)->setCheckState(Qt::Checked);
+}
+
+void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
+{
+    foreach (ProjectName name, _projectNames)
+    {
+        if (name.GetProjectNo().contains(arg1))
+        {
+            _backup.SetName(ui->lineEditProjectName->text());
+            ui->lineEditProjectName->setText(name.GetName());
+            return;
+        }
+    }
+    ui->lineEditProjectName->setText(_backup.GetName());
+}
+
+void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
+{
+    foreach (ProjectName name, _projectNames)
+    {
+        if (name.GetName().contains(arg1))
+        {
+            _backup.SetProjectNo(ui->lineEditProjectNo->text());
+            ui->lineEditProjectNo->setText(name.GetProjectNo());
+            return;
+        }
+    }
+    ui->lineEditProjectNo->setText(_backup.GetProjectNo());
 }

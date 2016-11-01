@@ -13,3 +13,54 @@ QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_Mode
 QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
 QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
 QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+This application failed to start because it could not find or load the Qt platform plugin "windows"
+in "".
+
+Reinstalling the application may fix this problem.
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+db connect result  true
+Thread copy start
+compression result  true
+copy was successfull
+File #  1
+compression result  true
+copy was successfull
+File #  2
+compression result  true
+copy was successfull
+File #  3
+Circle finished
+Progress 100
+Thread copy finished
+finishedCopy start
+QSqlQuery::value: not positioned on a valid record
+QSqlQuery::value: unknown field name 'ID'
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (30, '2016-11-01', '5;7', '3;5', '2;3', 'C:/Peri/Романенко Артем/01-12-2016/2014-11-07/IMG_8078.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (30, '2016-11-01', '5;7', '3;5', '2;3', 'C:/Peri/Романенко Артем/01-12-2016/2014-11-07/IMG_8079.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (30, '2016-11-01', '5;7', '3;5', '2;3', 'C:/Peri/Романенко Артем/01-12-2016/2014-11-07/IMG_8080.JPG')"
+insert result  true
+finishedCopy end true

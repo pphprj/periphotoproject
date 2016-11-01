@@ -8,6 +8,7 @@
 #include "formworksystem.h"
 #include "feature.h"
 #include "categorie.h"
+#include "projectname.h"
 
 class DatabaseManager
 {
@@ -19,6 +20,7 @@ public:
     bool SelectFormworkSystems(QVector<FormworkSystem>& elems);
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
+    bool SelectProjectNames(QVector<ProjectName>& elems);
 
     bool UpdateFormworkSystems(const QVector<FormworkSystem>& elems);
     bool UpdateFeatures(const QVector<Feature>& elems);
