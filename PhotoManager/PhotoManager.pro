@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     configurator.cpp \
     sqlservermanager.cpp \
     filecopierthread.cpp \
-    projectname.cpp
+    projectname.cpp \
+    previewworker.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     configurator.h \
     sqlservermanager.h \
     filecopierthread.h \
-    projectname.h
+    projectname.h \
+    previewworker.h
 
 FORMS    += mainwindow.ui
 

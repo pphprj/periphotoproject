@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "previewworker.h"
+
 #include <QtGui>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -126,11 +128,24 @@ void MainWindow::AddFileToPreview(const QString &fileName)
     {
         _files.push_back(fileName);
 
-        QPixmap pm(fileName);
-        QPixmap scaled = pm.scaled(400, 300, Qt::KeepAspectRatio).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
+        QThread* thread = new QThread();
+        PreviewWorker* worker = new PreviewWorker();
+        worker->setFile(fileName);
+        worker->moveToThread(thread);
+        connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+        connect(thread, SIGNAL(started()), worker, SLOT(process()));
+        connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+        connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+        connect(worker, SIGNAL(resultsReady(QPixmap, QString)), SLOT(finishedProcessPreview(QPixmap, QString)));
+        thread->start();
     }
+}
+
+void MainWindow::finishedProcessPreview(QPixmap scaled, QString fileName)
+{
+    QMutexLocker lock(&_previewMutex);
+    ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
 }
 
 void MainWindow::DeleteFileFromPreview(int num)
