@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _fileManager = new FileManager(_cfg->GetProjectsDirectory());
     _copierThread = new FilecopierThread(_fileManager);
+    _previewSession = new PreviewSession(ui->listWidgetPhotos);
 
     QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
     QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
@@ -31,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete _previewSession;
     delete _copierThread;
     delete _fileManager;
     delete _dbm;
@@ -128,24 +130,8 @@ void MainWindow::AddFileToPreview(const QString &fileName)
     {
         _files.push_back(fileName);
 
-        QThread* thread = new QThread();
-        PreviewWorker* worker = new PreviewWorker();
-        worker->setFile(fileName);
-        worker->moveToThread(thread);
-        connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
-        connect(thread, SIGNAL(started()), worker, SLOT(process()));
-        connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-        connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-        connect(worker, SIGNAL(resultsReady(QPixmap, QString)), SLOT(finishedProcessPreview(QPixmap, QString)));
-        thread->start();
+        _previewSession->addFile(fileName);
     }
-}
-
-void MainWindow::finishedProcessPreview(QPixmap scaled, QString fileName)
-{
-    QMutexLocker lock(&_previewMutex);
-    ui->listWidgetPhotos->addItem(new QListWidgetItem(QIcon(scaled), fileName));
 }
 
 void MainWindow::DeleteFileFromPreview(int num)

@@ -4,13 +4,13 @@
 #include <QMainWindow>
 #include <QtGui>
 #include <QTableWidgetItem>
-#include <QMutex>
+
 
 #include "databasemanager.h"
 #include "filemanager.h"
 #include "configurator.h"
 #include "filecopierthread.h"
-#include "previewworker.h"
+#include "previewsession.h"
 
 namespace Ui {
 class MainWindow;
@@ -105,7 +105,6 @@ private:
 public slots:
     void setProgressBarValue(int value);
     void finishedCopy();
-    void finishedProcessPreview(QPixmap scaled, QString fileName);
 
 private:
     Ui::MainWindow *ui;
@@ -122,7 +121,7 @@ private:
     FileManager* _fileManager;
     Configurator* _cfg;
     FilecopierThread* _copierThread;
-    QMutex _previewMutex;
+    PreviewSession* _previewSession;
 };
 
 #endif // MAINWINDOW_H
