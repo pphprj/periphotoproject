@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include "previewworker.h"
+#include "interfacemanager.h"
+#include "tableabstractelemmanager.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -104,11 +106,11 @@ void MainWindow::LoadDatabase()
 void MainWindow::LoadInterface()
 {
     //create combobox with cheking elems for formworks
-    FillCombobox(_loader->GetFormworkSystems(), ui->comboBoxSystems);
+    InterfaceManager::FillCombobox(_loader->GetFormworkSystems(), ui->comboBoxSystems);
     connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
 
     //create combobox with cheking elems for features
-    FillCombobox(_loader->GetFeatures(), ui->comboBoxFeatures);
+    InterfaceManager::FillCombobox(_loader->GetFeatures(), ui->comboBoxFeatures);
     connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
 }
 
@@ -173,16 +175,16 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
-    QString selectedFws = CreateIDsList(selectedSystems);
+    QVector<FormworkSystem> selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
+    QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedSystems);
     if (selectedFws.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select formworks!"));
         return;
     }
 
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
-    QString selectedFts = CreateIDsList(selectedFeatures);
+    QVector<Feature> selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
+    QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
     if (selectedFts.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select features!"));
@@ -224,179 +226,6 @@ QDate MainWindow::GetProjectDate()
 
 void MainWindow::GetFilesDate()
 {
-    return;
-   /* for (int i = 0; i < _files.length(); i++)
-    {
-        QFileInfo info(_files[i]);
-        QDate selectedDate = GetProjectDate();
-        QDate lastModified = info.lastModified().date();
-        if (selectedDate != lastModified)
-        {
-            if ((_filesDate != lastModified) && (!_filesDate.isNull()))
-            {
-                _filesDate = selectedDate;
-            }
-            else
-            {
-                _filesDate = lastModified;
-            }
-        }
-        else
-        {
-            _filesDate = selectedDate;
-        }
-    }*/
-}
-
-template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
-{
-    QString result;
-
-    for(int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        result += QString::number(elem.GetID()) + ";";
-    }
-
-    result.remove(result.length() - 1, 1);
-
-    return result;
-}
-
-template <typename T> QString MainWindow::CreateNamesList(const QVector<T>& elems)
-{
-    QString result;
-
-    for(int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        result += elem.GetName() + ";";
-    }
-
-    result.remove(result.length() - 1, 1);
-
-    return result;
-}
-
-template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, const QComboBox* comboBox)
-{
-    QComboBox* cb = const_cast<QComboBox*>(comboBox);
-
-    cb->clear();
-
-    QStandardItemModel* model = new QStandardItemModel(elems.length() + 2, 1);
-
-    QStandardItem* itemShowSelecatble = new QStandardItem("");
-    model->setItem(0, 0, itemShowSelecatble);
-
-
-    QStandardItem* itemDisableAll = new QStandardItem(tr("Disable all"));
-
-    itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-    itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-    model->setItem(1, 0, itemDisableAll);
-
-    for (int i = 2; i < elems.length() + 2; i++)
-    {
-        T elem = elems[i - 2];
-        QStandardItem* item = new QStandardItem(elem.GetName());
-
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-        model->setItem(i, 0, item);
-    }
-
-
-    cb->setModel(model);
-    cb->setCurrentIndex(0);
-}
-
-template <typename T> void MainWindow::FillTableWidget(const QVector<T>& elems, const QTableWidget* table)
-{
-    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
-    tbWidget->setRowCount(elems.length());
-
-    tbWidget->setColumnCount(2);
-    for (int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        QTableWidgetItem* itemName = new QTableWidgetItem(elem.GetName());
-        itemName->setFlags(itemName->flags() | Qt::ItemIsEditable);
-
-        QString str = elem.GetDesription();
-        QTableWidgetItem* itemDescription = new QTableWidgetItem(str);
-        itemDescription->setFlags(itemDescription->flags() | Qt::ItemIsEditable);
-
-        tbWidget->setItem(i, 0, itemName);
-        tbWidget->setItem(i, 1, itemDescription);
-    }
-    tbWidget->resizeColumnsToContents();
-}
-
-template <typename T> QVector<T> MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
-{
-    QVector<T> selected;
-    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
-    int length = standardModel->rowCount();
-    for (int i = 2; i < length; i++)
-    {
-        if (standardModel->item(i)->checkState() == Qt::Checked)
-        {
-            selected.push_back(elems[i - 2]);
-        }
-    }
-    return selected;
-}
-
-template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTableWidget* table)
-{
-    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
-    for (int i = 0; i < tbWidget->rowCount(); i++)
-    {
-       QTableWidgetItem* name = tbWidget->item(i, 0);
-       QTableWidgetItem* descr = tbWidget->item(i, 1);
-
-       if (name == nullptr)
-       {
-           continue;
-       }
-
-       QString nameText = name->text();
-       QString descrText = (descr != nullptr) ? descr->text() : "";
-
-       if (i < elems.length())
-       {
-           elems[i].SetName(nameText);
-           elems[i].SetDescription(descrText);
-       }
-       else
-       {
-           if (nameText != tr("New item"))
-           {
-               elems.push_back(T(0, nameText, descrText));
-           }
-       }
-    }
-    _dbChangesFlag = false;
-}
-
-template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table)
-{
-    if (item->text().isEmpty() && item->column() == 0)
-    {
-        if (item->row() < elems.length())
-        {
-            item->setText(elems[item->row()].GetName());
-        }
-        else
-        {
-            //if you no enter new name
-            table->removeRow(item->row());
-        }
-    }
-    _dbChangesFlag = true;
 }
 
 void MainWindow::NewItem( QTableWidget* table)
@@ -409,17 +238,6 @@ void MainWindow::NewItem( QTableWidget* table)
     _dbChangesFlag = true;
 }
 
-template <typename T> void MainWindow::ShowSelection(const QVector<T>& elems, QComboBox *comboBox, QStandardItem *item)
-{
-    if (item->index().row() == 0)
-    {
-        return;
-    }
-
-    QVector<T> selected = GetSelectedListItems(elems, comboBox->model());
-    QString selectedList = CreateNamesList(selected);
-    comboBox->setItemText(0, selectedList);
-}
 
 QString MainWindow::GetSelectedCategories()
 {
@@ -429,7 +247,7 @@ QString MainWindow::GetSelectedCategories()
     if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_loader->GetCategories()[1]);
     if (ui->checkBoxMarketing->isChecked()) selected.push_back(_loader->GetCategories()[2]);
 
-    return CreateIDsList(selected);
+    return TableAbstractElemManager::CreateIDsList(selected);
 }
 
 QStringList& MainWindow::GetFileList()
@@ -467,7 +285,7 @@ void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
     }
     else
     {
-        ShowSelection(_loader->GetFormworkSystems(), ui->comboBoxSystems, item);
+        InterfaceManager::ShowSelection(_loader->GetFormworkSystems(), ui->comboBoxSystems, item);
     }
 }
 
@@ -479,7 +297,7 @@ void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
     }
     else
     {
-        ShowSelection(_loader->GetFeatures(), ui->comboBoxFeatures, item);
+        InterfaceManager::ShowSelection(_loader->GetFeatures(), ui->comboBoxFeatures, item);
     }
 }
 
@@ -536,8 +354,8 @@ void MainWindow::on_tabWidgetSystem_currentChanged(int index)
 {
     if (index == 1)
     {
-        FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
-        FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        InterfaceManager::FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        InterfaceManager::FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
 
         _dbChangesFlag = false;
     }
@@ -555,7 +373,8 @@ void MainWindow::on_pushButtonApplySystem_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+    InterfaceManager::ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+    _dbChangesFlag = false;
 
     _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
@@ -565,7 +384,8 @@ void MainWindow::on_pushButtonApplySystem_clicked()
 
 void MainWindow::on_tableWidgetSystems_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_loader->GetFormworkSystems(), item, ui->tableWidgetSystems);
+    InterfaceManager::ItemChanged(_loader->GetFormworkSystems(), item, ui->tableWidgetSystems);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonSystemsNew_clicked()
@@ -583,7 +403,8 @@ void MainWindow::on_pushButtonApplyFeature_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+    InterfaceManager::ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+    _dbChangesFlag = false;
     _dbm->UpdateFeatures(_loader->GetFeatures());
     LoadDatabase();
     LoadInterface();
@@ -591,7 +412,8 @@ void MainWindow::on_pushButtonApplyFeature_clicked()
 
 void MainWindow::on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_loader->GetFeatures(), item, ui->tableWidgetFeatures);
+    InterfaceManager::ItemChanged(_loader->GetFeatures(), item, ui->tableWidgetFeatures);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
@@ -607,10 +429,12 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
         if (!ConfirmWindow())
             return;
 
-        ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        InterfaceManager::ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        _dbChangesFlag = false;
         _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
-        ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        InterfaceManager::ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        _dbChangesFlag = false;
         _dbm->UpdateFeatures(_loader->GetFeatures());
 
         LoadDatabase();
@@ -659,11 +483,11 @@ void MainWindow::finishedCopy()
     QString projectName = GetProjectName();
     QString projectNo = GetProjectNo();
 
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
-    QString selectedFws = CreateIDsList(selectedSystems);
+    QVector<FormworkSystem> selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
+    QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedSystems);
 
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
-    QString selectedFts = CreateIDsList(selectedFeatures);
+    QVector<Feature> selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
+    QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
 
     QString selectedCategories = GetSelectedCategories();
 

@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     projectname.cpp \
     previewworker.cpp \
     previewsession.cpp \
-    photoloader.cpp
+    photoloader.cpp \
+    interfacemanager.cpp \
+    tableabstractelemmanager.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -41,7 +43,9 @@ HEADERS  += mainwindow.h \
     projectname.h \
     previewworker.h \
     previewsession.h \
-    photoloader.h
+    photoloader.h \
+    interfacemanager.h \
+    tableabstractelemmanager.h
 
 FORMS    += mainwindow.ui
 

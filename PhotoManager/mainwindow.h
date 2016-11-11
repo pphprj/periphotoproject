@@ -92,16 +92,6 @@ private:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
-    template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
-    template <typename T> void FillTableWidget(const QVector<T>& elems, const QTableWidget* table);
-
-    template <typename T> QString CreateIDsList(const QVector<T>& elems);
-    template <typename T> QString CreateNamesList(const QVector<T>& elems);
-    template <typename T> QVector<T> GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);
-
-    template <typename T> void ApplyChanges(QVector<T>& elems, const QTableWidget* table);
-    template <typename T> void ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table);
-    template <typename T> void ShowSelection(const QVector<T>& elems, QComboBox* comboBox, QStandardItem* item);
 
 public slots:
     void setProgressBarValue(int value);
