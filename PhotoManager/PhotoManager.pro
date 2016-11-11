@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     filecopierthread.cpp \
     projectname.cpp \
     previewworker.cpp \
-    previewsession.cpp
+    previewsession.cpp \
+    photoloader.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     filecopierthread.h \
     projectname.h \
     previewworker.h \
-    previewsession.h
+    previewsession.h \
+    photoloader.h
 
 FORMS    += mainwindow.ui
 

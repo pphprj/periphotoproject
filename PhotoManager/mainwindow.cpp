@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete _loader;
     delete _previewSession;
     delete _copierThread;
     delete _fileManager;
@@ -46,6 +47,10 @@ void MainWindow::InitDatabase()
 
     _dbm = new DatabaseManager();
     bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
+    if (result)
+    {
+        _loader = new PhotoLoader(_dbm);
+    }
 
     qDebug() << "db connect result " << result;
 }
@@ -90,27 +95,20 @@ void MainWindow::InitInterface()
 
 void MainWindow::LoadDatabase()
 {
-    if(_dbm)
+    if (_loader)
     {
-        _formworkSystems.clear();
-        _dbm->SelectFormworkSystems(_formworkSystems);
-        _features.clear();
-        _dbm->SelectFeatures(_features);
-        _categories.clear();
-        _dbm->SelectCategories(_categories);
-        _projectNames.clear();
-        _dbm->SelectProjectNames(_projectNames);
+        _loader->LoadDatabase();
     }
 }
 
 void MainWindow::LoadInterface()
 {
     //create combobox with cheking elems for formworks
-    FillCombobox(_formworkSystems, ui->comboBoxSystems);
+    FillCombobox(_loader->GetFormworkSystems(), ui->comboBoxSystems);
     connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
 
     //create combobox with cheking elems for features
-    FillCombobox(_features, ui->comboBoxFeatures);
+    FillCombobox(_loader->GetFeatures(), ui->comboBoxFeatures);
     connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
 }
 
@@ -175,7 +173,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
+    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
     QString selectedFws = CreateIDsList(selectedSystems);
     if (selectedFws.isEmpty())
     {
@@ -183,7 +181,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
+    QVector<Feature> selectedFeatures = GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
     QString selectedFts = CreateIDsList(selectedFeatures);
     if (selectedFts.isEmpty())
     {
@@ -427,9 +425,9 @@ QString MainWindow::GetSelectedCategories()
 {
     QVector<Categorie> selected;
 
-    if (ui->checkBoxInProc->isChecked()) selected.push_back(_categories[0]);
-    if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_categories[1]);
-    if (ui->checkBoxMarketing->isChecked()) selected.push_back(_categories[2]);
+    if (ui->checkBoxInProc->isChecked()) selected.push_back(_loader->GetCategories()[0]);
+    if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_loader->GetCategories()[1]);
+    if (ui->checkBoxMarketing->isChecked()) selected.push_back(_loader->GetCategories()[2]);
 
     return CreateIDsList(selected);
 }
@@ -469,7 +467,7 @@ void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
     }
     else
     {
-        ShowSelection(_formworkSystems, ui->comboBoxSystems, item);
+        ShowSelection(_loader->GetFormworkSystems(), ui->comboBoxSystems, item);
     }
 }
 
@@ -481,7 +479,7 @@ void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
     }
     else
     {
-        ShowSelection(_features, ui->comboBoxFeatures, item);
+        ShowSelection(_loader->GetFeatures(), ui->comboBoxFeatures, item);
     }
 }
 
@@ -538,8 +536,8 @@ void MainWindow::on_tabWidgetSystem_currentChanged(int index)
 {
     if (index == 1)
     {
-        FillTableWidget(_formworkSystems, ui->tableWidgetSystems);
-        FillTableWidget(_features, ui->tableWidgetFeatures);
+        FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
 
         _dbChangesFlag = false;
     }
@@ -557,9 +555,9 @@ void MainWindow::on_pushButtonApplySystem_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
+    ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
 
-    _dbm->UpdateFormworkSystems(_formworkSystems);
+    _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
     LoadDatabase();
     LoadInterface();
@@ -567,7 +565,7 @@ void MainWindow::on_pushButtonApplySystem_clicked()
 
 void MainWindow::on_tableWidgetSystems_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_formworkSystems, item, ui->tableWidgetSystems);
+    ItemChanged(_loader->GetFormworkSystems(), item, ui->tableWidgetSystems);
 }
 
 void MainWindow::on_pushButtonSystemsNew_clicked()
@@ -585,15 +583,15 @@ void MainWindow::on_pushButtonApplyFeature_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_features, ui->tableWidgetFeatures);
-    _dbm->UpdateFeatures(_features);
+    ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+    _dbm->UpdateFeatures(_loader->GetFeatures());
     LoadDatabase();
     LoadInterface();
 }
 
 void MainWindow::on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_features, item, ui->tableWidgetFeatures);
+    ItemChanged(_loader->GetFeatures(), item, ui->tableWidgetFeatures);
 }
 
 void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
@@ -609,11 +607,11 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
         if (!ConfirmWindow())
             return;
 
-        ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
-        _dbm->UpdateFormworkSystems(_formworkSystems);
+        ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
-        ApplyChanges(_features, ui->tableWidgetFeatures);
-        _dbm->UpdateFeatures(_features);
+        ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        _dbm->UpdateFeatures(_loader->GetFeatures());
 
         LoadDatabase();
         LoadInterface();
@@ -661,10 +659,10 @@ void MainWindow::finishedCopy()
     QString projectName = GetProjectName();
     QString projectNo = GetProjectNo();
 
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
+    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
     QString selectedFws = CreateIDsList(selectedSystems);
 
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
+    QVector<Feature> selectedFeatures = GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
     QString selectedFts = CreateIDsList(selectedFeatures);
 
     QString selectedCategories = GetSelectedCategories();
@@ -704,6 +702,10 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 {
+    if (index == -1)
+    {
+        return;
+    }
     QAbstractItemModel* model = ui->comboBoxSystems->model();
     QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
     standardModel->item(index)->setCheckState(Qt::Checked);
@@ -711,7 +713,7 @@ void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 
 void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
-    foreach (ProjectName name, _projectNames)
+    foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetProjectNo().contains(arg1))
         {
@@ -725,7 +727,7 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 {
-    foreach (ProjectName name, _projectNames)
+    foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetName().contains(arg1))
         {

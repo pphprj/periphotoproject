@@ -11,6 +11,7 @@
 #include "configurator.h"
 #include "filecopierthread.h"
 #include "previewsession.h"
+#include "photoloader.h"
 
 namespace Ui {
 class MainWindow;
@@ -109,10 +110,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     DatabaseManager* _dbm;
-    QVector<FormworkSystem> _formworkSystems;
-    QVector<Feature> _features;
-    QVector<Categorie> _categories;
-    QVector<ProjectName> _projectNames;
+
     ProjectName _backup;
     QStringList _files;
     QDate _filesDate;
@@ -122,6 +120,8 @@ private:
     Configurator* _cfg;
     FilecopierThread* _copierThread;
     PreviewSession* _previewSession;
+
+    PhotoLoader* _loader;
 };
 
 #endif // MAINWINDOW_H

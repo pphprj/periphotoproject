@@ -595,3 +595,11 @@ QPixmap::scaled: Pixmap is a null pixmap
 QPixmap::scaled: Pixmap is a null pixmap
 QPixmap::scaled: Pixmap is a null pixmap
 QPixmap::scaled: Pixmap is a null pixmap
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+prject dir  "C:/Peri/Романенко Артем"
+last folder  "C:/Photos/Греция 2016"
+compression rate  80
+db connect result  true
+root dir  "C:/Peri/Романенко Артем"
