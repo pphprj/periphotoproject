@@ -9,6 +9,7 @@
 
 FileManager::FileManager(const QString& root)
 {
+    qDebug() << "root dir " << root;
     _rootDirectory = root;
 }
 
@@ -33,6 +34,7 @@ void FileManager::CreateRootDirectory()
 bool FileManager::CreateProjectDirectory(const QString &projectNo)
 {
     _projectDirectory = _rootDirectory + "\\" + projectNo;
+    qDebug() << "project dir " << _projectDirectory;
     if (!CheckDirectory(_projectDirectory))
         return CreateDirectory(_projectDirectory);
     return true;
@@ -41,6 +43,7 @@ bool FileManager::CreateProjectDirectory(const QString &projectNo)
 bool FileManager::CreateFilesDirectory(const QDate &filesDate)
 {
     QString filesDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\";
+    qDebug() << "files dir " << filesDirectory;
     if (!CheckDirectory(filesDirectory))
         return CreateDirectory(filesDirectory);
     return true;
@@ -67,7 +70,7 @@ QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRa
 
     if (QFile::copy(tmpFile.fileName(), destinationFileName))
     {
-        qDebug() << "copy was successfull";
+        qDebug() << "copy was successfull " << destinationFileName;
         return QFileInfo(destinationFileName);
     }
     return QFileInfo();

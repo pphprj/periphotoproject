@@ -3,6 +3,7 @@
 #include <QSettings>
 #include <QApplication>
 #include <QTextCodec>
+#include <QDebug>
 
 Configurator::Configurator()
 {
@@ -21,8 +22,11 @@ Configurator::Configurator()
 
     settings.beginGroup("Files");
     _projectsDirectory = settings.value("Directory").toString();
+    qDebug() << "prject dir " << _projectsDirectory;
     _lastFolder = settings.value("LastFolder").toString();
+    qDebug() << "last folder " << _lastFolder;
     _compressionRate = settings.value("CompressionRate").toInt();
+    qDebug() << "compression rate " << _compressionRate;
     settings.endGroup();
 }
 

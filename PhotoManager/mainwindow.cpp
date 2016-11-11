@@ -711,6 +711,8 @@ void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 
 void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
+    return;
+
     foreach (ProjectName name, _projectNames)
     {
         if (name.GetProjectNo().contains(arg1))
@@ -725,6 +727,8 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 {
+    return;
+
     foreach (ProjectName name, _projectNames)
     {
         if (name.GetName().contains(arg1))
