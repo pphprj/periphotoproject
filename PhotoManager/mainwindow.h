@@ -76,13 +76,12 @@ private:
     QStringList& GetFileList();
     void GetFilesDate();
 
-    void ClearComboboxChecked(QComboBox* comboBox);
     void ClearInterface();
 
     void LoadInterface();
     void LoadDatabase();
 
-    void NewItem(QTableWidget* table);
+
     void AddFileToPreview(const QString& fileName);
     void DeleteFileFromPreview(int num);
 
@@ -105,6 +104,8 @@ private:
     QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;
+    QVector<FormworkSystem> _selectedSystems;
+    QVector<Feature> _selectedFeatures;
 
     FileManager* _fileManager;
     Configurator* _cfg;

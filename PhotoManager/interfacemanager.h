@@ -132,17 +132,15 @@ public:
             }
         }
     }
-    template <typename T> static void ShowSelection(const QVector<T>& elems, QComboBox* comboBox, QStandardItem* item)
-    {
-        if (item->index().row() == 0)
-        {
-            return;
-        }
 
-        QVector<T> selected = InterfaceManager::GetSelectedListItems(elems, comboBox->model());
+    template <typename T> static void ShowSelection(const QVector<T>& selected, QComboBox* comboBox)
+    {
         QString selectedList = TableAbstractElemManager::CreateNamesList(selected);
         comboBox->setItemText(0, selectedList);
     }
+
+    static void NewItem(QTableWidget* table);
+    static void ClearComboboxChecked(QComboBox* comboBox);
 
 signals:
 

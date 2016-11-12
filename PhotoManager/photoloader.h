@@ -12,6 +12,9 @@ public:
     explicit PhotoLoader(DatabaseManager* manager, QObject *parent = 0);
 
     bool LoadDatabase();
+    bool InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
+                          QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QString& selectedCategories,
+                          QVector<QFileInfo>& files);
 
     QVector<FormworkSystem>& GetFormworkSystems();
     QVector<Feature>& GetFeatures();

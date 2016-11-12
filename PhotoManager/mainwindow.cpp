@@ -170,22 +170,17 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     QString projectNo = GetProjectNo();
     if (projectNo.isEmpty())
     {
-
         QMessageBox::critical(this, tr("Error!"), tr("Please, input Project No!"));
         return;
     }
 
-    QVector<FormworkSystem> selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
-    QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedSystems);
-    if (selectedFws.isEmpty())
+    if (_selectedSystems.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select formworks!"));
         return;
     }
 
-    QVector<Feature> selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
-    QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
-    if (selectedFts.isEmpty())
+    if (_selectedFeatures.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select features!"));
         return;
@@ -228,16 +223,6 @@ void MainWindow::GetFilesDate()
 {
 }
 
-void MainWindow::NewItem( QTableWidget* table)
-{
-    QTableWidgetItem* item = new QTableWidgetItem(tr("New item"));
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
-    table->insertRow(table->rowCount());
-    table->setItem(table->rowCount() - 1, 0, item);
-    table->setCurrentItem(item);
-    _dbChangesFlag = true;
-}
-
 
 QString MainWindow::GetSelectedCategories()
 {
@@ -255,37 +240,28 @@ QStringList& MainWindow::GetFileList()
     return _files;
 }
 
-void MainWindow::ClearComboboxChecked(QComboBox* comboBox)
-{
-    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(comboBox->model());
-    for (int i = 0; i < standardModel->rowCount(); i++)
-    {
-        if (standardModel->item(i)->checkState() == Qt::Checked)
-        {
-            standardModel->item(i)->setCheckState(Qt::Unchecked);
-        }
-    }
-    comboBox->setItemText(0, "");
-}
-
 void MainWindow::ClearInterface()
 {
     ui->listWidgetPhotos->clear();
     ui->progressBar->setValue(0);
     _files.clear();
-    //ClearComboboxChecked(ui->comboBoxFeatures->model());
-    //ClearComboboxChecked(ui->comboBoxSystems->model());
 }
 
 void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
 {
     if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxSystems);
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxSystems);
     }
     else
     {
-        InterfaceManager::ShowSelection(_loader->GetFormworkSystems(), ui->comboBoxSystems, item);
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
+        InterfaceManager::ShowSelection(_selectedSystems, ui->comboBoxSystems);
     }
 }
 
@@ -293,11 +269,17 @@ void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
 {
     if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxFeatures);
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxFeatures);
     }
     else
     {
-        InterfaceManager::ShowSelection(_loader->GetFeatures(), ui->comboBoxFeatures, item);
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
+        InterfaceManager::ShowSelection(_selectedFeatures, ui->comboBoxFeatures);
     }
 }
 
@@ -390,12 +372,14 @@ void MainWindow::on_tableWidgetSystems_itemChanged(QTableWidgetItem *item)
 
 void MainWindow::on_pushButtonSystemsNew_clicked()
 {
-    NewItem(ui->tableWidgetSystems);
+    InterfaceManager::NewItem(ui->tableWidgetSystems);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonNewFeature_clicked()
 {
-    NewItem(ui->tableWidgetFeatures);
+    InterfaceManager::NewItem(ui->tableWidgetFeatures);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonApplyFeature_clicked()
@@ -456,7 +440,6 @@ bool MainWindow::ConfirmWindow()
 
 void MainWindow::on_checkBoxEnablePreview_clicked()
 {
-    ;
     if (ui->checkBoxEnablePreview->isChecked())
     {
         ui->listWidgetPhotos->setViewMode(QListWidget::IconMode);
@@ -480,25 +463,10 @@ void MainWindow::finishedCopy()
     qDebug() << "finishedCopy start";
     QVector<QFileInfo> files = _copierThread->getCopiedFiles();
 
-    QString projectName = GetProjectName();
-    QString projectNo = GetProjectNo();
 
-    QVector<FormworkSystem> selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
-    QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedSystems);
-
-    QVector<Feature> selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
-    QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
-
-    QString selectedCategories = GetSelectedCategories();
-
-
-    bool result = _dbm->InsertValuesToPhotos(projectNo,
-                                             projectName,
-                                             GetProjectDate(),
-                                             selectedFws,
-                               selectedFts,
-                               selectedCategories,
-                               files);
+    bool result = _loader->InsertToDatabase(GetProjectNo(), GetProjectName(), GetProjectDate(),
+                                            _selectedSystems, _selectedFeatures, GetSelectedCategories(),
+                                            files);
 
     if (result)
     {
@@ -526,6 +494,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 {
+    return;
+
     if (index == -1)
     {
         return;

@@ -1,4 +1,5 @@
 #include "photoloader.h"
+#include "tableabstractelemmanager.h"
 
 PhotoLoader::PhotoLoader(DatabaseManager* manager, QObject *parent) : QObject(parent)
 {
@@ -19,6 +20,25 @@ bool PhotoLoader::LoadDatabase()
         _projectNames.clear();
         result |= _dbm->SelectProjectNames(_projectNames);
     }
+    return result;
+}
+
+bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
+                                   QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QString& selectedCategories,
+                                   QVector<QFileInfo>& files)
+{
+    QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedFormworks);
+
+    QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
+
+    bool result = _dbm->InsertValuesToPhotos(projectNo,
+                                             projectName,
+                                             projectDate,
+                                             selectedFws,
+                               selectedFts,
+                               selectedCategories,
+                               files);
+
     return result;
 }
 
