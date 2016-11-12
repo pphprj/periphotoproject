@@ -30,9 +30,9 @@ void FileManager::CreateRootDirectory()
         CreateDirectory(_rootDirectory);
 }
 
-bool FileManager::CreateProjectDirectory(const QString &projectNo)
+bool FileManager::CreateProjectDirectory(const QString &projectNo, const QString& projectName)
 {
-    _projectDirectory = _rootDirectory + "\\" + projectNo;
+    _projectDirectory = _rootDirectory + "\\" + projectNo + " " + projectName;
     if (!CheckDirectory(_projectDirectory))
         return CreateDirectory(_projectDirectory);
     return true;

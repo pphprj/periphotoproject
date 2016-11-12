@@ -12,7 +12,7 @@ public:
     FileManager(const QString& root);
 
     void CreateRootDirectory();
-    bool CreateProjectDirectory(const QString& projectNo);
+    bool CreateProjectDirectory(const QString& projectNo, const QString& projectName);
     bool CreateFilesDirectory(const QDate& filesDate);
 
     //return destination file name
