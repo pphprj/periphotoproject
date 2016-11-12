@@ -603,3 +603,55 @@ last folder  "C:/Photos/Греция 2016"
 compression rate  80
 db connect result  true
 root dir  "C:/Peri/Романенко Артем"
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+prject dir  "C:/Peri/Романенко Артем"
+last folder  "C:/Photos/Греция 2016"
+compression rate  80
+db connect result  true
+root dir  "C:/Peri/Романенко Артем"
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+project dir  "C:/Peri/Романенко Артем\\999999 hello world"
+Thread copy start
+files dir  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-05\\"
+compression result  true
+copy was successfull  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-05\\IMG_9152.JPG"
+File #  1
+files dir  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-05\\"
+compression result  true
+copy was successfull  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-05\\IMG_9165.JPG"
+File #  2
+files dir  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\"
+compression result  true
+copy was successfull  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\IMG_9186.JPG"
+File #  3
+files dir  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\"
+compression result  true
+copy was successfull  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\IMG_9352.JPG"
+File #  4
+files dir  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\"
+compression result  true
+copy was successfull  "C:/Peri/Романенко Артем\\999999 hello world\\2016-09-06\\IMG_9353.JPG"
+File #  5
+Circle finished
+Progress 100
+finishedCopy start
+d
+QSqlQuery::value: not positioned on a valid record
+QSqlQuery::value: unknown field name 'ID'
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (35, '2016-11-12', '3;6', '4', '3', 'C:/Peri/Романенко Артем/999999 hello world/2016-09-05/IMG_9152.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (35, '2016-11-12', '3;6', '4', '3', 'C:/Peri/Романенко Артем/999999 hello world/2016-09-05/IMG_9165.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (35, '2016-11-12', '3;6', '4', '3', 'C:/Peri/Романенко Артем/999999 hello world/2016-09-06/IMG_9186.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (35, '2016-11-12', '3;6', '4', '3', 'C:/Peri/Романенко Артем/999999 hello world/2016-09-06/IMG_9352.JPG')"
+insert result  true
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (35, '2016-11-12', '3;6', '4', '3', 'C:/Peri/Романенко Артем/999999 hello world/2016-09-06/IMG_9353.JPG')"
+insert result  true
+finishedCopy end true

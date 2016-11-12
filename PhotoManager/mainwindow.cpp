@@ -204,7 +204,8 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    _fileManager->CreateProjectDirectory(projectNo);
+    QString projectName = GetProjectName();
+    _fileManager->CreateProjectDirectory(projectNo, projectName);
     _copierThread->setFileList(GetFileList(), _cfg->GetCompressionRate());
     _copierThread->start();
 }
