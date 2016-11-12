@@ -704,6 +704,10 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 {
+    if (index == -1)
+    {
+        return;
+    }
     QAbstractItemModel* model = ui->comboBoxSystems->model();
     QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
     standardModel->item(index)->setCheckState(Qt::Checked);
