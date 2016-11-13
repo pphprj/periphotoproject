@@ -5,6 +5,7 @@
 #include <QPixmap>
 #include <QTemporaryFile>
 #include <QDebug>
+#include <QIcon>
 
 
 FileManager::FileManager(const QString& root)
@@ -32,7 +33,11 @@ void FileManager::CreateRootDirectory()
 
 bool FileManager::CreateProjectDirectory(const QString &projectNo, const QString& projectName)
 {
-    _projectDirectory = _rootDirectory + "\\" + projectNo + " " + projectName;
+    _projectDirectory = _rootDirectory + "\\" + projectNo;
+
+    if (!projectName.isEmpty())
+        _projectDirectory += " " + projectName;
+
     if (!CheckDirectory(_projectDirectory))
         return CreateDirectory(_projectDirectory);
     return true;
@@ -43,6 +48,14 @@ bool FileManager::CreateFilesDirectory(const QDate &filesDate)
     QString filesDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\";
     if (!CheckDirectory(filesDirectory))
         return CreateDirectory(filesDirectory);
+    return true;
+}
+
+bool FileManager::CreatePreviewDirectory(const QDate &filesDate)
+{
+    _previewDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\" + "preview" + "\\";
+    if (!CheckDirectory(_previewDirectory))
+        return CreateDirectory(_previewDirectory);
     return true;
 }
 
@@ -81,4 +94,16 @@ QVector<QFileInfo> FileManager::AddFilesToDirectory(const QStringList &files, in
         result.push_back(AddFileToDirectory(files.at(i), compressionRate));
     }
     return result;
+}
+
+QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &file)
+{
+    QFileInfo sourceFile(file);
+    CreatePreviewDirectory(sourceFile.lastModified().date());
+
+    QString previewFileName = _previewDirectory + "\\" + sourceFile.baseName() + ".png";
+
+    icon.pixmap(100, 100).save(previewFileName);
+
+    return QFileInfo(previewFileName);
 }

@@ -165,7 +165,8 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &formworkSystems,
                                            const QString &features,
                                            const QString &categories,
-                                           const QVector<QFileInfo> &photos)
+                                           const QVector<QFileInfo> &photos,
+                                           const QVector<QFileInfo> &previews)
 {
     int projectID = CheckProjectNo(projectNo);
     if (projectID == -1)
@@ -214,13 +215,42 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         {
             QString fileDate = file.lastModified().date().toString("yyyy-MM-dd");
             QString temp = queryString.arg(fileDate, file.filePath());
+            query.prepare(temp);
             qDebug() << temp;
-            result = query.exec(temp);
+            result = query.exec();
+            if (result)
+            {
+                InsertPreview(query.lastInsertId().toInt(), previews[i]);
+            }
             qDebug() << "insert result " << result;
         }
     }
 
     return true;
+}
+
+bool DatabaseManager::InsertPreview(int photoID, const QFileInfo &preview)
+{
+    QString queryString = "INSERT INTO Previews ";
+
+    //column names
+    queryString += "(";
+    queryString += "PhotoID, ";
+    queryString += "FilePath";
+    queryString += ")";
+
+    //values
+    queryString += " VALUES ";
+    queryString += "(";
+    queryString += QString::number(photoID) + ", ";
+    queryString += "'" + preview.filePath() + "'";
+    queryString += ")";
+
+    QSqlQuery query;
+    bool result = query.exec(queryString);
+    qDebug() << queryString << " result " << query.lastError().text();
+
+    return result;
 }
 
 bool DatabaseManager::InsertProject(const QString &projectNo,

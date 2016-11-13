@@ -25,7 +25,7 @@ bool PhotoLoader::LoadDatabase()
 
 bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
                                    QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QString& selectedCategories,
-                                   QVector<QFileInfo>& files)
+                                   QVector<QFileInfo>& files, QVector<QFileInfo>& previews)
 {
     QString selectedFws = TableAbstractElemManager::CreateIDsList(selectedFormworks);
 
@@ -35,9 +35,10 @@ bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDa
                                              projectName,
                                              projectDate,
                                              selectedFws,
-                               selectedFts,
-                               selectedCategories,
-                               files);
+                                             selectedFts,
+                                             selectedCategories,
+                                             files,
+                                             previews);
 
     return result;
 }

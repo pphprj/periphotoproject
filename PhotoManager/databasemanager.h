@@ -37,7 +37,10 @@ public:
                               const QString& formworkSystems,
                               const QString& features,
                               const QString& categories,
-                              const QVector<QFileInfo>& photos);
+                              const QVector<QFileInfo>& photos,
+                              const QVector<QFileInfo>& previews);
+
+    bool InsertPreview(int photoID, const QFileInfo& preview);
 
     bool InsertProject(const QString& projectNo,
                        const QString& name,

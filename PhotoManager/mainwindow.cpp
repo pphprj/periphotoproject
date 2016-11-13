@@ -201,7 +201,7 @@ void MainWindow::on_pushButtonAddToDB_clicked()
 
     QString projectName = GetProjectName();
     _fileManager->CreateProjectDirectory(projectNo, projectName);
-    _copierThread->setFileList(GetFileList(), _cfg->GetCompressionRate());
+    _copierThread->setFileList(_files, _cfg->GetCompressionRate());
     _copierThread->start();
 }
 
@@ -234,11 +234,6 @@ QString MainWindow::GetSelectedCategories()
     if (ui->checkBoxMarketing->isChecked()) selected.push_back(_loader->GetCategories()[2]);
 
     return TableAbstractElemManager::CreateIDsList(selected);
-}
-
-QStringList& MainWindow::GetFileList()
-{
-    return _files;
 }
 
 void MainWindow::ClearInterface()
@@ -465,9 +460,17 @@ void MainWindow::finishedCopy()
     QVector<QFileInfo> files = _copierThread->getCopiedFiles();
 
 
+    QVector<QFileInfo> previews;
+    for (int i = 0; i < _files.count(); i++)
+    {
+       previews.push_back(_fileManager->AddPreviewToDirectory(ui->listWidgetPhotos->item(i)->icon(), _files.at(i)));
+    }
+
+
     bool result = _loader->InsertToDatabase(GetProjectNo(), GetProjectName(), GetProjectDate(),
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
-                                            files);
+                                            files,
+                                            previews);
 
     if (result)
     {

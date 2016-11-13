@@ -73,7 +73,6 @@ private:
     QString GetProjectName();
     QDate GetProjectDate();
     QString GetSelectedCategories();
-    QStringList& GetFileList();
     void GetFilesDate();
 
     void ClearInterface();
