@@ -29,7 +29,30 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
             "Pwd=" + password + ";" +
             "WSID=";
     _db.setDatabaseName(connection);
-    return _db.open();
+
+    bool result = _db.open();
+    if (result)
+    {
+        if (!CheckTable("Previews"))
+        {
+            result = CreateTable("Previews");
+        }
+    }
+
+    return result;
+}
+
+bool DatabaseManager::CreateTable(const QString &tableName)
+{
+    if (!_db.isOpen()) return false;
+    QSqlQuery query;
+    QString request = "CREATE TABLE " + tableName;
+    request += " (";
+    request += "ID INTEGER PRIMARY KEY IDENTITY(1,1), ";
+    request += "PHOTOID INTEGER NOT NULL,";
+    request += "FILEPATH VARCHAR(255) NOT NULL";
+    request += ")";
+    return query.exec(request);
 }
 
 bool DatabaseManager::InsertTestValuesToCategoriesTable()
@@ -304,6 +327,12 @@ int DatabaseManager::CheckProjectNo(const QString &projectNo)
         result = query.value("ID").toInt();
     }
     return result;
+}
+
+bool DatabaseManager::CheckTable(const QString &tableName)
+{
+    if (!_db.isOpen()) return false;
+    return _db.tables().contains(tableName);
 }
 
 bool DatabaseManager::UpdateFeatures(const QVector<Feature> &elems)

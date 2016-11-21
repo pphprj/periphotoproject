@@ -112,6 +112,9 @@ void MainWindow::LoadInterface()
     //create combobox with cheking elems for features
     InterfaceManager::FillCombobox(_loader->GetFeatures(), ui->comboBoxFeatures);
     connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
+
+    ui->checkBoxEnablePreview->setChecked(true);
+    on_checkBoxEnablePreview_clicked();
 }
 
 void MainWindow::on_pushButtonTestSQL_clicked()

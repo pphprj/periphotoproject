@@ -17,6 +17,8 @@ public:
     ~DatabaseManager();
     bool Connect(const QString& host, const QString& username, const QString& password);
 
+    bool CreateTable(const QString& tableName);
+
     bool SelectFormworkSystems(QVector<FormworkSystem>& elems);
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
@@ -28,8 +30,6 @@ public:
     bool InsertTestValuesToCategoriesTable();
     bool InsertTestValuesToFormworkSystemsTable();
     bool InsertTestValuesToFeaturesTable();
-
-
 
     bool InsertValuesToPhotos(const QString& projectNo,
                               const QString& projectName,
@@ -49,6 +49,7 @@ public:
 
     //return Project ID
     int CheckProjectNo(const QString& projectNo);
+    bool CheckTable(const QString& tableName);
 
 private:
 
