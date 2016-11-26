@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     previewsession.cpp \
     photoloader.cpp \
     interfacemanager.cpp \
-    tableabstractelemmanager.cpp
+    tableabstractelemmanager.cpp \
+    photosearcher.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     previewsession.h \
     photoloader.h \
     interfacemanager.h \
-    tableabstractelemmanager.h
+    tableabstractelemmanager.h \
+    photosearcher.h
 
 FORMS    += mainwindow.ui
 

@@ -12,6 +12,7 @@
 #include "filecopierthread.h"
 #include "previewsession.h"
 #include "photoloader.h"
+#include "photosearcher.h"
 
 namespace Ui {
 class MainWindow;
@@ -65,6 +66,8 @@ private slots:
 
     void on_lineEditProjectName_textEdited(const QString &arg1);
 
+    void on_pushButtonSearch_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -112,6 +115,7 @@ private:
     PreviewSession* _previewSession;
 
     PhotoLoader* _loader;
+    PhotoSearcher* _searcher;
 };
 
 #endif // MAINWINDOW_H

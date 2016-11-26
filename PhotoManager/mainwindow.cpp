@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete _loader;
+    delete _searcher;
     delete _previewSession;
     delete _copierThread;
     delete _fileManager;
@@ -52,6 +53,7 @@ void MainWindow::InitDatabase()
     if (result)
     {
         _loader = new PhotoLoader(_dbm);
+        _searcher = new PhotoSearcher(_dbm);
     }
 
     qDebug() << "db connect result " << result;
@@ -88,7 +90,7 @@ void MainWindow::InitInterface()
     ui->pushButtonNewFeature->setText(tr("New feature"));
     ui->pushButtonSystemsNew->setText(tr("New system"));
     ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
-    ui->tabWidgetSystem->setTabText(1, tr("Edit database"));
+    ui->tabWidgetSystem->setTabText(2, tr("Edit database"));
 
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
@@ -100,6 +102,11 @@ void MainWindow::LoadDatabase()
     if (_loader)
     {
         _loader->LoadDatabase();
+    }
+
+    if (_searcher)
+    {
+        _searcher->LoadDatabase();
     }
 }
 
@@ -333,7 +340,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::on_tabWidgetSystem_currentChanged(int index)
 {
-    if (index == 1)
+    if (index == 2)
     {
         InterfaceManager::FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
         InterfaceManager::FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
@@ -514,6 +521,8 @@ void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 
 void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
+    return;
+
     foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetProjectNo().contains(arg1))
@@ -528,6 +537,8 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 {
+    return;
+
     foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetName().contains(arg1))
@@ -538,4 +549,9 @@ void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
         }
     }
     ui->lineEditProjectNo->setText(_backup.GetProjectNo());
+}
+
+void MainWindow::on_pushButtonSearch_clicked()
+{
+
 }
