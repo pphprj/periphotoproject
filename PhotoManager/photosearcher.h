@@ -10,7 +10,7 @@ public:
     explicit PhotoSearcher(DatabaseManager* manager, QObject *parent = 0);
 
     bool SearchPhotos(QString& projectNo, QString& projectName, QDate& projectDate,
-                          QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QString& selectedCategories,
+                          QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QVector<Categorie>& selectedCategories,
                           QVector<QFileInfo>& files, QVector<QFileInfo>& previews);
 };
 

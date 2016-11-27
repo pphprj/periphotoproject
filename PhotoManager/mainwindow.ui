@@ -38,7 +38,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabAdd">
          <attribute name="title">
@@ -376,9 +376,9 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonSavePhoto">
+           <widget class="QPushButton" name="pushButtonSavePhotos">
             <property name="text">
-             <string>Save photo</string>
+             <string>Save photos</string>
             </property>
            </widget>
           </item>

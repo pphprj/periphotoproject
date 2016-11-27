@@ -41,6 +41,8 @@ private slots:
 
     void on_comboBoxSystems_ModelItemChanged(QStandardItem *item);
     void on_comboBoxFeatures_ModelItemChanged(QStandardItem *item);
+    void on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item);
+    void on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item);
 
     void on_tabWidgetSystem_currentChanged(int index);
 
@@ -68,17 +70,16 @@ private slots:
 
     void on_pushButtonSearch_clicked();
 
+    void on_pushButtonSavePhotos_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
 
-    QString GetProjectNo();
-    QString GetProjectName();
-    QDate GetProjectDate();
     QString GetSelectedCategories();
-    void GetFilesDate();
+    QVector<Categorie> GetSelectedCategoriesSearch();
 
-    void ClearInterface();
+    void ClearInterface(int tabIndex);
 
     void LoadInterface();
     void LoadDatabase();
@@ -108,6 +109,7 @@ private:
     bool _dbChangesFlag;
     QVector<FormworkSystem> _selectedSystems;
     QVector<Feature> _selectedFeatures;
+    QVector<QFileInfo> _searchResult;
 
     FileManager* _fileManager;
     Configurator* _cfg;

@@ -603,3 +603,17 @@ last folder  "C:/Photos/Греция 2016"
 compression rate  80
 db connect result  true
 root dir  "C:/Peri/Романенко Артем"
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem*)
+db connect result  true
+"SELECT FilePath, ProjectID FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') AND (CreationTime = '2016-11-11') WHERE  Projects.ID = Photos.ProjectID  AND  ( Category LIKE '2'  OR Category LIKE '%2;%' OR Category LIKE '%2' ) "
+" "
+"SELECT FilePath, ProjectID FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') AND (CreationTime = '2016-11-11') WHERE  Projects.ID = Photos.ProjectID  AND  ( Category LIKE '3'  OR Category LIKE '%3;%' OR Category LIKE '%3' ) "
+" "
+"SELECT FilePath, ProjectID FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') AND (CreationTime = '2016-11-11') WHERE  Projects.ID = Photos.ProjectID  AND  ( FormworkSystems LIKE '3'  OR FormworkSystems LIKE '%3;%' OR FormworkSystems LIKE '%3' )  AND  ( Category LIKE '3'  OR Category LIKE '%3;%' OR Category LIKE '%3' ) "
+" "
+"SELECT FilePath, ProjectID FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') AND (CreationTime = '2016-11-11') WHERE  Projects.ID = Photos.ProjectID  AND  ( FormworkSystems LIKE '3'  OR FormworkSystems LIKE '%3;%' OR FormworkSystems LIKE '%3' )  AND  ( Features LIKE '4'  OR Features LIKE '%4;%' OR Features LIKE '%4' )  AND  ( Category LIKE '3'  OR Category LIKE '%3;%' OR Category LIKE '%3' ) "
+" "

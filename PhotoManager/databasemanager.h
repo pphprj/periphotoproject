@@ -23,6 +23,14 @@ public:
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
     bool SelectProjectNames(QVector<ProjectName>& elems);
+    bool SelectPhotos(const QString& projectNo,
+                      const QString& projectName,
+                      const QDate& projectDate,
+                      const QVector<FormworkSystem>& formworkSystems,
+                      const QVector<Feature>& features,
+                      const QVector<Categorie>& categories,
+                      QVector<QFileInfo>& photos,
+                      QVector<QFileInfo>& previews);
 
     bool UpdateFormworkSystems(const QVector<FormworkSystem>& elems);
     bool UpdateFeatures(const QVector<Feature>& elems);

@@ -182,6 +182,138 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
     return true;
 }
 
+bool DatabaseManager::SelectPhotos(const QString &projectNo,
+                                   const QString &projectName,
+                                   const QDate &projectDate,
+                                   const QVector<FormworkSystem> &formworkSystems,
+                                   const QVector<Feature> &features,
+                                   const QVector<Categorie> &categories,
+                                   QVector<QFileInfo> &photos,
+                                   QVector<QFileInfo> &previews)
+{
+    if (!_db.isOpen()) return false;
+
+    bool result = false;
+
+    QSqlQuery query;
+    QString sqlQuery = "SELECT FilePath, ProjectID ";
+    sqlQuery += "FROM Photos ";
+
+    sqlQuery += "INNER JOIN Projects ";
+    sqlQuery += "ON ";
+    sqlQuery += QString("(ProjectNo LIKE ") + "'%" + projectNo + "%')";
+    if (!projectName.isEmpty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(Name LIKE ") + "'%" + projectName + "%')";
+    }
+    sqlQuery += " AND ";
+    sqlQuery += QString("(CreationTime = ") + "'" + projectDate.toString("yyyy-MM-dd") + "')";
+
+    sqlQuery += " WHERE ";
+
+    sqlQuery += " Projects.ID = Photos.ProjectID ";
+
+    if (!formworkSystems.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < formworkSystems.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        FormworkSystem system = formworkSystems[i];
+        //alone ID
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'" + QString::number(system.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + "'";
+    }
+
+    if (!formworkSystems.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (!features.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < features.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        Feature feature = features[i];
+        //alone ID
+        sqlQuery += QString("Features ") + "LIKE " + "'" + QString::number(feature.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + "'";
+    }
+
+    if (!features.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (!categories.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < categories.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        Categorie cat = categories[i];
+        //alone ID
+        sqlQuery += QString("Category ") + "LIKE " + "'" + QString::number(cat.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("Category ") + "LIKE " + "'%" + QString::number(cat.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("Category ") + "LIKE " + "'%" + QString::number(cat.GetID()) + "'";
+    }
+
+    if (!categories.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (query.exec(sqlQuery))
+    {
+        while (query.next())
+        {
+            QString filePath = query.value("FilePath").toString();
+            photos.push_back(QFileInfo(filePath));
+        }
+        result = true;
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &projectName,
                                            const QDate  &projectDate,
