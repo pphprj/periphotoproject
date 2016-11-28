@@ -320,7 +320,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &formworkSystems,
                                            const QString &features,
                                            const QString &categories,
-                                           const QVector<QFileInfo> &photos,
+                                           const QVector<FileInfoStruct> &photos,
                                            const QVector<QFileInfo> &previews)
 {
     int projectID = CheckProjectNo(projectNo);
@@ -365,11 +365,11 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     bool result = true;
     for (int i = 0; i < photos.length(); i++)
     {
-        QFileInfo file = photos[i];
-        if (!file.filePath().isEmpty())
+        FileInfoStruct file = photos[i];
+        if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified().date().toString("yyyy-MM-dd");
-            QString temp = queryString.arg(fileDate, file.filePath());
+            QString fileDate = file.lastModified.date().toString("yyyy-MM-dd");
+            QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
             query.prepare(temp);
             qDebug() << temp;
             result = query.exec();

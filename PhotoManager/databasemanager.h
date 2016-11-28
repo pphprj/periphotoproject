@@ -9,6 +9,7 @@
 #include "feature.h"
 #include "categorie.h"
 #include "projectname.h"
+#include "fileinfostruct.h"
 
 class DatabaseManager
 {
@@ -45,7 +46,7 @@ public:
                               const QString& formworkSystems,
                               const QString& features,
                               const QString& categories,
-                              const QVector<QFileInfo>& photos,
+                              const QVector<FileInfoStruct>& photos,
                               const QVector<QFileInfo>& previews);
 
     bool InsertPreview(int photoID, const QFileInfo& preview);

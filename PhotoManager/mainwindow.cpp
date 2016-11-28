@@ -517,7 +517,7 @@ void MainWindow::setProgressBarValue(int value)
 void MainWindow::finishedCopy()
 {
     qDebug() << "finishedCopy start";
-    QVector<QFileInfo> files = _copierThread->getCopiedFiles();
+    QVector<FileInfoStruct> files = _copierThread->getCopiedFiles();
 
 
     QVector<QFileInfo> previews;

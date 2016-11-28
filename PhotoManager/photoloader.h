@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "databasemanager.h"
+#include "fileinfostruct.h"
 
 class PhotoLoader : public QObject
 {
@@ -14,7 +15,7 @@ public:
     bool LoadDatabase();
     bool InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QString& selectedCategories,
-                          QVector<QFileInfo>& files, QVector<QFileInfo>& previews);
+                          QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews);
 
     QVector<FormworkSystem>& GetFormworkSystems();
     QVector<Feature>& GetFeatures();

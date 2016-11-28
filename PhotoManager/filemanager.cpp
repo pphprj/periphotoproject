@@ -59,7 +59,7 @@ bool FileManager::CreatePreviewDirectory(const QDate &filesDate)
     return true;
 }
 
-QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRate)
+FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compressionRate)
 {
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
@@ -81,14 +81,17 @@ QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRa
     if (QFile::copy(tmpFile.fileName(), destinationFileName))
     {
         qDebug() << "copy was successfull";
-        return QFileInfo(destinationFileName);
+        FileInfoStruct fileInfo;
+        fileInfo.fileInfo.setFile(destinationFileName);
+        fileInfo.lastModified = sourceFile.lastModified();
+        return fileInfo;
     }
-    return QFileInfo();
+    return FileInfoStruct();
 }
 
-QVector<QFileInfo> FileManager::AddFilesToDirectory(const QStringList &files, int compressionRate)
+QVector<FileInfoStruct> FileManager::AddFilesToDirectory(const QStringList &files, int compressionRate)
 {
-    QVector<QFileInfo> result;
+    QVector<FileInfoStruct> result;
     for (int i = 0; i < files.length(); i++)
     {
         result.push_back(AddFileToDirectory(files.at(i), compressionRate));

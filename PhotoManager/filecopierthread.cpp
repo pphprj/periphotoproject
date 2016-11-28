@@ -32,7 +32,7 @@ void FilecopierThread::run()
     qDebug() << "Thread copy finished";
 }
 
-QVector<QFileInfo>& FilecopierThread::getCopiedFiles()
+QVector<FileInfoStruct>& FilecopierThread::getCopiedFiles()
 {
     return _copiedFiles;
 }

@@ -47,7 +47,8 @@ HEADERS  += mainwindow.h \
     photoloader.h \
     interfacemanager.h \
     tableabstractelemmanager.h \
-    photosearcher.h
+    photosearcher.h \
+    fileinfostruct.h
 
 FORMS    += mainwindow.ui
 

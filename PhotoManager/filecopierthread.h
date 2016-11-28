@@ -3,8 +3,9 @@
 
 #include <QThread>
 #include <QString>
-#include <QFileInfo>
 #include <QVector>
+
+#include <fileinfostruct.h>
 
 class FileManager;
 
@@ -17,7 +18,7 @@ public:
     void setFileList(QStringList files, int compression);
     void run();
 
-    QVector<QFileInfo>& getCopiedFiles();
+    QVector<FileInfoStruct>& getCopiedFiles();
 
 signals:
     void progress(int value);
@@ -28,7 +29,7 @@ private:
     QStringList _files;
     int _compression;
     FileManager* _fileManager;
-    QVector<QFileInfo> _copiedFiles;
+    QVector<FileInfoStruct> _copiedFiles;
 };
 
 #endif // FILECOPIERTHREAD_H
