@@ -72,6 +72,12 @@ private slots:
 
     void on_pushButtonSavePhotos_clicked();
 
+    void on_checkBoxDisableProjectDate_clicked();
+
+    void on_checkBoxDisableIntervalBegin_clicked();
+
+    void on_checkBoxDisableIntervalEnd_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();

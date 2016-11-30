@@ -7,7 +7,15 @@ PhotoSearcher::PhotoSearcher(DatabaseManager* manager, QObject* parent) :
 
 }
 
-bool PhotoSearcher::SearchPhotos(QString &projectNo, QString &projectName, QDate &projectDate, QVector<FormworkSystem> &selectedFormworks, QVector<Feature> &selectedFeatures, QVector<Categorie> &selectedCategories, QVector<QFileInfo> &files, QVector<QFileInfo> &previews)
+bool PhotoSearcher::SearchPhotos(QString &projectNo,
+                                 QString &projectName,
+                                 QDate &projectDate,
+                                 QVector<FormworkSystem> &selectedFormworks,
+                                 QVector<Feature> &selectedFeatures,
+                                 QVector<Categorie> &selectedCategories,
+                                 QDate& intervalBegin,
+                                 QDate& intervalEnd,
+                                 QVector<QFileInfo> &files, QVector<QFileInfo> &previews)
 {
     bool result = _dbm->SelectPhotos(projectNo,
                                              projectName,
@@ -15,6 +23,8 @@ bool PhotoSearcher::SearchPhotos(QString &projectNo, QString &projectName, QDate
                                              selectedFormworks,
                                              selectedFeatures,
                                              selectedCategories,
+                                             intervalBegin,
+                                             intervalEnd,
                                              files,
                                              previews);
 

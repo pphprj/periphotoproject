@@ -93,7 +93,10 @@ void MainWindow::InitInterface()
     ui->tabWidgetSystem->setTabText(2, tr("Edit database"));
 
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
-    ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditProjectDateSearch->setEnabled(false);
+    ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
     ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
@@ -615,8 +618,12 @@ void MainWindow::on_pushButtonSearch_clicked()
 
     QVector<QFileInfo> previews;
 
+    QDate intervalBegin = ui->dateEditPhotoIntervalBegin->date();
+    QDate intervalEnd = ui->dateEditPhotoIntervalEnd->date();
+
     bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategoriesSearch(),
+                                            intervalBegin, intervalEnd,
                                             _searchResult,
                                             previews);
 
@@ -636,5 +643,47 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     {
         QString destinationFileName = destination + _searchResult[i].fileName();
         QFile::copy(_searchResult[i].filePath(), destinationFileName);
+    }
+}
+
+void MainWindow::on_checkBoxDisableProjectDate_clicked()
+{
+    if (ui->checkBoxDisableProjectDate->isChecked())
+    {
+        ui->dateEditProjectDateSearch->setEnabled(false);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditProjectDateSearch->setEnabled(true);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxDisableIntervalBegin_clicked()
+{
+    if (ui->checkBoxDisableIntervalBegin->isChecked())
+    {
+        ui->dateEditPhotoIntervalBegin->setEnabled(false);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditPhotoIntervalBegin->setEnabled(true);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
+{
+    if (ui->checkBoxDisableIntervalEnd->isChecked())
+    {
+        ui->dateEditPhotoIntervalEnd->setEnabled(false);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditPhotoIntervalEnd->setEnabled(true);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
     }
 }

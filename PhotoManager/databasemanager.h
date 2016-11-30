@@ -30,6 +30,8 @@ public:
                       const QVector<FormworkSystem>& formworkSystems,
                       const QVector<Feature>& features,
                       const QVector<Categorie>& categories,
+                      const QDate& intervalBegin,
+                      const QDate& intervalEnd,
                       QVector<QFileInfo>& photos,
                       QVector<QFileInfo>& previews);
 

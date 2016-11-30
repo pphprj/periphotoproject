@@ -188,6 +188,8 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QVector<FormworkSystem> &formworkSystems,
                                    const QVector<Feature> &features,
                                    const QVector<Categorie> &categories,
+                                   const QDate &intervalBegin,
+                                   const QDate &intervalEnd,
                                    QVector<QFileInfo> &photos,
                                    QVector<QFileInfo> &previews)
 {
@@ -207,8 +209,11 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
         sqlQuery += " AND ";
         sqlQuery += QString("(Name LIKE ") + "'%" + projectName + "%')";
     }
-    sqlQuery += " AND ";
-    sqlQuery += QString("(CreationTime = ") + "'" + projectDate.toString("yyyy-MM-dd") + "')";
+    if (projectDate != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("yyyy-MM-dd") + "')";
+    }
 
     sqlQuery += " WHERE ";
 
@@ -297,6 +302,25 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " ) ";
     }
+
+    if (intervalBegin != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("yyyy-MM-dd") + "'";
+    }
+
+    if (intervalEnd != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("yyyy-MM-dd") + "'";
+    }
+
+    if (intervalBegin != QDate(1970, 1, 1))
+    {
+        sqlQuery += " ) ";
+    }
+
 
     if (query.exec(sqlQuery))
     {
