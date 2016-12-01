@@ -78,6 +78,8 @@ private slots:
 
     void on_checkBoxDisableIntervalEnd_clicked();
 
+    void on_checkBoxEnablePreviewSearch_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -115,7 +117,7 @@ private:
     bool _dbChangesFlag;
     QVector<FormworkSystem> _selectedSystems;
     QVector<Feature> _selectedFeatures;
-    QVector<QFileInfo> _searchResult;
+    QVector<FileAndPreview> _searchResult;
 
     FileManager* _fileManager;
     Configurator* _cfg;

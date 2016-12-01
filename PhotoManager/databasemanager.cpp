@@ -190,15 +190,14 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QVector<Categorie> &categories,
                                    const QDate &intervalBegin,
                                    const QDate &intervalEnd,
-                                   QVector<QFileInfo> &photos,
-                                   QVector<QFileInfo> &previews)
+                                   QVector<FileAndPreview> &photos)
 {
     if (!_db.isOpen()) return false;
 
     bool result = false;
 
     QSqlQuery query;
-    QString sqlQuery = "SELECT FilePath, ProjectID ";
+    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -326,10 +325,40 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         while (query.next())
         {
-            QString filePath = query.value("FilePath").toString();
-            photos.push_back(QFileInfo(filePath));
+            FileAndPreview fnp;
+            fnp.photoId = query.value("ID").toInt();
+            fnp.filePath = query.value("FilePath").toString();
+            photos.push_back(fnp);
         }
         result = true;
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
+
+    SelectPreviews(photos);
+
+    return result;
+}
+
+bool DatabaseManager::SelectPreviews(QVector<FileAndPreview> &photos)
+{
+    bool result = false;
+
+    QString sqlQuery = "SELECT FilePath FROM Previews WHERE PhotoID = %1";
+    QSqlQuery query;
+
+    for (int i = 0; i < photos.length(); i++)
+    {
+        QString temp = sqlQuery.arg(photos[i].photoId);
+        if (query.exec(temp))
+        {
+            while (query.next())
+            {
+                photos[i].previewPath = query.value("FilePath").toString();
+            }
+            result = true;
+        }
     }
 
     qDebug() << sqlQuery;

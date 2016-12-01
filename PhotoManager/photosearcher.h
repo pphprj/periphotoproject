@@ -12,7 +12,7 @@ public:
     bool SearchPhotos(QString& projectNo, QString& projectName, QDate& projectDate,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QVector<Categorie>& selectedCategories,
                           QDate& intervalBegin, QDate& intervalEnd,
-                          QVector<QFileInfo>& files, QVector<QFileInfo>& previews);
+                          QVector<FileAndPreview>& photos);
 };
 
 #endif // PHOTOSEARCHER_H

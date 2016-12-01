@@ -624,15 +624,23 @@ void MainWindow::on_pushButtonSearch_clicked()
     bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategoriesSearch(),
                                             intervalBegin, intervalEnd,
-                                            _searchResult,
-                                            previews);
+                                            _searchResult);
 
     if (!result)
         return;
 
     for (int i = 0; i < _searchResult.count(); i++)
     {
-       ui->listWidgetPhotosSearch->addItem(_searchResult.at(i).filePath());
+       FileAndPreview fnp = _searchResult[i];
+       if (!fnp.previewPath.isEmpty())
+       {
+           QPixmap pm(fnp.previewPath);
+           ui->listWidgetPhotosSearch->addItem(new QListWidgetItem(QIcon(pm), fnp.filePath));
+       }
+       else
+       {
+           ui->listWidgetPhotosSearch->addItem(fnp.filePath);
+       }
     }
 }
 
@@ -641,8 +649,9 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     for (int i = 0; i < _searchResult.length(); i++)
     {
-        QString destinationFileName = destination + _searchResult[i].fileName();
-        QFile::copy(_searchResult[i].filePath(), destinationFileName);
+        QFileInfo fileInfo(_searchResult[i].filePath);
+        QString destinationFileName = destination + fileInfo.fileName();
+        QFile::copy(fileInfo.filePath(), destinationFileName);
     }
 }
 
@@ -685,5 +694,20 @@ void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
     {
         ui->dateEditPhotoIntervalEnd->setEnabled(true);
         ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxEnablePreviewSearch_clicked()
+{
+    if (ui->checkBoxEnablePreviewSearch->isChecked())
+    {
+        ui->listWidgetPhotosSearch->setViewMode(QListWidget::IconMode);
+        ui->listWidgetPhotosSearch->setIconSize(QSize(100, 100));
+        ui->listWidgetPhotosSearch->setResizeMode(QListWidget::Adjust);
+    }
+    else
+    {
+        ui->listWidgetPhotosSearch->setViewMode(QListWidget::ListMode);
+        ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
     }
 }
