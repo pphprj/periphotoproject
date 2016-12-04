@@ -792,34 +792,96 @@ void MainWindow::saveSelected(QListWidgetItem* item)
 
 void MainWindow::printSelected(QListWidgetItem *item)
 {
-    if (item == nullptr)
+    try
     {
-        return;
+        if (item == nullptr)
+        {
+            return;
+        }
+
+        QString filePath = item->text();
+
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setFullPage(true);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageSize(QPrinter::A4);
+        QPrintDialog *dlg = new QPrintDialog(&printer, this);
+        if(dlg->exec() == QDialog::Accepted)
+        {
+            QPixmap img(filePath);
+            QPainter painter(&printer);
+            QRect rect = painter.viewport();
+            QSize size = img.size();
+            size.scale(rect.size(), Qt::KeepAspectRatio);
+            painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+            painter.setWindow(img.rect());
+            painter.drawPixmap(0, 0, img);
+        }
+
+        delete dlg;
     }
-
-    QString filePath = item->text();
-
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setFullPage(true);
-    printer.setPaperSize(QPrinter::A4);
-    printer.setPageSize(QPrinter::A4);
-    QPrintDialog *dlg = new QPrintDialog(&printer, this);
-    if(dlg->exec() == QDialog::Accepted)
+    catch (QException& exp)
     {
-        QPixmap img(filePath);
-        QPainter painter(&printer);
-        QRect rect = painter.viewport();
-        QSize size = img.size();
-        size.scale(rect.size(), Qt::KeepAspectRatio);
-        painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-        painter.setWindow(img.rect());
-        painter.drawPixmap(0, 0, img);
+        qDebug() << exp.what();
     }
-
-    delete dlg;
 }
 
 void MainWindow::on_pushButtonPrintSelected_clicked()
 {
+    try
+    {
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setFullPage(true);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageSize(QPrinter::A4);
+        QPrintDialog *dlg = new QPrintDialog(&printer, this);
 
+        if(dlg->exec() == QDialog::Accepted)
+        {
+            bool result = true;
+            QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+
+            QPainter painter(&printer);
+            if (selected.empty())
+            {
+                for (int i = 0; i < _searchResult.length(); i++)
+                {
+                    QPixmap pm(_searchResult[i].filePath);
+                    painter.begin(&printer);
+                    printer.newPage();
+                    QRect rect = painter.viewport();
+                    QSize size = pm.size();
+                    size.scale(rect.size(), Qt::KeepAspectRatio);
+                    painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+                    painter.setWindow(pm.rect());
+                    painter.drawPixmap(0, 0, pm);
+                    painter.end();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < selected.length(); i++)
+                {
+                    QListWidgetItem* item = selected[i];
+                    QPixmap pm(item->text());
+                    painter.begin(&printer);
+                    printer.newPage();
+                    //QPainter painter(&printer);
+                    QRect rect = painter.viewport();
+                    QSize size = pm.size();
+                    size.scale(rect.size(), Qt::KeepAspectRatio);
+                    painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+                    painter.setWindow(pm.rect());
+                    painter.drawPixmap(0, 0, pm);
+                    painter.end();
+                }
+            }
+        }
+
+        delete dlg;
+    }
+    catch (QException& exp)
+    {
+        qDebug() << exp.what();
+    }
 }
