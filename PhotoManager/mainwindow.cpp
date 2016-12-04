@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPrinter>
+#include <QPrintDialog>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -100,6 +102,8 @@ void MainWindow::InitInterface()
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
     ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
+    ui->listWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->listWidgetPhotosSearch, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
 void MainWindow::LoadDatabase()
@@ -258,9 +262,17 @@ QVector<Categorie> MainWindow::GetSelectedCategoriesSearch()
 
 void MainWindow::ClearInterface(int tabIndex)
 {
-    ui->listWidgetPhotos->clear();
-    ui->progressBar->setValue(0);
-    _files.clear();
+    if (tabIndex == 0)
+    {
+        ui->listWidgetPhotos->clear();
+        ui->progressBar->setValue(0);
+        _files.clear();
+    }
+    if (tabIndex == 1)
+    {
+        ui->listWidgetPhotosSearch->clear();
+        _searchResult.clear();;
+    }
 }
 
 void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
@@ -609,8 +621,7 @@ void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 
 void MainWindow::on_pushButtonSearch_clicked()
 {
-    ui->listWidgetPhotosSearch->clear();
-    _searchResult.clear();
+    ClearInterface(1);
 
     QString projectNo = ui->lineEditProjectNoSearch->text();
     QString projectName = ui->lineEditProjectNameSearch->text();
@@ -647,11 +658,34 @@ void MainWindow::on_pushButtonSearch_clicked()
 void MainWindow::on_pushButtonSavePhotos_clicked()
 {
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
-    for (int i = 0; i < _searchResult.length(); i++)
+    QString saveDirectory = QFileDialog::getExistingDirectory(this, tr("Save images"), destination, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    bool result = true;
+    QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+
+    if (selected.empty())
     {
-        QFileInfo fileInfo(_searchResult[i].filePath);
-        QString destinationFileName = destination + fileInfo.fileName();
-        QFile::copy(fileInfo.filePath(), destinationFileName);
+        for (int i = 0; i < _searchResult.length(); i++)
+        {
+            QFileInfo fileInfo(_searchResult[i].filePath);
+            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
+            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < selected.length(); i++)
+        {
+            QListWidgetItem* item = selected[i];
+            QFileInfo fileInfo(item->text());
+            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
+            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+        }
+    }
+
+    if (result)
+    {
+        QMessageBox::information(this, tr("Successfully"), tr("Photos were copied to directory"));
+        ClearInterface(1);
     }
 }
 
@@ -710,4 +744,82 @@ void MainWindow::on_checkBoxEnablePreviewSearch_clicked()
         ui->listWidgetPhotosSearch->setViewMode(QListWidget::ListMode);
         ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
     }
+}
+
+void MainWindow::showContextMenu(QPoint pos)
+{
+    QListWidgetItem* item = ui->listWidgetPhotosSearch->itemAt(pos);
+    if (item != nullptr)
+    {
+        QMenu contextMenu;
+        QAction* save = contextMenu.addAction(tr("Save"));
+        QAction* print = contextMenu.addAction(tr("Print"));
+        QAction* selectedAction = contextMenu.exec(ui->listWidgetPhotosSearch->mapToGlobal(pos));
+        if (selectedAction)
+        {
+            if (selectedAction == save)
+            {
+                saveSelected(item);
+            }
+
+            if (selectedAction == print)
+            {
+                printSelected(item);
+            }
+        }
+    }
+}
+
+void MainWindow::saveSelected(QListWidgetItem* item)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    QString filePath = item->text();
+    QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
+    QString destinationFile = QFileDialog::getSaveFileName(this, tr("Save file"), destination, tr("Images (*.jpg)"));
+    if (destinationFile != "")
+    {
+        bool result = QFile::copy(filePath, destinationFile);
+        if (result)
+        {
+            QMessageBox::information(this, tr("Successfully"), tr("Photos were copied to directory"));
+        }
+    }
+}
+
+void MainWindow::printSelected(QListWidgetItem *item)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    QString filePath = item->text();
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setFullPage(true);
+    printer.setPaperSize(QPrinter::A4);
+    printer.setPageSize(QPrinter::A4);
+    QPrintDialog *dlg = new QPrintDialog(&printer, this);
+    if(dlg->exec() == QDialog::Accepted)
+    {
+        QPixmap img(filePath);
+        QPainter painter(&printer);
+        QRect rect = painter.viewport();
+        QSize size = img.size();
+        size.scale(rect.size(), Qt::KeepAspectRatio);
+        painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+        painter.setWindow(img.rect());
+        painter.drawPixmap(0, 0, img);
+    }
+
+    delete dlg;
+}
+
+void MainWindow::on_pushButtonPrintSelected_clicked()
+{
+
 }

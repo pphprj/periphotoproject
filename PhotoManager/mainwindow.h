@@ -80,6 +80,8 @@ private slots:
 
     void on_checkBoxEnablePreviewSearch_clicked();
 
+    void on_pushButtonPrintSelected_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -106,6 +108,9 @@ private:
 public slots:
     void setProgressBarValue(int value);
     void finishedCopy();
+    void showContextMenu(QPoint pos);
+    void saveSelected(QListWidgetItem* item);
+    void printSelected(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;
