@@ -70,7 +70,7 @@ void MainWindow::InitInterface()
     setAcceptDrops(true);
 
     //set captions for i18n
-    ui->groupBoxCategories->setTitle(tr("Categories"));
+  /*  ui->groupBoxCategories->setTitle(tr("Categories"));
     ui->groupBoxFeatures->setTitle(tr("Features"));
     ui->groupBoxPhotos->setTitle(tr("Photos"));
     ui->groupBoxProject->setTitle(tr("Project"));
@@ -92,8 +92,12 @@ void MainWindow::InitInterface()
     ui->pushButtonNewFeature->setText(tr("New feature"));
     ui->pushButtonSystemsNew->setText(tr("New system"));
     ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
-    ui->tabWidgetSystem->setTabText(2, tr("Edit database"));
+    ui->tabWidgetSystem->setTabText(2, tr("Edit database"));*/
 
+    ui->pushButtonApplyFeature->setMinimumWidth(160);
+    ui->pushButtonApplySystem->setMinimumWidth(160);
+    ui->pushButtonNewFeature->setMinimumWidth(160);
+    ui->pushButtonSystemsNew->setMinimumWidth(160);
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
     ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
     ui->dateEditProjectDateSearch->setEnabled(false);
