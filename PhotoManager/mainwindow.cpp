@@ -4,6 +4,7 @@
 #include "previewworker.h"
 #include "interfacemanager.h"
 #include "tableabstractelemmanager.h"
+#include "attributeseditdialog.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -758,6 +759,7 @@ void MainWindow::showContextMenu(QPoint pos)
         QMenu contextMenu;
         QAction* save = contextMenu.addAction(tr("Save"));
         QAction* print = contextMenu.addAction(tr("Print"));
+        QAction* edit = contextMenu.addAction(tr("Edit"));
         QAction* selectedAction = contextMenu.exec(ui->listWidgetPhotosSearch->mapToGlobal(pos));
         if (selectedAction)
         {
@@ -769,6 +771,13 @@ void MainWindow::showContextMenu(QPoint pos)
             if (selectedAction == print)
             {
                 printSelected(item);
+            }
+
+            if (selectedAction == edit)
+            {
+                AttributesEditDialog* dlg = new AttributesEditDialog(this);
+                dlg->exec();
+                delete dlg;
             }
         }
     }

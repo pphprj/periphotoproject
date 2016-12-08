@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     photoloader.cpp \
     interfacemanager.cpp \
     tableabstractelemmanager.cpp \
-    photosearcher.cpp
+    photosearcher.cpp \
+    attributeseditdialog.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -48,8 +49,10 @@ HEADERS  += mainwindow.h \
     interfacemanager.h \
     tableabstractelemmanager.h \
     photosearcher.h \
-    fileinfostruct.h
+    fileinfostruct.h \
+    attributeseditdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    attributeseditdialog.ui
 
 TRANSLATIONS = mainwindow_en.ts mainwindow_ru.ts
