@@ -11,6 +11,8 @@
 #include "configurator.h"
 #include "filecopierthread.h"
 #include "previewsession.h"
+#include "photoloader.h"
+#include "photosearcher.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,6 +41,8 @@ private slots:
 
     void on_comboBoxSystems_ModelItemChanged(QStandardItem *item);
     void on_comboBoxFeatures_ModelItemChanged(QStandardItem *item);
+    void on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item);
+    void on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item);
 
     void on_tabWidgetSystem_currentChanged(int index);
 
@@ -64,24 +68,33 @@ private slots:
 
     void on_lineEditProjectName_textEdited(const QString &arg1);
 
+    void on_pushButtonSearch_clicked();
+
+    void on_pushButtonSavePhotos_clicked();
+
+    void on_checkBoxDisableProjectDate_clicked();
+
+    void on_checkBoxDisableIntervalBegin_clicked();
+
+    void on_checkBoxDisableIntervalEnd_clicked();
+
+    void on_checkBoxEnablePreviewSearch_clicked();
+
+    void on_pushButtonPrintSelected_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
 
-    QString GetProjectNo();
-    QString GetProjectName();
-    QDate GetProjectDate();
     QString GetSelectedCategories();
-    QStringList& GetFileList();
-    void GetFilesDate();
+    QVector<Categorie> GetSelectedCategoriesSearch();
 
-    void ClearComboboxChecked(QComboBox* comboBox);
-    void ClearInterface();
+    void ClearInterface(int tabIndex);
 
     void LoadInterface();
     void LoadDatabase();
 
-    void NewItem(QTableWidget* table);
+
     void AddFileToPreview(const QString& fileName);
     void DeleteFileFromPreview(int num);
 
@@ -91,37 +104,33 @@ private:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
-    template <typename T> void FillCombobox(const QVector<T>& elems, const QComboBox* comboBox);
-    template <typename T> void FillTableWidget(const QVector<T>& elems, const QTableWidget* table);
-
-    template <typename T> QString CreateIDsList(const QVector<T>& elems);
-    template <typename T> QString CreateNamesList(const QVector<T>& elems);
-    template <typename T> QVector<T> GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel* model);
-
-    template <typename T> void ApplyChanges(QVector<T>& elems, const QTableWidget* table);
-    template <typename T> void ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table);
-    template <typename T> void ShowSelection(const QVector<T>& elems, QComboBox* comboBox, QStandardItem* item);
 
 public slots:
     void setProgressBarValue(int value);
     void finishedCopy();
+    void showContextMenu(QPoint pos);
+    void saveSelected(QListWidgetItem* item);
+    void printSelected(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;
     DatabaseManager* _dbm;
-    QVector<FormworkSystem> _formworkSystems;
-    QVector<Feature> _features;
-    QVector<Categorie> _categories;
-    QVector<ProjectName> _projectNames;
+
     ProjectName _backup;
     QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;
+    QVector<FormworkSystem> _selectedSystems;
+    QVector<Feature> _selectedFeatures;
+    QVector<FileAndPreview> _searchResult;
 
     FileManager* _fileManager;
     Configurator* _cfg;
     FilecopierThread* _copierThread;
     PreviewSession* _previewSession;
+
+    PhotoLoader* _loader;
+    PhotoSearcher* _searcher;
 };
 
 #endif // MAINWINDOW_H

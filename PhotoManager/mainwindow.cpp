@@ -2,10 +2,14 @@
 #include "ui_mainwindow.h"
 
 #include "previewworker.h"
+#include "interfacemanager.h"
+#include "tableabstractelemmanager.h"
 
 #include <QtGui>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPrinter>
+#include <QPrintDialog>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -32,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete _loader;
+    delete _searcher;
     delete _previewSession;
     delete _copierThread;
     delete _fileManager;
@@ -46,6 +52,11 @@ void MainWindow::InitDatabase()
 
     _dbm = new DatabaseManager();
     bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
+    if (result)
+    {
+        _loader = new PhotoLoader(_dbm);
+        _searcher = new PhotoSearcher(_dbm);
+    }
 
     qDebug() << "db connect result " << result;
 }
@@ -59,7 +70,7 @@ void MainWindow::InitInterface()
     setAcceptDrops(true);
 
     //set captions for i18n
-    ui->groupBoxCategories->setTitle(tr("Categories"));
+  /*  ui->groupBoxCategories->setTitle(tr("Categories"));
     ui->groupBoxFeatures->setTitle(tr("Features"));
     ui->groupBoxPhotos->setTitle(tr("Photos"));
     ui->groupBoxProject->setTitle(tr("Project"));
@@ -81,37 +92,61 @@ void MainWindow::InitInterface()
     ui->pushButtonNewFeature->setText(tr("New feature"));
     ui->pushButtonSystemsNew->setText(tr("New system"));
     ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
-    ui->tabWidgetSystem->setTabText(1, tr("Edit database"));
+    ui->tabWidgetSystem->setTabText(2, tr("Edit database"));*/
 
+    ui->pushButtonApplyFeature->setMinimumWidth(160);
+    ui->pushButtonApplySystem->setMinimumWidth(160);
+    ui->pushButtonNewFeature->setMinimumWidth(160);
+    ui->pushButtonSystemsNew->setMinimumWidth(160);
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditProjectDateSearch->setEnabled(false);
+    ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
+    ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
+    ui->listWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->listWidgetPhotosSearch, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
 void MainWindow::LoadDatabase()
 {
-    if(_dbm)
+    if (_loader)
     {
-        _formworkSystems.clear();
-        _dbm->SelectFormworkSystems(_formworkSystems);
-        _features.clear();
-        _dbm->SelectFeatures(_features);
-        _categories.clear();
-        _dbm->SelectCategories(_categories);
-        _projectNames.clear();
-        _dbm->SelectProjectNames(_projectNames);
+        _loader->LoadDatabase();
+    }
+
+    if (_searcher)
+    {
+        _searcher->LoadDatabase();
     }
 }
 
 void MainWindow::LoadInterface()
 {
     //create combobox with cheking elems for formworks
-    FillCombobox(_formworkSystems, ui->comboBoxSystems);
+    InterfaceManager::FillCombobox(_loader->GetFormworkSystems(), ui->comboBoxSystems);
     connect(ui->comboBoxSystems->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystems_ModelItemChanged(QStandardItem*)));
 
     //create combobox with cheking elems for features
-    FillCombobox(_features, ui->comboBoxFeatures);
+    InterfaceManager::FillCombobox(_loader->GetFeatures(), ui->comboBoxFeatures);
     connect(ui->comboBoxFeatures->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeatures_ModelItemChanged(QStandardItem*)));
+
+    //create combobox with cheking elems for formworks
+    InterfaceManager::FillCombobox(_searcher->GetFormworkSystems(), ui->comboBoxSystemsSearch);
+    connect(ui->comboBoxSystemsSearch->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem*)));
+
+    //create combobox with cheking elems for features
+    InterfaceManager::FillCombobox(_searcher->GetFeatures(), ui->comboBoxFeaturesSearch);
+    connect(ui->comboBoxFeaturesSearch->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem*)));
+
+
+    _selectedFeatures.clear();
+    _selectedSystems.clear();
+
+    ui->checkBoxEnablePreview->setChecked(true);
+    on_checkBoxEnablePreview_clicked();
 }
 
 void MainWindow::on_pushButtonTestSQL_clicked()
@@ -167,25 +202,20 @@ void MainWindow::on_pushButtonLoadPhoto_clicked()
 
 void MainWindow::on_pushButtonAddToDB_clicked()
 {
-    QString projectNo = GetProjectNo();
+    QString projectNo = ui->lineEditProjectNo->text();
     if (projectNo.isEmpty())
     {
-
         QMessageBox::critical(this, tr("Error!"), tr("Please, input Project No!"));
         return;
     }
 
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
-    QString selectedFws = CreateIDsList(selectedSystems);
-    if (selectedFws.isEmpty())
+    if (_selectedSystems.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select formworks!"));
         return;
     }
 
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
-    QString selectedFts = CreateIDsList(selectedFeatures);
-    if (selectedFts.isEmpty())
+    if (_selectedFeatures.isEmpty())
     {
         QMessageBox::critical(this, tr("Error!"), tr("Please, select features!"));
         return;
@@ -204,273 +234,66 @@ void MainWindow::on_pushButtonAddToDB_clicked()
         return;
     }
 
-    QString projectName = GetProjectName();
+    QString projectName = ui->lineEditProjectName->text();
     _fileManager->CreateProjectDirectory(projectNo, projectName);
-    _copierThread->setFileList(GetFileList(), _cfg->GetCompressionRate());
+    _copierThread->setFileList(_files, _cfg->GetCompressionRate());
     _copierThread->start();
 }
 
-QString MainWindow::GetProjectNo()
-{
-    return ui->lineEditProjectNo->text();
-}
 
-QString MainWindow::GetProjectName()
-{
-    return ui->lineEditProjectName->text();
-}
-
-QDate MainWindow::GetProjectDate()
-{
-    return ui->dateEditProjectDate->date();
-}
-
-void MainWindow::GetFilesDate()
-{
-    return;
-   /* for (int i = 0; i < _files.length(); i++)
-    {
-        QFileInfo info(_files[i]);
-        QDate selectedDate = GetProjectDate();
-        QDate lastModified = info.lastModified().date();
-        if (selectedDate != lastModified)
-        {
-            if ((_filesDate != lastModified) && (!_filesDate.isNull()))
-            {
-                _filesDate = selectedDate;
-            }
-            else
-            {
-                _filesDate = lastModified;
-            }
-        }
-        else
-        {
-            _filesDate = selectedDate;
-        }
-    }*/
-}
-
-template <typename T> QString MainWindow::CreateIDsList(const QVector<T>& elems)
-{
-    QString result;
-
-    for(int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        result += QString::number(elem.GetID()) + ";";
-    }
-
-    result.remove(result.length() - 1, 1);
-
-    return result;
-}
-
-template <typename T> QString MainWindow::CreateNamesList(const QVector<T>& elems)
-{
-    QString result;
-
-    for(int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        result += elem.GetName() + ";";
-    }
-
-    result.remove(result.length() - 1, 1);
-
-    return result;
-}
-
-template <typename T> void MainWindow::FillCombobox(const QVector<T>& elems, const QComboBox* comboBox)
-{
-    QComboBox* cb = const_cast<QComboBox*>(comboBox);
-
-    cb->clear();
-
-    QStandardItemModel* model = new QStandardItemModel(elems.length() + 2, 1);
-
-    QStandardItem* itemShowSelecatble = new QStandardItem("");
-    model->setItem(0, 0, itemShowSelecatble);
-
-
-    QStandardItem* itemDisableAll = new QStandardItem(tr("Disable all"));
-
-    itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-    itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-    model->setItem(1, 0, itemDisableAll);
-
-    for (int i = 2; i < elems.length() + 2; i++)
-    {
-        T elem = elems[i - 2];
-        QStandardItem* item = new QStandardItem(elem.GetName());
-
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-        model->setItem(i, 0, item);
-    }
-
-
-    cb->setModel(model);
-    cb->setCurrentIndex(0);
-}
-
-template <typename T> void MainWindow::FillTableWidget(const QVector<T>& elems, const QTableWidget* table)
-{
-    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
-    tbWidget->setRowCount(elems.length());
-
-    tbWidget->setColumnCount(2);
-    for (int i = 0; i < elems.length(); i++)
-    {
-        T elem = elems[i];
-        QTableWidgetItem* itemName = new QTableWidgetItem(elem.GetName());
-        itemName->setFlags(itemName->flags() | Qt::ItemIsEditable);
-
-        QString str = elem.GetDesription();
-        QTableWidgetItem* itemDescription = new QTableWidgetItem(str);
-        itemDescription->setFlags(itemDescription->flags() | Qt::ItemIsEditable);
-
-        tbWidget->setItem(i, 0, itemName);
-        tbWidget->setItem(i, 1, itemDescription);
-    }
-    tbWidget->resizeColumnsToContents();
-}
-
-template <typename T> QVector<T> MainWindow::GetSelectedListItems(const QVector<T>& elems, const QAbstractItemModel *model)
-{
-    QVector<T> selected;
-    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
-    int length = standardModel->rowCount();
-    for (int i = 2; i < length; i++)
-    {
-        if (standardModel->item(i)->checkState() == Qt::Checked)
-        {
-            selected.push_back(elems[i - 2]);
-        }
-    }
-    return selected;
-}
-
-template <typename T> void MainWindow::ApplyChanges(QVector<T>& elems, const QTableWidget* table)
-{
-    QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
-    for (int i = 0; i < tbWidget->rowCount(); i++)
-    {
-       QTableWidgetItem* name = tbWidget->item(i, 0);
-       QTableWidgetItem* descr = tbWidget->item(i, 1);
-
-       if (name == nullptr)
-       {
-           continue;
-       }
-
-       QString nameText = name->text();
-       QString descrText = (descr != nullptr) ? descr->text() : "";
-
-       if (i < elems.length())
-       {
-           elems[i].SetName(nameText);
-           elems[i].SetDescription(descrText);
-       }
-       else
-       {
-           if (nameText != tr("New item"))
-           {
-               elems.push_back(T(0, nameText, descrText));
-           }
-       }
-    }
-    _dbChangesFlag = false;
-}
-
-template <typename T> void MainWindow::ItemChanged(QVector<T>& elems, QTableWidgetItem* item, QTableWidget* table)
-{
-    if (item->text().isEmpty() && item->column() == 0)
-    {
-        if (item->row() < elems.length())
-        {
-            item->setText(elems[item->row()].GetName());
-        }
-        else
-        {
-            //if you no enter new name
-            table->removeRow(item->row());
-        }
-    }
-    _dbChangesFlag = true;
-}
-
-void MainWindow::NewItem( QTableWidget* table)
-{
-    QTableWidgetItem* item = new QTableWidgetItem(tr("New item"));
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
-    table->insertRow(table->rowCount());
-    table->setItem(table->rowCount() - 1, 0, item);
-    table->setCurrentItem(item);
-    _dbChangesFlag = true;
-}
-
-template <typename T> void MainWindow::ShowSelection(const QVector<T>& elems, QComboBox *comboBox, QStandardItem *item)
-{
-    if (item->index().row() == 0)
-    {
-        return;
-    }
-
-    QVector<T> selected = GetSelectedListItems(elems, comboBox->model());
-    QString selectedList = CreateNamesList(selected);
-    comboBox->setItemText(0, selectedList);
-}
 
 QString MainWindow::GetSelectedCategories()
 {
     QVector<Categorie> selected;
 
-    if (ui->checkBoxInProc->isChecked()) selected.push_back(_categories[0]);
-    if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_categories[1]);
-    if (ui->checkBoxMarketing->isChecked()) selected.push_back(_categories[2]);
+    if (ui->checkBoxInProc->isChecked()) selected.push_back(_loader->GetCategories()[0]);
+    if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_loader->GetCategories()[1]);
+    if (ui->checkBoxMarketing->isChecked()) selected.push_back(_loader->GetCategories()[2]);
 
-    return CreateIDsList(selected);
+    return TableAbstractElemManager::CreateIDsList(selected);
 }
 
-QStringList& MainWindow::GetFileList()
+QVector<Categorie> MainWindow::GetSelectedCategoriesSearch()
 {
-    return _files;
+    QVector<Categorie> selected;
+
+    if (ui->checkBoxInProcSearch->isChecked()) selected.push_back(_searcher->GetCategories()[0]);
+    if (ui->checkBoxCurrentStateSearch->isChecked()) selected.push_back(_searcher->GetCategories()[1]);
+    if (ui->checkBoxMarketingSearch->isChecked()) selected.push_back(_searcher->GetCategories()[2]);
+
+    return selected;
 }
 
-void MainWindow::ClearComboboxChecked(QComboBox* comboBox)
+void MainWindow::ClearInterface(int tabIndex)
 {
-    QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(comboBox->model());
-    for (int i = 0; i < standardModel->rowCount(); i++)
+    if (tabIndex == 0)
     {
-        if (standardModel->item(i)->checkState() == Qt::Checked)
-        {
-            standardModel->item(i)->setCheckState(Qt::Unchecked);
-        }
+        ui->listWidgetPhotos->clear();
+        ui->progressBar->setValue(0);
+        _files.clear();
     }
-    comboBox->setItemText(0, "");
-}
-
-void MainWindow::ClearInterface()
-{
-    ui->listWidgetPhotos->clear();
-    ui->progressBar->setValue(0);
-    _files.clear();
-    //ClearComboboxChecked(ui->comboBoxFeatures->model());
-    //ClearComboboxChecked(ui->comboBoxSystems->model());
+    if (tabIndex == 1)
+    {
+        ui->listWidgetPhotosSearch->clear();
+        _searchResult.clear();;
+    }
 }
 
 void MainWindow::on_comboBoxSystems_ModelItemChanged(QStandardItem *item)
 {
     if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxSystems);
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxSystems);
     }
     else
     {
-        ShowSelection(_formworkSystems, ui->comboBoxSystems, item);
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedSystems = InterfaceManager::GetSelectedListItems(_loader->GetFormworkSystems(), ui->comboBoxSystems->model());
+        InterfaceManager::ShowSelection(_selectedSystems, ui->comboBoxSystems);
     }
 }
 
@@ -478,11 +301,53 @@ void MainWindow::on_comboBoxFeatures_ModelItemChanged(QStandardItem *item)
 {
     if (item->index().row() == 1)
     {
-        ClearComboboxChecked(ui->comboBoxFeatures);
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxFeatures);
     }
     else
     {
-        ShowSelection(_features, ui->comboBoxFeatures, item);
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedFeatures = InterfaceManager::GetSelectedListItems(_loader->GetFeatures(), ui->comboBoxFeatures->model());
+        InterfaceManager::ShowSelection(_selectedFeatures, ui->comboBoxFeatures);
+    }
+}
+
+void MainWindow::on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item)
+{
+    if (item->index().row() == 1)
+    {
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxSystemsSearch);
+    }
+    else
+    {
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedSystems = InterfaceManager::GetSelectedListItems(_searcher->GetFormworkSystems(), ui->comboBoxSystemsSearch->model());
+        InterfaceManager::ShowSelection(_selectedSystems, ui->comboBoxSystemsSearch);
+    }
+}
+
+void MainWindow::on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item)
+{
+    if (item->index().row() == 1)
+    {
+        InterfaceManager::ClearComboboxChecked(ui->comboBoxFeaturesSearch);
+    }
+    else
+    {
+        if (item->index().row() == 0)
+        {
+            return;
+        }
+
+        _selectedFeatures = InterfaceManager::GetSelectedListItems(_searcher->GetFeatures(), ui->comboBoxFeaturesSearch->model());
+        InterfaceManager::ShowSelection(_selectedFeatures, ui->comboBoxFeaturesSearch);
     }
 }
 
@@ -537,18 +402,19 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::on_tabWidgetSystem_currentChanged(int index)
 {
-    if (index == 1)
+    if (index == 2)
     {
-        FillTableWidget(_formworkSystems, ui->tableWidgetSystems);
-        FillTableWidget(_features, ui->tableWidgetFeatures);
+        InterfaceManager::FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        InterfaceManager::FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
 
         _dbChangesFlag = false;
     }
 
-    if (index == 0)
+    if ((index == 0) || (index == 1))
     {
         ui->tableWidgetSystems->clear();
         ui->tableWidgetFeatures->clear();
+        LoadInterface();
     }
 }
 
@@ -558,9 +424,11 @@ void MainWindow::on_pushButtonApplySystem_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
+    InterfaceManager::ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+    InterfaceManager::ApplyChanges(_searcher->GetFormworkSystems(), ui->tableWidgetSystems);
+    _dbChangesFlag = false;
 
-    _dbm->UpdateFormworkSystems(_formworkSystems);
+    _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
     LoadDatabase();
     LoadInterface();
@@ -568,17 +436,20 @@ void MainWindow::on_pushButtonApplySystem_clicked()
 
 void MainWindow::on_tableWidgetSystems_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_formworkSystems, item, ui->tableWidgetSystems);
+    InterfaceManager::ItemChanged(_loader->GetFormworkSystems(), item, ui->tableWidgetSystems);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonSystemsNew_clicked()
 {
-    NewItem(ui->tableWidgetSystems);
+    InterfaceManager::NewItem(ui->tableWidgetSystems);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonNewFeature_clicked()
 {
-    NewItem(ui->tableWidgetFeatures);
+    InterfaceManager::NewItem(ui->tableWidgetFeatures);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_pushButtonApplyFeature_clicked()
@@ -586,20 +457,25 @@ void MainWindow::on_pushButtonApplyFeature_clicked()
     if (!ConfirmWindow())
         return;
 
-    ApplyChanges(_features, ui->tableWidgetFeatures);
-    _dbm->UpdateFeatures(_features);
+    InterfaceManager::ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+    InterfaceManager::ApplyChanges(_searcher->GetFeatures(), ui->tableWidgetFeatures);
+    _dbChangesFlag = false;
+
+    _dbm->UpdateFeatures(_loader->GetFeatures());
+
     LoadDatabase();
     LoadInterface();
 }
 
 void MainWindow::on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item)
 {
-    ItemChanged(_features, item, ui->tableWidgetFeatures);
+    InterfaceManager::ItemChanged(_loader->GetFeatures(), item, ui->tableWidgetFeatures);
+    _dbChangesFlag = true;
 }
 
 void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
 {
-    if (index == 0)
+    if ((index == 0) || (index == 1))
     {
         if (ui->tabWidgetSystem->currentIndex() == index)
             return;
@@ -610,14 +486,18 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
         if (!ConfirmWindow())
             return;
 
-        ApplyChanges(_formworkSystems, ui->tableWidgetSystems);
-        _dbm->UpdateFormworkSystems(_formworkSystems);
+        InterfaceManager::ApplyChanges(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
+        _dbChangesFlag = false;
+        _dbm->UpdateFormworkSystems(_loader->GetFormworkSystems());
 
-        ApplyChanges(_features, ui->tableWidgetFeatures);
-        _dbm->UpdateFeatures(_features);
+        InterfaceManager::ApplyChanges(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        _dbChangesFlag = false;
+        _dbm->UpdateFeatures(_loader->GetFeatures());
+
+        InterfaceManager::ApplyChanges(_searcher->GetFormworkSystems(), ui->tableWidgetSystems);
+        InterfaceManager::ApplyChanges(_searcher->GetFeatures(), ui->tableWidgetFeatures);
 
         LoadDatabase();
-        LoadInterface();
     }
 }
 
@@ -635,7 +515,6 @@ bool MainWindow::ConfirmWindow()
 
 void MainWindow::on_checkBoxEnablePreview_clicked()
 {
-    ;
     if (ui->checkBoxEnablePreview->isChecked())
     {
         ui->listWidgetPhotos->setViewMode(QListWidget::IconMode);
@@ -657,32 +536,28 @@ void MainWindow::setProgressBarValue(int value)
 void MainWindow::finishedCopy()
 {
     qDebug() << "finishedCopy start";
-    QVector<QFileInfo> files = _copierThread->getCopiedFiles();
-
-    QString projectName = GetProjectName();
-    QString projectNo = GetProjectNo();
-
-    QVector<FormworkSystem> selectedSystems = GetSelectedListItems(_formworkSystems, ui->comboBoxSystems->model());
-    QString selectedFws = CreateIDsList(selectedSystems);
-
-    QVector<Feature> selectedFeatures = GetSelectedListItems(_features, ui->comboBoxFeatures->model());
-    QString selectedFts = CreateIDsList(selectedFeatures);
-
-    QString selectedCategories = GetSelectedCategories();
+    QVector<FileInfoStruct> files = _copierThread->getCopiedFiles();
 
 
-    bool result = _dbm->InsertValuesToPhotos(projectNo,
-                                             projectName,
-                                             GetProjectDate(),
-                                             selectedFws,
-                               selectedFts,
-                               selectedCategories,
-                               files);
+    QVector<QFileInfo> previews;
+    for (int i = 0; i < _files.count(); i++)
+    {
+       previews.push_back(_fileManager->AddPreviewToDirectory(ui->listWidgetPhotos->item(i)->icon(), _files.at(i)));
+    }
+
+
+    QString projectNo = ui->lineEditProjectNo->text();
+    QString projectName = ui->lineEditProjectName->text();
+    QDate projectDate = ui->dateEditProjectDate->date();
+    bool result = _loader->InsertToDatabase(projectNo, projectName, projectDate,
+                                            _selectedSystems, _selectedFeatures, GetSelectedCategories(),
+                                            files,
+                                            previews);
 
     if (result)
     {
         QMessageBox::information(this, tr("Successfully"), tr("Photos were added to DB"));
-        ClearInterface();
+        ClearInterface(0);
     }
     qDebug() << "finishedCopy end" << result;
 }
@@ -705,6 +580,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 {
+    return;
+
     if (index == -1)
     {
         return;
@@ -718,7 +595,7 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
     return;
 
-    foreach (ProjectName name, _projectNames)
+    foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetProjectNo().contains(arg1))
         {
@@ -734,7 +611,7 @@ void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 {
     return;
 
-    foreach (ProjectName name, _projectNames)
+    foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetName().contains(arg1))
         {
@@ -744,4 +621,271 @@ void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
         }
     }
     ui->lineEditProjectNo->setText(_backup.GetProjectNo());
+}
+
+void MainWindow::on_pushButtonSearch_clicked()
+{
+    ClearInterface(1);
+
+    QString projectNo = ui->lineEditProjectNoSearch->text();
+    QString projectName = ui->lineEditProjectNameSearch->text();
+    QDate projectDate = ui->dateEditProjectDateSearch->date();
+
+    QVector<QFileInfo> previews;
+
+    QDate intervalBegin = ui->dateEditPhotoIntervalBegin->date();
+    QDate intervalEnd = ui->dateEditPhotoIntervalEnd->date();
+
+    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate,
+                                            _selectedSystems, _selectedFeatures, GetSelectedCategoriesSearch(),
+                                            intervalBegin, intervalEnd,
+                                            _searchResult);
+
+    if (!result)
+        return;
+
+    for (int i = 0; i < _searchResult.count(); i++)
+    {
+       FileAndPreview fnp = _searchResult[i];
+       if (!fnp.previewPath.isEmpty())
+       {
+           QPixmap pm(fnp.previewPath);
+           ui->listWidgetPhotosSearch->addItem(new QListWidgetItem(QIcon(pm), fnp.filePath));
+       }
+       else
+       {
+           ui->listWidgetPhotosSearch->addItem(fnp.filePath);
+       }
+    }
+}
+
+void MainWindow::on_pushButtonSavePhotos_clicked()
+{
+    QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
+    QString saveDirectory = QFileDialog::getExistingDirectory(this, tr("Save images"), destination, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    bool result = true;
+    QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+
+    if (selected.empty())
+    {
+        for (int i = 0; i < _searchResult.length(); i++)
+        {
+            QFileInfo fileInfo(_searchResult[i].filePath);
+            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
+            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < selected.length(); i++)
+        {
+            QListWidgetItem* item = selected[i];
+            QFileInfo fileInfo(item->text());
+            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
+            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+        }
+    }
+
+    if (result)
+    {
+        QMessageBox::information(this, tr("Successfully"), tr("Photos were copied to directory"));
+        ClearInterface(1);
+    }
+}
+
+void MainWindow::on_checkBoxDisableProjectDate_clicked()
+{
+    if (ui->checkBoxDisableProjectDate->isChecked())
+    {
+        ui->dateEditProjectDateSearch->setEnabled(false);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditProjectDateSearch->setEnabled(true);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxDisableIntervalBegin_clicked()
+{
+    if (ui->checkBoxDisableIntervalBegin->isChecked())
+    {
+        ui->dateEditPhotoIntervalBegin->setEnabled(false);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditPhotoIntervalBegin->setEnabled(true);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
+{
+    if (ui->checkBoxDisableIntervalEnd->isChecked())
+    {
+        ui->dateEditPhotoIntervalEnd->setEnabled(false);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
+    else
+    {
+        ui->dateEditPhotoIntervalEnd->setEnabled(true);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
+    }
+}
+
+void MainWindow::on_checkBoxEnablePreviewSearch_clicked()
+{
+    if (ui->checkBoxEnablePreviewSearch->isChecked())
+    {
+        ui->listWidgetPhotosSearch->setViewMode(QListWidget::IconMode);
+        ui->listWidgetPhotosSearch->setIconSize(QSize(100, 100));
+        ui->listWidgetPhotosSearch->setResizeMode(QListWidget::Adjust);
+    }
+    else
+    {
+        ui->listWidgetPhotosSearch->setViewMode(QListWidget::ListMode);
+        ui->listWidgetPhotosSearch->setIconSize(QSize(0, 0));
+    }
+}
+
+void MainWindow::showContextMenu(QPoint pos)
+{
+    QListWidgetItem* item = ui->listWidgetPhotosSearch->itemAt(pos);
+    if (item != nullptr)
+    {
+        QMenu contextMenu;
+        QAction* save = contextMenu.addAction(tr("Save"));
+        QAction* print = contextMenu.addAction(tr("Print"));
+        QAction* selectedAction = contextMenu.exec(ui->listWidgetPhotosSearch->mapToGlobal(pos));
+        if (selectedAction)
+        {
+            if (selectedAction == save)
+            {
+                saveSelected(item);
+            }
+
+            if (selectedAction == print)
+            {
+                printSelected(item);
+            }
+        }
+    }
+}
+
+void MainWindow::saveSelected(QListWidgetItem* item)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    QString filePath = item->text();
+    QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
+    QString destinationFile = QFileDialog::getSaveFileName(this, tr("Save file"), destination, tr("Images (*.jpg)"));
+    if (destinationFile != "")
+    {
+        bool result = QFile::copy(filePath, destinationFile);
+        if (result)
+        {
+            QMessageBox::information(this, tr("Successfully"), tr("Photos were copied to directory"));
+        }
+    }
+}
+
+void MainWindow::printSelected(QListWidgetItem *item)
+{
+    try
+    {
+        if (item == nullptr)
+        {
+            return;
+        }
+
+        QString filePath = item->text();
+
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setFullPage(true);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageSize(QPrinter::A4);
+        QPrintDialog *dlg = new QPrintDialog(&printer, this);
+        if(dlg->exec() == QDialog::Accepted)
+        {
+            QPixmap img(filePath);
+            QPainter painter(&printer);
+            QRect rect = painter.viewport();
+            QSize size = img.size();
+            size.scale(rect.size(), Qt::KeepAspectRatio);
+            painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+            painter.setWindow(img.rect());
+            painter.drawPixmap(0, 0, img);
+        }
+
+        delete dlg;
+    }
+    catch (QException& exp)
+    {
+        qDebug() << exp.what();
+    }
+}
+
+void MainWindow::on_pushButtonPrintSelected_clicked()
+{
+    try
+    {
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setFullPage(true);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageSize(QPrinter::A4);
+        QPrintDialog *dlg = new QPrintDialog(&printer, this);
+
+        if(dlg->exec() == QDialog::Accepted)
+        {
+            bool result = true;
+            QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+
+            QPainter painter(&printer);
+            if (selected.empty())
+            {
+                for (int i = 0; i < _searchResult.length(); i++)
+                {
+                    QPixmap pm(_searchResult[i].filePath);
+                    painter.begin(&printer);
+                    printer.newPage();
+                    QRect rect = painter.viewport();
+                    QSize size = pm.size();
+                    size.scale(rect.size(), Qt::KeepAspectRatio);
+                    painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+                    painter.setWindow(pm.rect());
+                    painter.drawPixmap(0, 0, pm);
+                    painter.end();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < selected.length(); i++)
+                {
+                    QListWidgetItem* item = selected[i];
+                    QPixmap pm(item->text());
+                    painter.begin(&printer);
+                    printer.newPage();
+                    //QPainter painter(&printer);
+                    QRect rect = painter.viewport();
+                    QSize size = pm.size();
+                    size.scale(rect.size(), Qt::KeepAspectRatio);
+                    painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+                    painter.setWindow(pm.rect());
+                    painter.drawPixmap(0, 0, pm);
+                    painter.end();
+                }
+            }
+        }
+
+        delete dlg;
+    }
+    catch (QException& exp)
+    {
+        qDebug() << exp.what();
+    }
 }

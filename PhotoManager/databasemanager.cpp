@@ -29,7 +29,30 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
             "Pwd=" + password + ";" +
             "WSID=";
     _db.setDatabaseName(connection);
-    return _db.open();
+
+    bool result = _db.open();
+    if (result)
+    {
+        if (!CheckTable("Previews"))
+        {
+            result = CreateTable("Previews");
+        }
+    }
+
+    return result;
+}
+
+bool DatabaseManager::CreateTable(const QString &tableName)
+{
+    if (!_db.isOpen()) return false;
+    QSqlQuery query;
+    QString request = "CREATE TABLE " + tableName;
+    request += " (";
+    request += "ID INTEGER PRIMARY KEY IDENTITY(1,1), ";
+    request += "PHOTOID INTEGER NOT NULL,";
+    request += "FILEPATH VARCHAR(255) NOT NULL";
+    request += ")";
+    return query.exec(request);
 }
 
 bool DatabaseManager::InsertTestValuesToCategoriesTable()
@@ -159,13 +182,199 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
     return true;
 }
 
+bool DatabaseManager::SelectPhotos(const QString &projectNo,
+                                   const QString &projectName,
+                                   const QDate &projectDate,
+                                   const QVector<FormworkSystem> &formworkSystems,
+                                   const QVector<Feature> &features,
+                                   const QVector<Categorie> &categories,
+                                   const QDate &intervalBegin,
+                                   const QDate &intervalEnd,
+                                   QVector<FileAndPreview> &photos)
+{
+    if (!_db.isOpen()) return false;
+
+    bool result = false;
+
+    QSqlQuery query;
+    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID ";
+    sqlQuery += "FROM Photos ";
+
+    sqlQuery += "INNER JOIN Projects ";
+    sqlQuery += "ON ";
+    sqlQuery += QString("(ProjectNo LIKE ") + "'%" + projectNo + "%')";
+    if (!projectName.isEmpty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(Name LIKE ") + "'%" + projectName + "%')";
+    }
+    if (projectDate != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("yyyy-MM-dd") + "')";
+    }
+
+    sqlQuery += " WHERE ";
+
+    sqlQuery += " Projects.ID = Photos.ProjectID ";
+
+    if (!formworkSystems.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < formworkSystems.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        FormworkSystem system = formworkSystems[i];
+        //alone ID
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'" + QString::number(system.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + "'";
+    }
+
+    if (!formworkSystems.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (!features.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < features.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        Feature feature = features[i];
+        //alone ID
+        sqlQuery += QString("Features ") + "LIKE " + "'" + QString::number(feature.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + "'";
+    }
+
+    if (!features.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (!categories.empty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+    }
+
+    for (int i = 0; i < categories.length(); i++)
+    {
+        if (i > 0)
+        {
+            sqlQuery += " OR ";
+        }
+        Categorie cat = categories[i];
+        //alone ID
+        sqlQuery += QString("Category ") + "LIKE " + "'" + QString::number(cat.GetID()) + "' ";
+        sqlQuery += " OR ";
+        //ID in the middle
+        sqlQuery += QString("Category ") + "LIKE " + "'%" + QString::number(cat.GetID()) + ";%'";
+        sqlQuery += " OR ";
+        //ID in the end
+        sqlQuery += QString("Category ") + "LIKE " + "'%" + QString::number(cat.GetID()) + "'";
+    }
+
+    if (!categories.empty())
+    {
+        sqlQuery += " ) ";
+    }
+
+    if (intervalBegin != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += " ( ";
+        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("yyyy-MM-dd") + "'";
+    }
+
+    if (intervalEnd != QDate(1970, 1, 1))
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("yyyy-MM-dd") + "'";
+    }
+
+    if (intervalBegin != QDate(1970, 1, 1))
+    {
+        sqlQuery += " ) ";
+    }
+
+
+    if (query.exec(sqlQuery))
+    {
+        while (query.next())
+        {
+            FileAndPreview fnp;
+            fnp.photoId = query.value("ID").toInt();
+            fnp.filePath = query.value("FilePath").toString();
+            photos.push_back(fnp);
+        }
+        result = true;
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
+
+    SelectPreviews(photos);
+
+    return result;
+}
+
+bool DatabaseManager::SelectPreviews(QVector<FileAndPreview> &photos)
+{
+    bool result = false;
+
+    QString sqlQuery = "SELECT FilePath FROM Previews WHERE PhotoID = %1";
+    QSqlQuery query;
+
+    for (int i = 0; i < photos.length(); i++)
+    {
+        QString temp = sqlQuery.arg(photos[i].photoId);
+        if (query.exec(temp))
+        {
+            while (query.next())
+            {
+                photos[i].previewPath = query.value("FilePath").toString();
+            }
+            result = true;
+        }
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &projectName,
                                            const QDate  &projectDate,
                                            const QString &formworkSystems,
                                            const QString &features,
                                            const QString &categories,
-                                           const QVector<QFileInfo> &photos)
+                                           const QVector<FileInfoStruct> &photos,
+                                           const QVector<QFileInfo> &previews)
 {
     int projectID = CheckProjectNo(projectNo);
     if (projectID == -1)
@@ -209,18 +418,47 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
     bool result = true;
     for (int i = 0; i < photos.length(); i++)
     {
-        QFileInfo file = photos[i];
-        if (!file.filePath().isEmpty())
+        FileInfoStruct file = photos[i];
+        if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified().date().toString("yyyy-MM-dd");
-            QString temp = queryString.arg(fileDate, file.filePath());
+            QString fileDate = file.lastModified.date().toString("yyyy-MM-dd");
+            QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
+            query.prepare(temp);
             qDebug() << temp;
-            result = query.exec(temp);
+            result = query.exec();
+            if (result)
+            {
+                InsertPreview(query.lastInsertId().toInt(), previews[i]);
+            }
             qDebug() << "insert result " << result;
         }
     }
 
     return true;
+}
+
+bool DatabaseManager::InsertPreview(int photoID, const QFileInfo &preview)
+{
+    QString queryString = "INSERT INTO Previews ";
+
+    //column names
+    queryString += "(";
+    queryString += "PhotoID, ";
+    queryString += "FilePath";
+    queryString += ")";
+
+    //values
+    queryString += " VALUES ";
+    queryString += "(";
+    queryString += QString::number(photoID) + ", ";
+    queryString += "'" + preview.filePath() + "'";
+    queryString += ")";
+
+    QSqlQuery query;
+    bool result = query.exec(queryString);
+    qDebug() << queryString << " result " << query.lastError().text();
+
+    return result;
 }
 
 bool DatabaseManager::InsertProject(const QString &projectNo,
@@ -274,6 +512,12 @@ int DatabaseManager::CheckProjectNo(const QString &projectNo)
         result = query.value("ID").toInt();
     }
     return result;
+}
+
+bool DatabaseManager::CheckTable(const QString &tableName)
+{
+    if (!_db.isOpen()) return false;
+    return _db.tables().contains(tableName);
 }
 
 bool DatabaseManager::UpdateFeatures(const QVector<Feature> &elems)

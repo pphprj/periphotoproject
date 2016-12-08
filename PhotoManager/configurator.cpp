@@ -34,6 +34,9 @@ Configurator::~Configurator()
 {
     QString settingsFile = QApplication::applicationDirPath() + "/settings.ini";
     QSettings settings(settingsFile, QSettings::IniFormat);
+
+    settings.setIniCodec("Windows-1251");
+
     settings.beginGroup("Files");
     settings.setValue("LastFolder", _lastFolder);
     settings.endGroup();

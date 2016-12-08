@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,7 +25,11 @@ SOURCES += main.cpp\
     filecopierthread.cpp \
     projectname.cpp \
     previewworker.cpp \
-    previewsession.cpp
+    previewsession.cpp \
+    photoloader.cpp \
+    interfacemanager.cpp \
+    tableabstractelemmanager.cpp \
+    photosearcher.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -39,7 +43,12 @@ HEADERS  += mainwindow.h \
     filecopierthread.h \
     projectname.h \
     previewworker.h \
-    previewsession.h
+    previewsession.h \
+    photoloader.h \
+    interfacemanager.h \
+    tableabstractelemmanager.h \
+    photosearcher.h \
+    fileinfostruct.h
 
 FORMS    += mainwindow.ui
 

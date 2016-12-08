@@ -9,6 +9,7 @@
 #include "feature.h"
 #include "categorie.h"
 #include "projectname.h"
+#include "fileinfostruct.h"
 
 class DatabaseManager
 {
@@ -17,10 +18,22 @@ public:
     ~DatabaseManager();
     bool Connect(const QString& host, const QString& username, const QString& password);
 
+    bool CreateTable(const QString& tableName);
+
     bool SelectFormworkSystems(QVector<FormworkSystem>& elems);
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
     bool SelectProjectNames(QVector<ProjectName>& elems);
+    bool SelectPhotos(const QString& projectNo,
+                      const QString& projectName,
+                      const QDate& projectDate,
+                      const QVector<FormworkSystem>& formworkSystems,
+                      const QVector<Feature>& features,
+                      const QVector<Categorie>& categories,
+                      const QDate& intervalBegin,
+                      const QDate& intervalEnd,
+                      QVector<FileAndPreview>& photos);
+    bool SelectPreviews(QVector<FileAndPreview>& photos);
 
     bool UpdateFormworkSystems(const QVector<FormworkSystem>& elems);
     bool UpdateFeatures(const QVector<Feature>& elems);
@@ -29,15 +42,16 @@ public:
     bool InsertTestValuesToFormworkSystemsTable();
     bool InsertTestValuesToFeaturesTable();
 
-
-
     bool InsertValuesToPhotos(const QString& projectNo,
                               const QString& projectName,
                               const QDate& projectDate,
                               const QString& formworkSystems,
                               const QString& features,
                               const QString& categories,
-                              const QVector<QFileInfo>& photos);
+                              const QVector<FileInfoStruct>& photos,
+                              const QVector<QFileInfo>& previews);
+
+    bool InsertPreview(int photoID, const QFileInfo& preview);
 
     bool InsertProject(const QString& projectNo,
                        const QString& name,
@@ -46,6 +60,7 @@ public:
 
     //return Project ID
     int CheckProjectNo(const QString& projectNo);
+    bool CheckTable(const QString& tableName);
 
 private:
 

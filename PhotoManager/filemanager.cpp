@@ -5,11 +5,11 @@
 #include <QPixmap>
 #include <QTemporaryFile>
 #include <QDebug>
+#include <QIcon>
 
 
 FileManager::FileManager(const QString& root)
 {
-    qDebug() << "root dir " << root;
     _rootDirectory = root;
 }
 
@@ -33,8 +33,11 @@ void FileManager::CreateRootDirectory()
 
 bool FileManager::CreateProjectDirectory(const QString &projectNo, const QString& projectName)
 {
-    _projectDirectory = _rootDirectory + "\\" + projectNo + " " + projectName;
-    qDebug() << "project dir " << _projectDirectory;
+    _projectDirectory = _rootDirectory + "\\" + projectNo;
+
+    if (!projectName.isEmpty())
+        _projectDirectory += " " + projectName;
+
     if (!CheckDirectory(_projectDirectory))
         return CreateDirectory(_projectDirectory);
     return true;
@@ -43,13 +46,20 @@ bool FileManager::CreateProjectDirectory(const QString &projectNo, const QString
 bool FileManager::CreateFilesDirectory(const QDate &filesDate)
 {
     QString filesDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\";
-    qDebug() << "files dir " << filesDirectory;
     if (!CheckDirectory(filesDirectory))
         return CreateDirectory(filesDirectory);
     return true;
 }
 
-QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRate)
+bool FileManager::CreatePreviewDirectory(const QDate &filesDate)
+{
+    _previewDirectory = _projectDirectory + "\\" + filesDate.toString("yyyy-MM-dd") + "\\" + "preview" + "\\";
+    if (!CheckDirectory(_previewDirectory))
+        return CreateDirectory(_previewDirectory);
+    return true;
+}
+
+FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compressionRate)
 {
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
@@ -68,20 +78,40 @@ QFileInfo FileManager::AddFileToDirectory(const QString &file, int compressionRa
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
     QString destinationFileName = destination + sourceFile.fileName();
 
+    if (QFile::exists(destinationFileName))
+    {
+        QFile::remove(destinationFileName);
+    }
+
     if (QFile::copy(tmpFile.fileName(), destinationFileName))
     {
-        qDebug() << "copy was successfull " << destinationFileName;
-        return QFileInfo(destinationFileName);
+        qDebug() << "copy was successfull";
+        FileInfoStruct fileInfo;
+        fileInfo.fileInfo.setFile(destinationFileName);
+        fileInfo.lastModified = sourceFile.lastModified();
+        return fileInfo;
     }
-    return QFileInfo();
+    return FileInfoStruct();
 }
 
-QVector<QFileInfo> FileManager::AddFilesToDirectory(const QStringList &files, int compressionRate)
+QVector<FileInfoStruct> FileManager::AddFilesToDirectory(const QStringList &files, int compressionRate)
 {
-    QVector<QFileInfo> result;
+    QVector<FileInfoStruct> result;
     for (int i = 0; i < files.length(); i++)
     {
         result.push_back(AddFileToDirectory(files.at(i), compressionRate));
     }
     return result;
+}
+
+QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &file)
+{
+    QFileInfo sourceFile(file);
+    CreatePreviewDirectory(sourceFile.lastModified().date());
+
+    QString previewFileName = _previewDirectory + "\\" + sourceFile.baseName() + ".png";
+
+    icon.pixmap(100, 100).save(previewFileName);
+
+    return QFileInfo(previewFileName);
 }
