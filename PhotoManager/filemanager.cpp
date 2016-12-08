@@ -78,6 +78,11 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
     QString destinationFileName = destination + sourceFile.fileName();
 
+    if (QFile::exists(destinationFileName))
+    {
+        QFile::remove(destinationFileName);
+    }
+
     if (QFile::copy(tmpFile.fileName(), destinationFileName))
     {
         qDebug() << "copy was successfull";
