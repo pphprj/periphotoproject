@@ -86,6 +86,23 @@ public:
         return selected;
     }
 
+    template <typename T> static void SetSelectedItems(const QVector<T>& selected, const QAbstractItemModel* model)
+    {
+        QStandardItemModel* standardModel = reinterpret_cast<QStandardItemModel*>(const_cast<QAbstractItemModel*>(model));
+        int length = standardModel->rowCount();
+        for (int i = 2; i < length; i++)
+        {
+            for (int j = 0; j < selected.length(); j++)
+            {
+                T elem = selected[j];
+                if (standardModel->item(i)->text() == elem.GetName())
+                {
+                    standardModel->item(i)->setCheckState(Qt::Checked);
+                }
+            }
+        }
+    }
+
     template <typename T> static void ApplyChanges(QVector<T>& elems, const QTableWidget* table)
     {
         QTableWidget* tbWidget = const_cast<QTableWidget*>(table);

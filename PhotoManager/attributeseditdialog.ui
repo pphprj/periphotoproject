@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Edit attributes</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="1" colspan="2">
@@ -20,7 +20,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>
@@ -60,6 +60,13 @@
       <string>Formworks and features</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelFormworksSystems">
+        <property name="text">
+         <string>Formwork systems</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="comboBoxSystems"/>
       </item>
@@ -73,12 +80,18 @@
       <item row="2" column="1">
        <widget class="QComboBox" name="comboBoxFeatures"/>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="labelFormworksSystems">
-        <property name="text">
-         <string>Formwork systems</string>
+      <item row="3" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

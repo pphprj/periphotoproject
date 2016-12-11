@@ -13,6 +13,12 @@ public:
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QVector<Categorie>& selectedCategories,
                           QDate& intervalBegin, QDate& intervalEnd,
                           QVector<FileAndPreview>& photos);
+
+    bool SelectedFormworkSystems(QVector<FormworkSystem>& selectedFormworks, int photoId);
+    bool SelectedFeatures(QVector<Feature>& selectedFeatures, int photoId);
+    bool SelectedCategories(QVector<Categorie>& selectedCategories, int photoId);
+
+    bool UpdatePhotoAttributes(QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QVector<Categorie>& selectedCategories, int photoId);
 };
 
 #endif // PHOTOSEARCHER_H

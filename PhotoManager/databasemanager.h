@@ -34,9 +34,16 @@ public:
                       const QDate& intervalEnd,
                       QVector<FileAndPreview>& photos);
     bool SelectPreviews(QVector<FileAndPreview>& photos);
+    bool SelectFormworkSystemsByPhotoId(QVector<FormworkSystem>& elems, int photoId);
+    bool SelectFeaturesByPhotoId(QVector<Feature>& elems, int photoId);
+    bool SelectCategoriesByPhotoId(QVector<Categorie>& elems, int photoId);
 
     bool UpdateFormworkSystems(const QVector<FormworkSystem>& elems);
     bool UpdateFeatures(const QVector<Feature>& elems);
+    bool UpdatePhotoAttributes(const QString& formworkSystems,
+                               const QString& features,
+                               const QString& categories,
+                               int photoId);
 
     bool InsertTestValuesToCategoriesTable();
     bool InsertTestValuesToFormworkSystemsTable();
@@ -64,7 +71,8 @@ public:
 
 private:
 
-    template <typename T> bool SelectElems(QVector<T>& elems, const QString& tableName);
+    template <typename T> bool SelectElems(QVector<T>& elems, const QString& tableName, int elemId = -1);
+    template <typename T> bool SelectElemsFromPhotos(QVector<T>& elems, const QString& what, const QString& table, int photoId);
     template <typename T> bool InsertOrUpdateElems(const QVector<T>& elems);
 
 

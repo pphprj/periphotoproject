@@ -70,31 +70,6 @@ void MainWindow::InitInterface()
 
     setAcceptDrops(true);
 
-    //set captions for i18n
-  /*  ui->groupBoxCategories->setTitle(tr("Categories"));
-    ui->groupBoxFeatures->setTitle(tr("Features"));
-    ui->groupBoxPhotos->setTitle(tr("Photos"));
-    ui->groupBoxProject->setTitle(tr("Project"));
-    ui->groupBoxSystems->setTitle(tr("Formwork systems"));
-    ui->labelFilesCopied->setText(tr("Files were copied"));
-    ui->labelProjectDate->setText(tr("Project creation date"));
-    ui->labelProjectFeatures->setText(tr("Features"));
-    ui->labelProjectName->setText(tr("Project name"));
-    ui->labelProjectNo->setText(tr("Project No"));
-    ui->labelSystems->setText(tr("Formwork systems"));
-    ui->checkBoxCurrentState->setText(tr("Current state"));
-    ui->checkBoxEnablePreview->setText(tr("Enable preview"));
-    ui->checkBoxInProc->setText(tr("In process"));
-    ui->checkBoxMarketing->setText(tr("Marketing"));
-    ui->pushButtonAddToDB->setText(tr("Add to DB"));
-    ui->pushButtonApplyFeature->setText(tr("Apply"));
-    ui->pushButtonApplySystem->setText(tr("Apply"));
-    ui->pushButtonLoadPhoto->setText(tr("Load photo"));
-    ui->pushButtonNewFeature->setText(tr("New feature"));
-    ui->pushButtonSystemsNew->setText(tr("New system"));
-    ui->tabWidgetSystem->setTabText(0, tr("Add new photos"));
-    ui->tabWidgetSystem->setTabText(2, tr("Edit database"));*/
-
     ui->pushButtonApplyFeature->setMinimumWidth(160);
     ui->pushButtonApplySystem->setMinimumWidth(160);
     ui->pushButtonNewFeature->setMinimumWidth(160);
@@ -776,6 +751,8 @@ void MainWindow::showContextMenu(QPoint pos)
             if (selectedAction == edit)
             {
                 AttributesEditDialog* dlg = new AttributesEditDialog(this);
+                int index = ui->listWidgetPhotosSearch->row(item);
+                dlg->LoadSelected(_searcher, _searchResult[index].photoId);
                 dlg->exec();
                 delete dlg;
             }

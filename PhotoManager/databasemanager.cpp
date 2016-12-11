@@ -106,12 +106,18 @@ bool DatabaseManager::InsertTestValuesToFormworkSystemsTable()
     return result;
 }
 
-template<typename T> bool DatabaseManager::SelectElems(QVector<T> &elems, const QString &tableName)
+template<typename T> bool DatabaseManager::SelectElems(QVector<T> &elems, const QString &tableName, int elemId)
 {
     if (!_db.isOpen()) return false;
 
     QSqlQuery query;
-    if (query.exec("SELECT ID, Name, Description FROM " + tableName))
+    QString queryStr = "SELECT ID, Name, Description FROM " + tableName;
+    if (elemId != -1)
+    {
+        queryStr += " WHERE ID = " + QString::number(elemId);
+    }
+
+    if (query.exec(queryStr))
     {
         while (query.next())
         {
@@ -122,6 +128,45 @@ template<typename T> bool DatabaseManager::SelectElems(QVector<T> &elems, const 
         }
     }
     return true;
+}
+
+template<typename T> bool DatabaseManager::SelectElemsFromPhotos(QVector<T> &elems, const QString &what, const QString& table, int photoId)
+{
+    bool result = false;
+
+    QString sqlQuery = "SELECT " + what + " FROM Photos WHERE ID = " + QString::number(photoId);
+    QSqlQuery query;
+
+    if (query.exec(sqlQuery))
+    {
+        while (query.next())
+        {
+            QString data = query.value(what).toString();
+            int pos = 0;
+            int newPos = 0;
+            do
+            {
+                newPos = data.indexOf(";", pos);
+                QString elemId = "";
+                if (newPos != -1)
+                {
+                    elemId = data.mid(pos, newPos - pos);
+                }
+                else
+                {
+                    elemId = data.mid(pos);
+                }
+                SelectElems(elems, table, elemId.toInt());
+                pos = newPos + 1;
+            }while (newPos != -1);
+        }
+        result = true;
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
+
+    return result;
 }
 
 template<typename T> bool DatabaseManager::InsertOrUpdateElems(const QVector<T>& elems)
@@ -367,6 +412,21 @@ bool DatabaseManager::SelectPreviews(QVector<FileAndPreview> &photos)
     return result;
 }
 
+bool DatabaseManager::SelectFormworkSystemsByPhotoId(QVector<FormworkSystem> &elems, int photoId)
+{
+    return SelectElemsFromPhotos(elems, "FormworkSystems", "FormworkSystems", photoId);
+}
+
+bool DatabaseManager::SelectFeaturesByPhotoId(QVector<Feature> &elems, int photoId)
+{
+    return SelectElemsFromPhotos(elems, "Features", "Features", photoId);
+}
+
+bool DatabaseManager::SelectCategoriesByPhotoId(QVector<Categorie> &elems, int photoId)
+{
+    return SelectElemsFromPhotos(elems, "Category", "Categories", photoId);
+}
+
 bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
                                            const QString &projectName,
                                            const QDate  &projectDate,
@@ -536,4 +596,23 @@ bool DatabaseManager::UpdateFormworkSystems(const QVector<FormworkSystem> &elems
     InsertOrUpdateElems(elems);
 
     return true;
+}
+
+bool DatabaseManager::UpdatePhotoAttributes(const QString &formworkSystems, const QString &features, const QString &categories, int photoId)
+{
+    if (!_db.isOpen()) return false;
+    QString queryStr = (QString)"UPDATE Photos SET " +
+            "FormworkSystems = " + "'" + formworkSystems + "'" + ", " +
+            "Features = " + "'" + features + "'" + ", " +
+            "Category = " + "'" + categories + "'" + " " +
+            "WHERE ID = " + QString::number(photoId);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
 }
