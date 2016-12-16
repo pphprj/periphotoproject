@@ -38,7 +38,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabAdd">
          <attribute name="title">
@@ -88,6 +88,13 @@
              <string>Project</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelProjectNo">
+               <property name="text">
+                <string>Project No</string>
+               </property>
+              </widget>
+             </item>
              <item row="6" column="1">
               <spacer name="verticalSpacer_5">
                <property name="orientation">
@@ -104,15 +111,21 @@
                </property>
               </spacer>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelProjectNo">
-               <property name="text">
-                <string>Project No</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="lineEditProjectNo"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEditProjectName"/>
+             </item>
+             <item row="4" column="1">
+              <widget class="QComboBox" name="comboBoxFeatures"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelSystems">
+               <property name="text">
+                <string>Systems</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="1">
               <widget class="QDateEdit" name="dateEditProjectDate">
@@ -128,18 +141,8 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="labelSystems">
-               <property name="text">
-                <string>Systems</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEditProjectName"/>
-             </item>
-             <item row="4" column="1">
-              <widget class="QComboBox" name="comboBoxFeatures"/>
+             <item row="3" column="1">
+              <widget class="QComboBox" name="comboBoxSystems"/>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="labelProjectFeatures">
@@ -154,9 +157,6 @@
                 <string>Project Date</string>
                </property>
               </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QComboBox" name="comboBoxSystems"/>
              </item>
             </layout>
            </widget>
@@ -250,31 +250,6 @@
           <string>Search photos</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="2" column="0" colspan="5">
-           <widget class="QGroupBox" name="groupBoxPhotosSearch">
-            <property name="title">
-             <string>Photos</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <item>
-              <widget class="QListWidget" name="listWidgetPhotosSearch">
-               <property name="acceptDrops">
-                <bool>true</bool>
-               </property>
-               <property name="dragDropMode">
-                <enum>QAbstractItemView::NoDragDrop</enum>
-               </property>
-               <property name="defaultDropAction">
-                <enum>Qt::CopyAction</enum>
-               </property>
-               <property name="selectionMode">
-                <enum>QAbstractItemView::ExtendedSelection</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="4">
            <widget class="QGroupBox" name="groupBoxProjectSearch">
             <property name="title">
@@ -412,6 +387,18 @@
             </layout>
            </widget>
           </item>
+          <item row="3" column="0" colspan="5">
+           <widget class="QGroupBox" name="groupBoxPhotosSearch">
+            <property name="title">
+             <string>Photos</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QListWidget" name="listWidgetPhotosSearch"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item row="0" column="4">
            <widget class="QGroupBox" name="groupBoxCategoriesSearch">
             <property name="title">
@@ -458,19 +445,6 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="3">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>381</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="1" column="2">
            <widget class="QCheckBox" name="checkBoxEnablePreviewSearch">
             <property name="text">
@@ -495,12 +469,18 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="labelFilesSearch">
-            <property name="text">
-             <string>Search</string>
+          <item row="1" column="3">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-           </widget>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>381</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item row="1" column="1">
            <widget class="QPushButton" name="pushButtonPrintSelected">
@@ -509,11 +489,34 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1" colspan="4">
-           <widget class="QProgressBar" name="progressBarSearch">
-            <property name="value">
-             <number>0</number>
+          <item row="2" column="0" colspan="5">
+           <widget class="QGroupBox" name="groupBoxFilters">
+            <property name="title">
+             <string>Filters</string>
             </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QCheckBox" name="checkBoxInProgressFilter">
+               <property name="text">
+                <string>In progress</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxCurrentStateFilters">
+               <property name="text">
+                <string>Current state</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxMarketingFilters">
+               <property name="text">
+                <string>Marketing</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
