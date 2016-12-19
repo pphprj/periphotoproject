@@ -235,14 +235,14 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QVector<Categorie> &categories,
                                    const QDate &intervalBegin,
                                    const QDate &intervalEnd,
-                                   QVector<FileAndPreview> &photos)
+                                   QVector<SearchResult> &photos)
 {
     if (!_db.isOpen()) return false;
 
     bool result = false;
 
     QSqlQuery query;
-    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID ";
+    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, Projects.Name  ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -370,9 +370,12 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         while (query.next())
         {
-            FileAndPreview fnp;
+            SearchResult fnp;
             fnp.photoId = query.value("ID").toInt();
             fnp.filePath = query.value("FilePath").toString();
+            fnp.photoDate = query.value("Time").toDate();
+            fnp.categories = query.value("Category").toString();
+            fnp.projectName = query.value("Name").toString();
             photos.push_back(fnp);
         }
         result = true;
@@ -386,7 +389,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     return result;
 }
 
-bool DatabaseManager::SelectPreviews(QVector<FileAndPreview> &photos)
+bool DatabaseManager::SelectPreviews(QVector<SearchResult> &photos)
 {
     bool result = false;
 

@@ -15,7 +15,7 @@ bool PhotoSearcher::SearchPhotos(QString &projectNo,
                                  QVector<Categorie> &selectedCategories,
                                  QDate& intervalBegin,
                                  QDate& intervalEnd,
-                                 QVector<FileAndPreview>& photos)
+                                 QVector<SearchResult>& photos)
 {
     bool result = _dbm->SelectPhotos(projectNo,
                                              projectName,

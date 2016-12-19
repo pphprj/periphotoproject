@@ -82,6 +82,8 @@ private slots:
 
     void on_pushButtonPrintSelected_clicked();
 
+    void on_checkBoxOrderByName_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -122,7 +124,7 @@ private:
     bool _dbChangesFlag;
     QVector<FormworkSystem> _selectedSystems;
     QVector<Feature> _selectedFeatures;
-    QVector<FileAndPreview> _searchResult;
+    QVector<SearchResult> _searchResult;
 
     FileManager* _fileManager;
     Configurator* _cfg;

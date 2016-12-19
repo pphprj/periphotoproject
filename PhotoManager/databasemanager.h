@@ -32,8 +32,8 @@ public:
                       const QVector<Categorie>& categories,
                       const QDate& intervalBegin,
                       const QDate& intervalEnd,
-                      QVector<FileAndPreview>& photos);
-    bool SelectPreviews(QVector<FileAndPreview>& photos);
+                      QVector<SearchResult>& photos);
+    bool SelectPreviews(QVector<SearchResult>& photos);
     bool SelectFormworkSystemsByPhotoId(QVector<FormworkSystem>& elems, int photoId);
     bool SelectFeaturesByPhotoId(QVector<Feature>& elems, int photoId);
     bool SelectCategoriesByPhotoId(QVector<Categorie>& elems, int photoId);

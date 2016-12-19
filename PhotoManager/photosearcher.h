@@ -12,7 +12,7 @@ public:
     bool SearchPhotos(QString& projectNo, QString& projectName, QDate& projectDate,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QVector<Categorie>& selectedCategories,
                           QDate& intervalBegin, QDate& intervalEnd,
-                          QVector<FileAndPreview>& photos);
+                          QVector<SearchResult>& photos);
 
     bool SelectedFormworkSystems(QVector<FormworkSystem>& selectedFormworks, int photoId);
     bool SelectedFeatures(QVector<Feature>& selectedFeatures, int photoId);

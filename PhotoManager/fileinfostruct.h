@@ -10,11 +10,15 @@ struct FileInfoStruct
     QDateTime lastModified;
 };
 
-struct FileAndPreview
+struct SearchResult
 {
     QString filePath;
     QString previewPath;
+
     int photoId;
+    QString categories;
+    QString projectName;
+    QDate photoDate;
 };
 
 #endif // FILEINFOSTRUCT_H

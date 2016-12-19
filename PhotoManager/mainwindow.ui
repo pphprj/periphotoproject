@@ -256,34 +256,21 @@
              <string>Project</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEditProjectNameSearch"/>
-             </item>
-             <item row="5" column="1">
-              <widget class="QComboBox" name="comboBoxSystemsSearch"/>
-             </item>
-             <item row="10" column="1">
-              <spacer name="verticalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Expanding</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
              <item row="5" column="0">
               <widget class="QLabel" name="labelSystemsSearch">
                <property name="text">
                 <string>Systems</string>
                </property>
               </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QComboBox" name="comboBoxSystemsSearch"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEditProjectNameSearch"/>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEditProjectNoSearch"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="labelProjectNoSearch">
@@ -292,13 +279,10 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEditProjectNoSearch"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelProjectNameSearch">
-               <property name="text">
-                <string>Project Name</string>
+             <item row="9" column="1">
+              <widget class="QDateEdit" name="dateEditPhotoIntervalEnd">
+               <property name="calendarPopup">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -306,13 +290,6 @@
               <widget class="QLabel" name="labelProjectDateSearch">
                <property name="text">
                 <string>Project Date</string>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="1">
-              <widget class="QDateEdit" name="dateEditPhotoIntervalEnd">
-               <property name="calendarPopup">
-                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -330,13 +307,24 @@
                </property>
               </widget>
              </item>
-             <item row="6" column="1">
-              <widget class="QComboBox" name="comboBoxFeaturesSearch"/>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelProjectNameSearch">
+               <property name="text">
+                <string>Project Name</string>
+               </property>
+              </widget>
              </item>
              <item row="8" column="0">
               <widget class="QLabel" name="labelPhotoIntervalBegin">
                <property name="text">
                 <string>Interval begin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="labelPhotoIntervalEnd">
+               <property name="text">
+                <string>Interval end</string>
                </property>
               </widget>
              </item>
@@ -347,12 +335,8 @@
                </property>
               </widget>
              </item>
-             <item row="9" column="0">
-              <widget class="QLabel" name="labelPhotoIntervalEnd">
-               <property name="text">
-                <string>Interval end</string>
-               </property>
-              </widget>
+             <item row="6" column="1">
+              <widget class="QComboBox" name="comboBoxFeaturesSearch"/>
              </item>
              <item row="2" column="2">
               <widget class="QCheckBox" name="checkBoxDisableProjectDate">
@@ -394,7 +378,7 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QListWidget" name="listWidgetPhotosSearch"/>
+              <widget class="QTableWidget" name="tableWidgetPhotosSearch"/>
              </item>
             </layout>
            </widget>
@@ -496,9 +480,30 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
+              <widget class="QCheckBox" name="checkBoxOrderByName">
+               <property name="text">
+                <string>Order by name</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelOnlyDate">
+               <property name="text">
+                <string>Filter by date</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDateEdit" name="dateEditOnly">
+               <property name="calendarPopup">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QCheckBox" name="checkBoxInProgressFilter">
                <property name="text">
-                <string>In progress</string>
+                <string>In process</string>
                </property>
               </widget>
              </item>
