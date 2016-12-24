@@ -38,6 +38,14 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
             result = CreateTable("Previews");
         }
     }
+    else
+    {
+        _db = QSqlDatabase::addDatabase("QSQLITE");
+        //connection = "c:\\Work\\Peri\\periphotoproject\\build-PhotoManager-Desktop_Qt_5_7_0_MSVC2013_32bit-Debug\\PeriProjects.db";
+        connection = "PeriProjects.db";
+        _db.setDatabaseName(connection);
+        result = _db.open();
+    }
 
     return result;
 }
@@ -61,8 +69,11 @@ bool DatabaseManager::InsertTestValuesToCategoriesTable()
 
     QSqlQuery query;
     bool result = query.exec("INSERT INTO Categories (name, description) VALUES('In process', '')");
+    QString error = query.lastError().text();
     result &= query.exec("INSERT INTO Categories (name) VALUES('Current state')");
+    error = query.lastError().text();
     result &= query.exec("INSERT INTO Categories (name) VALUES('Marketing')");
+    error = query.lastError().text();
 
     return result;
 }
@@ -182,11 +193,15 @@ template<typename T> bool DatabaseManager::InsertOrUpdateElems(const QVector<T>&
         {
             QString request = elem.GetUpdateRequest();
             result &= query.exec(request);
+            QString error = query.lastError().text();
+            qDebug() << error;
         }
         else
         {
             QString request = elem.GetInsertRequest();
             result &= query.exec(request);
+            QString error = query.lastError().text();
+            qDebug() << error;
         }
     }
 
@@ -256,7 +271,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     if (projectDate != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("yyyy-MM-dd") + "')";
+        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("MM-dd-yyyy") + "')";
     }
 
     sqlQuery += " WHERE ";
@@ -351,13 +366,13 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " AND ";
         sqlQuery += " ( ";
-        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("yyyy-MM-dd") + "'";
+        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("MM-dd-yyyy") + "'";
     }
 
     if (intervalEnd != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("yyyy-MM-dd") + "'";
+        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("MM-dd-yyyy") + "'";
     }
 
     if (intervalBegin != QDate(1970, 1, 1))
@@ -484,7 +499,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         FileInfoStruct file = photos[i];
         if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified.date().toString("yyyy-MM-dd");
+            QString fileDate = file.lastModified.date().toString("MM-dd-yyyy");
             QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
             query.prepare(temp);
             qDebug() << temp;
@@ -493,7 +508,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
             {
                 InsertPreview(query.lastInsertId().toInt(), previews[i]);
             }
-            qDebug() << "insert result " << result;
+            qDebug() << "insert result " << result << query.lastError().text();
         }
     }
 
@@ -547,7 +562,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += "(";
     queryString += "'" + projectNo + "'";
     queryString += (!name.isEmpty() ? ",'" + name + "'": "");
-    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("yyyy-MM-dd") + "'" : "");
+    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("MM-dd-yyyy") + "'" : "");
     queryString += (!description.isEmpty() ? ",'" + description + "'" : "");
     queryString += ")";
 

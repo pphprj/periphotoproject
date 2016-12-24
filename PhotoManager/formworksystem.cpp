@@ -18,7 +18,7 @@ FormworkSystem::~FormworkSystem()
 
 QString FormworkSystem::GetInsertRequest()
 {
-    return (QString)"INSERT FormworkSystems (name, description) VALUES (" +
+    return (QString)"INSERT INTO FormworkSystems (name, description) VALUES (" +
             "'" + _name + "'" + "," +
             "'" + _description + "'" +
             ")";

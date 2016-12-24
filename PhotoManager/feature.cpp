@@ -19,7 +19,7 @@ Feature::~Feature()
 
 QString Feature::GetInsertRequest()
 {
-    return (QString)"INSERT Features (name, description) VALUES (" +
+    return (QString)"INSERT INTO Features (name, description) VALUES (" +
             "'" + _name + "'" + "," +
             "'" + _description + "'" +
             ")";

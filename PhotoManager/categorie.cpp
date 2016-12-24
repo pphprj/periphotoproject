@@ -19,7 +19,7 @@ Categorie::~Categorie()
 
 QString Categorie::GetInsertRequest()
 {
-    return "INSERT Categories (name, description) VALUES (" +
+    return "INSERT INTO Categories (name, description) VALUES (" +
             _name + "," +
             _description +
             ")";
