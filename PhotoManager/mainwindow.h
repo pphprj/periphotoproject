@@ -78,11 +78,21 @@ private slots:
 
     void on_checkBoxDisableIntervalEnd_clicked();
 
-    void on_checkBoxEnablePreviewSearch_clicked();
-
     void on_pushButtonPrintSelected_clicked();
 
     void on_checkBoxOrderByName_clicked();
+
+    void on_dateEditOnly_dateChanged(const QDate &date);
+
+    void on_checkBoxInProgressFilter_clicked();
+
+    void on_checkBoxCurrentStateFilters_clicked();
+
+    void on_checkBoxMarketingFilters_clicked();
+
+    void on_checkBoxInProgressFilters_clicked();
+
+    void on_checkBoxFilterByDate_clicked();
 
 private:
     void InitDatabase();
@@ -111,8 +121,8 @@ public slots:
     void setProgressBarValue(int value);
     void finishedCopy();
     void showContextMenu(QPoint pos);
-    void saveSelected(QListWidgetItem* item);
-    void printSelected(QListWidgetItem* item);
+    void saveSelected(QTableWidgetItem* item);
+    void printSelected(QTableWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;

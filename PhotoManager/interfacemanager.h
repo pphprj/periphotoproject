@@ -49,12 +49,13 @@ public:
         cb->setCurrentIndex(0);
     }
 
-    template <typename T> static void FillTableWidget(const QVector<T>& elems, const QTableWidget* table)
+    template <typename T> static void FillTableWidget(const QStringList& headers, const QVector<T>& elems, const QTableWidget* table)
     {
         QTableWidget* tbWidget = const_cast<QTableWidget*>(table);
         tbWidget->setRowCount(elems.length());
 
         tbWidget->setColumnCount(2);
+        tbWidget->setHorizontalHeaderLabels(headers);
         for (int i = 0; i < elems.length(); i++)
         {
             T elem = elems[i];

@@ -81,8 +81,13 @@ void MainWindow::InitInterface()
     ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
-    ui->tableWidgetPhotosSearch->setIconSize(QSize(0, 0));
+    ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
     ui->tableWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableWidgetPhotosSearch->setColumnCount(3);
+    QStringList headers;
+    headers << tr("Preview") << tr("Project name / File path") << tr("Photo date");
+    ui->tableWidgetPhotosSearch->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetPhotosSearch->resizeColumnsToContents();
     connect(ui->tableWidgetPhotosSearch, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
@@ -380,8 +385,13 @@ void MainWindow::on_tabWidgetSystem_currentChanged(int index)
 {
     if (index == 2)
     {
-        InterfaceManager::FillTableWidget(_loader->GetFormworkSystems(), ui->tableWidgetSystems);
-        InterfaceManager::FillTableWidget(_loader->GetFeatures(), ui->tableWidgetFeatures);
+        QStringList tableSystemHeader;
+        tableSystemHeader << tr("Formwork system") << tr("Description");
+        InterfaceManager::FillTableWidget(tableSystemHeader, _loader->GetFormworkSystems(), ui->tableWidgetSystems);
+
+        QStringList tableFeaturesHeader;
+        tableFeaturesHeader << tr("Feature") << tr("Description");
+        InterfaceManager::FillTableWidget(tableFeaturesHeader, _loader->GetFeatures(), ui->tableWidgetFeatures);
 
         _dbChangesFlag = false;
     }
@@ -390,7 +400,6 @@ void MainWindow::on_tabWidgetSystem_currentChanged(int index)
     {
         ui->tableWidgetSystems->clear();
         ui->tableWidgetFeatures->clear();
-        LoadInterface();
     }
 }
 
@@ -474,6 +483,7 @@ void MainWindow::on_tabWidgetSystem_tabBarClicked(int index)
         InterfaceManager::ApplyChanges(_searcher->GetFeatures(), ui->tableWidgetFeatures);
 
         LoadDatabase();
+        LoadInterface();
     }
 }
 
@@ -620,8 +630,11 @@ void MainWindow::on_pushButtonSearch_clicked()
     if (!result)
         return;
 
-    ui->tableWidgetPhotosSearch->setColumnCount(3);
     ui->tableWidgetPhotosSearch->setRowCount(_searchResult.length());
+    QStringList headers;
+    headers << tr("Preview") << tr("Project name / File path") << tr("Photo date");
+    ui->tableWidgetPhotosSearch->setHorizontalHeaderLabels(headers);
+
     for (int i = 0; i < _searchResult.length(); i++)
     {
        SearchResult fnp = _searchResult[i];
@@ -632,6 +645,7 @@ void MainWindow::on_pushButtonSearch_clicked()
 
        if (!fnp.previewPath.isEmpty())
        {
+           itemImage->setSizeHint(QSize(100, 100));
            QPixmap pm(fnp.previewPath);
            itemImage->setIcon(QIcon(pm));
        }
@@ -642,6 +656,9 @@ void MainWindow::on_pushButtonSearch_clicked()
        ui->tableWidgetPhotosSearch->setItem(i, 2, itemDate);
 
     }
+    QHeaderView* header = ui->tableWidgetPhotosSearch->verticalHeader();
+    header->setSectionResizeMode(QHeaderView::Fixed);
+    header->setDefaultSectionSize(100);
     ui->tableWidgetPhotosSearch->resizeColumnsToContents();
 }
 
@@ -650,7 +667,7 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     QString saveDirectory = QFileDialog::getExistingDirectory(this, tr("Save images"), destination, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     bool result = true;
-    /*QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+    QList<QTableWidgetItem*> selected = ui->tableWidgetPhotosSearch->selectedItems();
 
     if (selected.empty())
     {
@@ -665,8 +682,9 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     {
         for (int i = 0; i < selected.length(); i++)
         {
-            QListWidgetItem* item = selected[i];
-            QFileInfo fileInfo(item->text());
+            QTableWidgetItem* item = selected[i];
+            SearchResult res = _searchResult[item->row()];
+            QFileInfo fileInfo(res.filePath);
             QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
             result &= QFile::copy(fileInfo.filePath(), destinationFileName);
         }
@@ -675,8 +693,7 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     if (result)
     {
         QMessageBox::information(this, tr("Successfully"), tr("Photos were copied to directory"));
-        ClearInterface(1);
-    }*/
+    }
 }
 
 void MainWindow::on_checkBoxDisableProjectDate_clicked()
@@ -721,31 +738,18 @@ void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
     }
 }
 
-void MainWindow::on_checkBoxEnablePreviewSearch_clicked()
-{
-    if (ui->checkBoxEnablePreviewSearch->isChecked())
-    {
-        //ui->tableWidgetPhotosSearch->setViewMode(QListWidget::IconMode);
-        ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
-        //ui->tableWidgetPhotosSearch->setResizeMode(QListWidget::Adjust);
-    }
-    else
-    {
-        //ui->listWidgetPhotosSearch->setViewMode(QListWidget::ListMode);
-        ui->tableWidgetPhotosSearch->setIconSize(QSize(0, 0));
-    }
-}
 
 void MainWindow::showContextMenu(QPoint pos)
 {
-    /*QListWidgetItem* item = ui->listWidgetPhotosSearch->itemAt(pos);
+    QTableWidgetItem* item = ui->tableWidgetPhotosSearch->itemAt(pos);
+    //QListWidgetItem* item = ui->listWidgetPhotosSearch->itemAt(pos);
     if (item != nullptr)
     {
         QMenu contextMenu;
         QAction* save = contextMenu.addAction(tr("Save"));
         QAction* print = contextMenu.addAction(tr("Print"));
         QAction* edit = contextMenu.addAction(tr("Edit"));
-        QAction* selectedAction = contextMenu.exec(ui->listWidgetPhotosSearch->mapToGlobal(pos));
+        QAction* selectedAction = contextMenu.exec(ui->tableWidgetPhotosSearch->mapToGlobal(pos));
         if (selectedAction)
         {
             if (selectedAction == save)
@@ -761,16 +765,16 @@ void MainWindow::showContextMenu(QPoint pos)
             if (selectedAction == edit)
             {
                 AttributesEditDialog* dlg = new AttributesEditDialog(this);
-                int index = ui->listWidgetPhotosSearch->row(item);
+                int index = ui->tableWidgetPhotosSearch->row(item);
                 dlg->LoadSelected(_searcher, _searchResult[index].photoId);
                 dlg->exec();
                 delete dlg;
             }
         }
-    }*/
+    }
 }
 
-void MainWindow::saveSelected(QListWidgetItem* item)
+void MainWindow::saveSelected(QTableWidgetItem* item)
 {
     if (item == nullptr)
     {
@@ -790,7 +794,7 @@ void MainWindow::saveSelected(QListWidgetItem* item)
     }
 }
 
-void MainWindow::printSelected(QListWidgetItem *item)
+void MainWindow::printSelected(QTableWidgetItem *item)
 {
     try
     {
@@ -828,7 +832,7 @@ void MainWindow::printSelected(QListWidgetItem *item)
 
 void MainWindow::on_pushButtonPrintSelected_clicked()
 {
-    /*try
+    try
     {
         QPrinter printer(QPrinter::HighResolution);
         printer.setFullPage(true);
@@ -839,7 +843,7 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
         if(dlg->exec() == QDialog::Accepted)
         {
             bool result = true;
-            QList<QListWidgetItem*> selected = ui->listWidgetPhotosSearch->selectedItems();
+            QList<QTableWidgetItem*> selected = ui->tableWidgetPhotosSearch->selectedItems();
 
             QPainter painter(&printer);
             if (selected.empty())
@@ -862,8 +866,9 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
             {
                 for (int i = 0; i < selected.length(); i++)
                 {
-                    QListWidgetItem* item = selected[i];
-                    QPixmap pm(item->text());
+                    QTableWidgetItem* item = selected[i];
+                    SearchResult res = _searchResult[item->row()];
+                    QPixmap pm(res.filePath);
                     painter.begin(&printer);
                     printer.newPage();
                     //QPainter painter(&printer);
@@ -883,9 +888,93 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
     catch (QException& exp)
     {
         qDebug() << exp.what();
-    }*/
+    }
 }
 
 void MainWindow::on_checkBoxOrderByName_clicked()
 {
+    ui->tableWidgetPhotosSearch->sortItems(1);
+}
+
+void MainWindow::on_dateEditOnly_dateChanged(const QDate &date)
+{
+    if (!ui->checkBoxFilterByDate->isChecked()) return;
+
+    QDate orderDate = date;
+    for (int i = 0; i < _searchResult.length(); i++)
+    {
+        if (orderDate != _searchResult[i].photoDate)
+        {
+            ui->tableWidgetPhotosSearch->setRowHidden(i, true);
+        }
+        else
+        {
+            ui->tableWidgetPhotosSearch->setRowHidden(i, false);
+        }
+    }
+}
+
+void MainWindow::on_checkBoxInProgressFilter_clicked()
+{
+    QString search = "";
+    if (ui->checkBoxInProgressFilters->isChecked())
+    {
+        search += "1";
+    }
+    if (ui->checkBoxCurrentStateFilters->isChecked())
+    {
+        if (!search.isEmpty()) search += ";";
+        search += "2";
+    }
+    if (ui->checkBoxMarketingFilters->isChecked())
+    {
+        if (!search.isEmpty()) search += ";";
+        search += "3";
+    }
+
+    for (int i = 0; i < _searchResult.length(); i++)
+    {
+        if (_searchResult[i].categories.indexOf(search) == -1)
+        {
+            ui->tableWidgetPhotosSearch->setRowHidden(i, true);
+        }
+        else
+        {
+            ui->tableWidgetPhotosSearch->setRowHidden(i, false);
+        }
+    }
+}
+
+void MainWindow::on_checkBoxCurrentStateFilters_clicked()
+{
+    on_checkBoxInProgressFilter_clicked();
+}
+
+
+
+void MainWindow::on_checkBoxMarketingFilters_clicked()
+{
+    on_checkBoxInProgressFilter_clicked();
+}
+
+void MainWindow::on_checkBoxInProgressFilters_clicked()
+{
+    on_checkBoxInProgressFilter_clicked();
+}
+
+void MainWindow::on_checkBoxFilterByDate_clicked()
+{
+    if (ui->checkBoxFilterByDate->isChecked())
+    {
+        ui->dateEditOnly->setEnabled(true);
+        on_dateEditOnly_dateChanged(ui->dateEditOnly->date());
+    }
+    else
+    {
+        ui->dateEditOnly->setEnabled(false);
+        for (int i = 0; i < _searchResult.length(); i++)
+        {
+            ui->tableWidgetPhotosSearch->setRowHidden(i, false);
+        }
+    }
 }
