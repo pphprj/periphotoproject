@@ -143,6 +143,8 @@ private:
 
     PhotoLoader* _loader;
     PhotoSearcher* _searcher;
+
+    QMenu* _contextMenu;
 };
 
 #endif // MAINWINDOW_H

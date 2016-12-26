@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _fileManager = new FileManager(_cfg->GetProjectsDirectory());
     _copierThread = new FilecopierThread(_fileManager);
     _previewSession = new PreviewSession(ui->listWidgetPhotos);
+    _contextMenu = new QMenu(this);
 
     QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
     QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
@@ -44,6 +45,7 @@ MainWindow::~MainWindow()
     delete _fileManager;
     delete _dbm;
     delete _cfg;
+    delete _contextMenu;
     delete ui;
 }
 
@@ -581,16 +583,27 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
     return;
 
+    _contextMenu->clear();
+
+    QList<QAction*> actions;
     foreach (ProjectName name, _loader->GetProjectNames())
     {
         if (name.GetProjectNo().contains(arg1))
         {
-            _backup.SetName(ui->lineEditProjectName->text());
-            ui->lineEditProjectName->setText(name.GetName());
-            return;
+            actions.push_back(new QAction(name.GetProjectNo()));
         }
     }
-    ui->lineEditProjectName->setText(_backup.GetName());
+
+    _contextMenu->addActions(actions);
+
+    //contextMenu.exec(ui->lineEditProjectNo->mapToGlobal(ui->lineEditProjectNo->pos()));
+    //_contextMenu->popup(ui->lineEditProjectNo->pos());
+
+    _contextMenu->setAttribute(Qt::WA_ShowWithoutActivating);
+    _contextMenu->show();
+   // _contextMenu->popup(ui->lineEditProjectNo->mapToGlobal(ui->lineEditProjectNo->pos()));
+
+    ui->lineEditProjectNo->setFocus(Qt::MouseFocusReason);
 }
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)

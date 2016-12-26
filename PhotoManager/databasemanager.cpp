@@ -271,7 +271,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     if (projectDate != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("MM-dd-yyyy") + "')";
+        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("dd-MM-yyyy") + "')";
     }
 
     sqlQuery += " WHERE ";
@@ -366,13 +366,13 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " AND ";
         sqlQuery += " ( ";
-        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("MM-dd-yyyy") + "'";
+        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("dd-MM-yyyy") + "'";
     }
 
     if (intervalEnd != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("MM-dd-yyyy") + "'";
+        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("dd-MM-yyyy") + "'";
     }
 
     if (intervalBegin != QDate(1970, 1, 1))
@@ -389,7 +389,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.photoId = query.value("ID").toInt();
             fnp.filePath = query.value("FilePath").toString();
             QString time = query.value("Time").toString();
-            QDate date = QDate::fromString(time, "MM-dd-yyyy");
+            QDate date = QDate::fromString(time, "dd-MM-yyyy");
             fnp.photoDate = date;
             fnp.categories = query.value("Category").toString();
             fnp.projectName = query.value("Name").toString();
@@ -501,7 +501,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         FileInfoStruct file = photos[i];
         if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified.date().toString("MM-dd-yyyy");
+            QString fileDate = file.lastModified.date().toString("dd-MM-yyyy");
             QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
             query.prepare(temp);
             qDebug() << temp;
@@ -564,7 +564,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += "(";
     queryString += "'" + projectNo + "'";
     queryString += (!name.isEmpty() ? ",'" + name + "'": "");
-    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("MM-dd-yyyy") + "'" : "");
+    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("dd-MM-yyyy") + "'" : "");
     queryString += (!description.isEmpty() ? ",'" + description + "'" : "");
     queryString += ")";
 
