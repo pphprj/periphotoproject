@@ -77,10 +77,11 @@ void MainWindow::InitInterface()
     ui->pushButtonNewFeature->setMinimumWidth(160);
     ui->pushButtonSystemsNew->setMinimumWidth(160);
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
-    ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
-    ui->dateEditProjectDateSearch->setEnabled(false);
-    ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
-    ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditPhotoIntervalBegin->setEnabled(false);
+    ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditPhotoIntervalEnd->setEnabled(false);
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
     ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
@@ -713,13 +714,13 @@ void MainWindow::on_checkBoxDisableProjectDate_clicked()
 {
     if (ui->checkBoxDisableProjectDate->isChecked())
     {
-        ui->dateEditProjectDateSearch->setEnabled(false);
-        ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+        ui->dateEditProjectDateSearch->setEnabled(true);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
     }
     else
     {
-        ui->dateEditProjectDateSearch->setEnabled(true);
-        ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+        ui->dateEditProjectDateSearch->setEnabled(false);
+        ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
     }
 }
 
@@ -727,13 +728,13 @@ void MainWindow::on_checkBoxDisableIntervalBegin_clicked()
 {
     if (ui->checkBoxDisableIntervalBegin->isChecked())
     {
-        ui->dateEditPhotoIntervalBegin->setEnabled(false);
-        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
+        ui->dateEditPhotoIntervalBegin->setEnabled(true);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
     }
     else
     {
-        ui->dateEditPhotoIntervalBegin->setEnabled(true);
-        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
+        ui->dateEditPhotoIntervalBegin->setEnabled(false);
+        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
     }
 }
 
@@ -741,13 +742,13 @@ void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
 {
     if (ui->checkBoxDisableIntervalEnd->isChecked())
     {
-        ui->dateEditPhotoIntervalEnd->setEnabled(false);
-        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
+        ui->dateEditPhotoIntervalEnd->setEnabled(true);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
     }
     else
     {
-        ui->dateEditPhotoIntervalEnd->setEnabled(true);
-        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
+        ui->dateEditPhotoIntervalEnd->setEnabled(false);
+        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
     }
 }
 
