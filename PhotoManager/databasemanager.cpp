@@ -389,7 +389,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.photoId = query.value("ID").toInt();
             fnp.filePath = query.value("FilePath").toString();
             QString time = query.value("Time").toString();
-            QDate date = QDate::fromString(time, "dd-MM-yyyy");
+            QDate date = query.value("Time").toDate();
             fnp.photoDate = date;
             fnp.categories = query.value("Category").toString();
             fnp.projectName = query.value("Name").toString();
