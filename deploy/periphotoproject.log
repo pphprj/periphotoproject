@@ -688,3 +688,7 @@ compression rate  80
 QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
 QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
 db connect result  true
+"SELECT Photos.ID, FilePath, ProjectID, Time, Category, Projects.Name  FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') WHERE  Projects.ID = Photos.ProjectID  AND  Photos.Time <= '27-12-2016'"
+" "
+"SELECT FilePath FROM Previews WHERE PhotoID = %1"
+" "

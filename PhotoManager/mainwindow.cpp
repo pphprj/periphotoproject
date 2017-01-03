@@ -128,6 +128,8 @@ void MainWindow::LoadInterface()
 
     _selectedFeatures.clear();
     _selectedSystems.clear();
+    _selectedFeaturesSearch.clear();
+    _selectedSystemSearch.clear();
 
     ui->checkBoxEnablePreview->setChecked(true);
     on_checkBoxEnablePreview_clicked();
@@ -259,7 +261,7 @@ void MainWindow::ClearInterface(int tabIndex)
     if (tabIndex == 1)
     {
         ui->tableWidgetPhotosSearch->clear();
-        _searchResult.clear();;
+        _searchResult.clear();
     }
 }
 
@@ -312,8 +314,8 @@ void MainWindow::on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item)
             return;
         }
 
-        _selectedSystems = InterfaceManager::GetSelectedListItems(_searcher->GetFormworkSystems(), ui->comboBoxSystemsSearch->model());
-        InterfaceManager::ShowSelection(_selectedSystems, ui->comboBoxSystemsSearch);
+        _selectedSystemSearch = InterfaceManager::GetSelectedListItems(_searcher->GetFormworkSystems(), ui->comboBoxSystemsSearch->model());
+        InterfaceManager::ShowSelection(_selectedSystemSearch, ui->comboBoxSystemsSearch);
     }
 }
 
@@ -330,8 +332,8 @@ void MainWindow::on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item)
             return;
         }
 
-        _selectedFeatures = InterfaceManager::GetSelectedListItems(_searcher->GetFeatures(), ui->comboBoxFeaturesSearch->model());
-        InterfaceManager::ShowSelection(_selectedFeatures, ui->comboBoxFeaturesSearch);
+        _selectedFeaturesSearch = InterfaceManager::GetSelectedListItems(_searcher->GetFeatures(), ui->comboBoxFeaturesSearch->model());
+        InterfaceManager::ShowSelection(_selectedFeaturesSearch, ui->comboBoxFeaturesSearch);
     }
 }
 
@@ -637,7 +639,7 @@ void MainWindow::on_pushButtonSearch_clicked()
     QDate intervalEnd = ui->dateEditPhotoIntervalEnd->date();
 
     bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate,
-                                            _selectedSystems, _selectedFeatures, GetSelectedCategoriesSearch(),
+                                            _selectedSystemSearch, _selectedFeaturesSearch, GetSelectedCategoriesSearch(),
                                             intervalBegin, intervalEnd,
                                             _searchResult);
 

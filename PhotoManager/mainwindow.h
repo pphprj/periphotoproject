@@ -132,8 +132,12 @@ private:
     QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;
+
     QVector<FormworkSystem> _selectedSystems;
     QVector<Feature> _selectedFeatures;
+
+    QVector<FormworkSystem> _selectedSystemSearch;
+    QVector<Feature> _selectedFeaturesSearch;
     QVector<SearchResult> _searchResult;
 
     FileManager* _fileManager;

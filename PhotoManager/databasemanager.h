@@ -78,6 +78,7 @@ private:
 
 private:
     QSqlDatabase _db;
+    QString _dateTimeFormat;
 };
 
 #endif // DATABASEMANAGER_H

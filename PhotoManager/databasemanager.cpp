@@ -5,6 +5,7 @@
 DatabaseManager::DatabaseManager()
 {
     _db = QSqlDatabase::addDatabase("QODBC");
+    _dateTimeFormat = "dd-MM-yyyy";
 }
 
 DatabaseManager::~DatabaseManager()
@@ -45,6 +46,7 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
         connection = "PeriProjects.db";
         _db.setDatabaseName(connection);
         result = _db.open();
+        _dateTimeFormat = "yyyy-MM-dd";
     }
 
     return result;
@@ -271,7 +273,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     if (projectDate != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString("dd-MM-yyyy") + "')";
+        sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString(_dateTimeFormat) + "')";
     }
 
     sqlQuery += " WHERE ";
@@ -366,13 +368,13 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " AND ";
         sqlQuery += " ( ";
-        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString("dd-MM-yyyy") + "'";
+        sqlQuery += QString(" Photos.Time >= ") + "'" + intervalBegin.toString(_dateTimeFormat) + "'";
     }
 
     if (intervalEnd != QDate(1970, 1, 1))
     {
         sqlQuery += " AND ";
-        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString("dd-MM-yyyy") + "'";
+        sqlQuery += QString(" Photos.Time <= ") + "'" + intervalEnd.toString(_dateTimeFormat) + "'";
     }
 
     if (intervalBegin != QDate(1970, 1, 1))
@@ -501,7 +503,7 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         FileInfoStruct file = photos[i];
         if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified.date().toString("dd-MM-yyyy");
+            QString fileDate = file.lastModified.date().toString(_dateTimeFormat);
             QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
             query.prepare(temp);
             qDebug() << temp;
@@ -564,7 +566,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += "(";
     queryString += "'" + projectNo + "'";
     queryString += (!name.isEmpty() ? ",'" + name + "'": "");
-    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString("dd-MM-yyyy") + "'" : "");
+    queryString += (!creationDate.isNull() ? ",'" + creationDate.toString(_dateTimeFormat) + "'" : "");
     queryString += (!description.isEmpty() ? ",'" + description + "'" : "");
     queryString += ")";
 
