@@ -94,6 +94,10 @@ private slots:
 
     void on_checkBoxFilterByDate_clicked();
 
+    void on_lineEditProjectNoSearch_textEdited(const QString &arg1);
+
+    void on_lineEditProjectNameSearch_textEdited(const QString &arg1);
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -128,7 +132,6 @@ private:
     Ui::MainWindow *ui;
     DatabaseManager* _dbm;
 
-    ProjectName _backup;
     QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;
@@ -147,8 +150,6 @@ private:
 
     PhotoLoader* _loader;
     PhotoSearcher* _searcher;
-
-    QMenu* _contextMenu;
 };
 
 #endif // MAINWINDOW_H

@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QCompleter>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -28,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent) :
     _fileManager = new FileManager(_cfg->GetProjectsDirectory());
     _copierThread = new FilecopierThread(_fileManager);
     _previewSession = new PreviewSession(ui->listWidgetPhotos);
-    _contextMenu = new QMenu(this);
 
     QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
     QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
@@ -45,7 +45,6 @@ MainWindow::~MainWindow()
     delete _fileManager;
     delete _dbm;
     delete _cfg;
-    delete _contextMenu;
     delete ui;
 }
 
@@ -584,45 +583,37 @@ void MainWindow::on_comboBoxSystems_currentIndexChanged(int index)
 
 void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
 {
-    return;
-
-    _contextMenu->clear();
-
-    QList<QAction*> actions;
+    QStringList items;
     foreach (ProjectName name, _loader->GetProjectNames())
     {
-        if (name.GetProjectNo().contains(arg1))
+        if (name.GetProjectNo().contains(arg1, Qt::CaseInsensitive))
         {
-            actions.push_back(new QAction(name.GetProjectNo()));
+            items.push_back(name.GetProjectNo());
         }
     }
 
-    _contextMenu->addActions(actions);
-
-    //contextMenu.exec(ui->lineEditProjectNo->mapToGlobal(ui->lineEditProjectNo->pos()));
-    //_contextMenu->popup(ui->lineEditProjectNo->pos());
-
-    _contextMenu->setAttribute(Qt::WA_ShowWithoutActivating);
-    _contextMenu->show();
-   // _contextMenu->popup(ui->lineEditProjectNo->mapToGlobal(ui->lineEditProjectNo->pos()));
-
-    ui->lineEditProjectNo->setFocus(Qt::MouseFocusReason);
+    QCompleter* completer = new QCompleter(items);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->lineEditProjectNo->setCompleter(completer);
 }
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
 {
-    return;
+    QStringList items;
 
     foreach (ProjectName name, _loader->GetProjectNames())
     {
-        if (name.GetName().contains(arg1))
+        if (name.GetName().contains(arg1, Qt::CaseInsensitive))
         {
-            _backup.SetProjectNo(ui->lineEditProjectNo->text());
-            ui->lineEditProjectNo->setText(name.GetProjectNo());
-            return;
+             items.push_back(name.GetName());
         }
     }
-    ui->lineEditProjectNo->setText(_backup.GetProjectNo());
+
+    QCompleter* completer = new QCompleter(items);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->lineEditProjectName->setCompleter(completer);
 }
 
 void MainWindow::on_pushButtonSearch_clicked()
@@ -993,4 +984,40 @@ void MainWindow::on_checkBoxFilterByDate_clicked()
             ui->tableWidgetPhotosSearch->setRowHidden(i, false);
         }
     }
+}
+
+void MainWindow::on_lineEditProjectNoSearch_textEdited(const QString &arg1)
+{
+    QStringList items;
+
+    foreach (ProjectName name, _searcher->GetProjectNames())
+    {
+        if (name.GetProjectNo().contains(arg1, Qt::CaseInsensitive))
+        {
+             items.push_back(name.GetProjectNo());
+        }
+    }
+
+    QCompleter* completer = new QCompleter(items);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->lineEditProjectNoSearch->setCompleter(completer);
+}
+
+void MainWindow::on_lineEditProjectNameSearch_textEdited(const QString &arg1)
+{
+    QStringList items;
+
+    foreach (ProjectName name, _searcher->GetProjectNames())
+    {
+        if (name.GetName().contains(arg1, Qt::CaseInsensitive))
+        {
+             items.push_back(name.GetName());
+        }
+    }
+
+    QCompleter* completer = new QCompleter(items);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->lineEditProjectNameSearch->setCompleter(completer);
 }
