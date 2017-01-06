@@ -98,6 +98,8 @@ private slots:
 
     void on_lineEditProjectNameSearch_textEdited(const QString &arg1);
 
+    void on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index);
+
 private:
     void InitDatabase();
     void InitInterface();

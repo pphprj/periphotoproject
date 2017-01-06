@@ -5,6 +5,7 @@
 #include "interfacemanager.h"
 #include "tableabstractelemmanager.h"
 #include "attributeseditdialog.h"
+#include "bigpreview.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -220,6 +221,11 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     }
 
     QString projectName = ui->lineEditProjectName->text();
+    if (projectName.isEmpty())
+    {
+        ProjectName pn = _loader->GetProjectNameByNo(projectNo);
+        projectName = pn.GetName();
+    }
     _fileManager->CreateProjectDirectory(projectNo, projectName);
     _copierThread->setFileList(_files, _cfg->GetCompressionRate());
     _copierThread->start();
@@ -546,6 +552,8 @@ void MainWindow::finishedCopy()
 
     if (result)
     {
+        _loader->RefreshProjectNames();
+        _searcher->RefreshProjectNames();
         QMessageBox::information(this, tr("Successfully"), tr("Photos were added to DB"));
         ClearInterface(0);
     }
@@ -624,8 +632,6 @@ void MainWindow::on_pushButtonSearch_clicked()
     QString projectName = ui->lineEditProjectNameSearch->text();
     QDate projectDate = ui->dateEditProjectDateSearch->date();
 
-    QVector<QFileInfo> previews;
-
     QDate intervalBegin = ui->dateEditPhotoIntervalBegin->date();
     QDate intervalEnd = ui->dateEditPhotoIntervalEnd->date();
 
@@ -657,6 +663,9 @@ void MainWindow::on_pushButtonSearch_clicked()
            itemImage->setIcon(QIcon(pm));
        }
 
+       itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
+       itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
+       itemName->setFlags(itemName->flags() ^ Qt::ItemIsEditable);
 
        ui->tableWidgetPhotosSearch->setItem(i, 1, itemName);
        ui->tableWidgetPhotosSearch->setItem(i, 0, itemImage);
@@ -1020,4 +1029,11 @@ void MainWindow::on_lineEditProjectNameSearch_textEdited(const QString &arg1)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     ui->lineEditProjectNameSearch->setCompleter(completer);
+}
+
+void MainWindow::on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index)
+{
+    SearchResult item = _searchResult[index.row()];
+    BigPreview* preview = new BigPreview(item.filePath, this);
+    preview->exec();
 }

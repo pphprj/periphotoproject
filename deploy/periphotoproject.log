@@ -692,3 +692,58 @@ db connect result  true
 " "
 "SELECT FilePath FROM Previews WHERE PhotoID = %1"
 " "
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_checkBoxInProgressFilter_clicked()
+prject dir  "C:/Peri/Романенко Артем"
+last folder  "C:/Photos/Греция 2016"
+compression rate  80
+QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_checkBoxInProgressFilter_clicked()
+prject dir  "C:/Peri/Романенко Артем"
+last folder  "C:/Photos/Греция 2016"
+compression rate  80
+QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+db connect result  true
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+QObject::connect: No such slot PreviewSession::errorString(QString)
+Thread copy start
+compression result  true
+copy was successfull
+File #  1
+compression result  true
+copy was successfull
+File #  2
+compression result  true
+copy was successfull
+File #  3
+Circle finished
+Progress 100
+Thread copy finished
+finishedCopy start
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (6, '2016-09-06', '3;7', '2;5', '2', 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/IMG_9383.JPG')"
+"INSERT INTO Previews (PhotoID, FilePath) VALUES (53, 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/preview//IMG_9383.png')"  result  " "
+insert result  true " "
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (6, '2016-09-06', '3;7', '2;5', '2', 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/IMG_9384.JPG')"
+"INSERT INTO Previews (PhotoID, FilePath) VALUES (54, 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/preview//IMG_9384.png')"  result  " "
+insert result  true " "
+"INSERT INTO Photos (ProjectID, Time, FormworkSystems, Features, Category, FilePath) VALUES (6, '2016-09-06', '3;7', '2;5', '2', 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/IMG_9385.JPG')"
+"INSERT INTO Previews (PhotoID, FilePath) VALUES (55, 'C:/Peri/Романенко Артем/06-01-2017 exif test 2/2016-09-06/preview//IMG_9385.png')"  result  " "
+insert result  true " "
+finishedCopy end true
+"SELECT Photos.ID, FilePath, ProjectID, Time, Category, Projects.Name  FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') AND (Projects.CreationTime = '2017-01-06') WHERE  Projects.ID = Photos.ProjectID "
+" "
+"SELECT FilePath FROM Previews WHERE PhotoID = %1"
+" "

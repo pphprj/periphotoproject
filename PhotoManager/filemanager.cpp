@@ -2,11 +2,10 @@
 
 #include <QDir>
 #include <QFile>
-#include <QPixmap>
-#include <QTemporaryFile>
 #include <QDebug>
 #include <QIcon>
 
+#include "jpegfilecopier.h"
 
 FileManager::FileManager(const QString& root)
 {
@@ -64,26 +63,10 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
     QFileInfo sourceFile(file);
     CreateFilesDirectory(sourceFile.lastModified().date());
 
-    QPixmap sourceImage(file);
-    //QPixmap destinationImage = sourceImage.scaled(1024, 768, Qt::AspectRatioMode::KeepAspectRatioByExpanding, Qt::TransformationMode::SmoothTransformation);
-    //destinationImage.save(destinationFileName, "JPEG", compressionRate);
-    QTemporaryFile tmpFile;
-    tmpFile.setAutoRemove(true);
-    if (tmpFile.open())
-    {
-       bool res = sourceImage.save(&tmpFile, "JPEG", compressionRate);
-       qDebug() << "compression result " << res;
-    }
-
     QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
     QString destinationFileName = destination + sourceFile.fileName();
 
-    if (QFile::exists(destinationFileName))
-    {
-        QFile::remove(destinationFileName);
-    }
-
-    if (QFile::copy(tmpFile.fileName(), destinationFileName))
+    if (JpegFileCopier::copyFile(file, destinationFileName, compressionRate))
     {
         qDebug() << "copy was successfull";
         FileInfoStruct fileInfo;

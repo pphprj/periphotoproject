@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = PhotoManager
 TEMPLATE = app
 
+INCLUDEPATH += exiv2/include
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -30,7 +31,9 @@ SOURCES += main.cpp\
     interfacemanager.cpp \
     tableabstractelemmanager.cpp \
     photosearcher.cpp \
-    attributeseditdialog.cpp
+    attributeseditdialog.cpp \
+    bigpreview.cpp \
+    jpegfilecopier.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -50,9 +53,30 @@ HEADERS  += mainwindow.h \
     tableabstractelemmanager.h \
     photosearcher.h \
     fileinfostruct.h \
-    attributeseditdialog.h
+    attributeseditdialog.h \
+    bigpreview.h \
+    jpegfilecopier.h
 
 FORMS    += mainwindow.ui \
-    attributeseditdialog.ui
+    attributeseditdialog.ui \
+    bigpreview.ui
 
 TRANSLATIONS = mainwindow_en.ts mainwindow_ru.ts
+
+LIB_PATH = $$PWD/exiv2/lib
+
+CONFIG(debug, debug|release) {
+    LIBS     += -L$$LIB_PATH/debug \
+                -llibexiv2 \
+                -llibexpat \
+                -lxmpsdk \
+                -lzlib1
+    }
+
+CONFIG(release, debug|release) {
+    LIBS     += -L$$LIB_PATH/release \
+                -llibexiv2 \
+                -llibexpat \
+                -lxmpsdk \
+                -lzlib1
+}

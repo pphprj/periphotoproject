@@ -13,6 +13,7 @@ public:
     explicit PhotoLoader(DatabaseManager* manager, QObject *parent = 0);
 
     bool LoadDatabase();
+    bool RefreshProjectNames();
     bool InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QString& selectedCategories,
                           QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews);
@@ -21,6 +22,7 @@ public:
     QVector<Feature>& GetFeatures();
     QVector<Categorie>& GetCategories();
     QVector<ProjectName>& GetProjectNames();
+    ProjectName GetProjectNameByNo(const QString& projectNo);
 
 signals:
 

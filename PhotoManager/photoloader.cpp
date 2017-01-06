@@ -23,6 +23,18 @@ bool PhotoLoader::LoadDatabase()
     return result;
 }
 
+bool PhotoLoader::RefreshProjectNames()
+{
+    bool result = false;
+    if(_dbm)
+    {
+        _projectNames.clear();
+        result |= _dbm->SelectProjectNames(_projectNames);
+    }
+
+    return result;
+}
+
 bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
                                    QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QString& selectedCategories,
                                    QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews)
@@ -61,4 +73,16 @@ QVector<Categorie>& PhotoLoader::GetCategories()
 QVector<ProjectName>& PhotoLoader::GetProjectNames()
 {
     return _projectNames;
+}
+
+ProjectName PhotoLoader::GetProjectNameByNo(const QString &projectNo)
+{
+    foreach (ProjectName name, _projectNames)
+    {
+        if (name.GetProjectNo() == projectNo)
+        {
+            return name;
+        }
+    }
+    return ProjectName();
 }
