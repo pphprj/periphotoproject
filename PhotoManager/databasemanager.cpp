@@ -259,7 +259,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     bool result = false;
 
     QSqlQuery query;
-    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, Projects.Name  ";
+    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features, Projects.Name  ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -296,11 +296,14 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
         //alone ID
         sqlQuery += QString("FormworkSystems ") + "LIKE " + "'" + QString::number(system.GetID()) + "' ";
         sqlQuery += " OR ";
+        //ID at the beginning
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'" + QString::number(system.GetID()) + ";%'";
+        sqlQuery += " OR ";
         //ID in the middle
-        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + ";%'";
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%;" + QString::number(system.GetID()) + ";%'";
         sqlQuery += " OR ";
         //ID in the end
-        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%" + QString::number(system.GetID()) + "'";
+        sqlQuery += QString("FormworkSystems ") + "LIKE " + "'%;" + QString::number(system.GetID()) + "'";
     }
 
     if (!formworkSystems.empty())
@@ -324,11 +327,14 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
         //alone ID
         sqlQuery += QString("Features ") + "LIKE " + "'" + QString::number(feature.GetID()) + "' ";
         sqlQuery += " OR ";
+        //ID at the beginning
+        sqlQuery += QString("Features ") + "LIKE " + "'" + QString::number(feature.GetID()) + ";%'";
+        sqlQuery += " OR ";
         //ID in the middle
-        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + ";%'";
+        sqlQuery += QString("Features ") + "LIKE " + "'%;" + QString::number(feature.GetID()) + ";%'";
         sqlQuery += " OR ";
         //ID in the end
-        sqlQuery += QString("Features ") + "LIKE " + "'%" + QString::number(feature.GetID()) + "'";
+        sqlQuery += QString("Features ") + "LIKE " + "'%;" + QString::number(feature.GetID()) + "'";
     }
 
     if (!features.empty())

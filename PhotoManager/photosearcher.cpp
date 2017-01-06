@@ -56,3 +56,4 @@ bool PhotoSearcher::UpdatePhotoAttributes(QVector<FormworkSystem> &selectedFormw
 
     return _dbm->UpdatePhotoAttributes(selectedFws, selectedFts, selectedCtgs, photoId);
 }
+
