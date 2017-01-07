@@ -15,6 +15,7 @@ public:
     QString GetProjectsDirectory();
     QString GetLastFolder();
     int GetCompressionRate();
+    bool ShowEditDBTab();
 
     void SetLastFolder(const QString& value);
 private:
@@ -24,6 +25,7 @@ private:
     QString _projectsDirectory;
     QString _lastFolder;
     int _compressionRate;
+    bool _editDBTab;
 };
 
 #endif // CONFIGURATOR_H

@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    _cfg = new Configurator();
+
     InitInterface();
 
     InitDatabase();
@@ -51,8 +53,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::InitDatabase()
 {
-    _cfg = new Configurator();
-
     _dbm = new DatabaseManager();
     bool result = _dbm->Connect(_cfg->GetHost(), _cfg->GetUsername(), _cfg->GetPassword());
     if (result)
@@ -84,6 +84,13 @@ void MainWindow::InitInterface()
     ui->dateEditPhotoIntervalEnd->setEnabled(false);
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
+
+    if (!_cfg->ShowEditDBTab())
+    {
+        //ui->tabWidgetSystem->setTabEnabled(2, false);
+        ui->tabWidgetSystem->removeTab(2);
+    }
+
     ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
     ui->tableWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableWidgetPhotosSearch->setColumnCount(5);

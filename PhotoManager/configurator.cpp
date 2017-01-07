@@ -28,6 +28,11 @@ Configurator::Configurator()
     _compressionRate = settings.value("CompressionRate").toInt();
     qDebug() << "compression rate " << _compressionRate;
     settings.endGroup();
+
+    settings.beginGroup("Interface");
+    _editDBTab = settings.value("EditDBTab", true).toBool();
+    qDebug() << "edit DB tab " << _editDBTab;
+    settings.endGroup();
 }
 
 Configurator::~Configurator()
@@ -75,4 +80,9 @@ void Configurator::SetLastFolder(const QString &value)
 int Configurator::GetCompressionRate()
 {
     return _compressionRate;
+}
+
+bool Configurator::ShowEditDBTab()
+{
+    return _editDBTab;
 }
