@@ -6,6 +6,7 @@
 #include "tableabstractelemmanager.h"
 #include "attributeseditdialog.h"
 #include "bigpreview.h"
+#include "aboutwindow.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -68,7 +69,7 @@ void MainWindow::InitInterface()
 {
     ui->setupUi(this);
     ui->statusBar->setVisible(false);
-    ui->menuBar->setVisible(false);
+    //ui->menuBar->setVisible(false);
 
     setAcceptDrops(true);
 
@@ -1070,4 +1071,16 @@ void MainWindow::on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &ind
     SearchResult item = _searchResult[index.row()];
     BigPreview* preview = new BigPreview(item.filePath, this);
     preview->exec();
+}
+
+void MainWindow::on_actionE_xit_triggered()
+{
+    this->close();
+}
+
+void MainWindow::on_action_About_triggered()
+{
+    AboutWindow* about = new AboutWindow(this);
+    about->exec();
+    delete about;
 }

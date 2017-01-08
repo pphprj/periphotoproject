@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     photosearcher.cpp \
     attributeseditdialog.cpp \
     bigpreview.cpp \
-    jpegfilecopier.cpp
+    jpegfilecopier.cpp \
+    aboutwindow.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -55,11 +56,13 @@ HEADERS  += mainwindow.h \
     fileinfostruct.h \
     attributeseditdialog.h \
     bigpreview.h \
-    jpegfilecopier.h
+    jpegfilecopier.h \
+    aboutwindow.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \
-    bigpreview.ui
+    bigpreview.ui \
+    aboutwindow.ui
 
 TRANSLATIONS = mainwindow_en.ts mainwindow_ru.ts
 
@@ -80,3 +83,8 @@ CONFIG(release, debug|release) {
                 -lxmpsdk \
                 -lzlib1
 }
+
+win32: RC_ICONS = periphotoproject.ico
+
+RESOURCES += \
+    photomangerres.qrc

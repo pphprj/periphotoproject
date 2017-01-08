@@ -2,6 +2,38 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>AboutWindow</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="obsolete">Превью</translation>
+    </message>
+    <message>
+        <location filename="aboutwindow.ui" line="14"/>
+        <source>About</source>
+        <translation type="unfinished">О программе...</translation>
+    </message>
+    <message>
+        <location filename="aboutwindow.ui" line="22"/>
+        <source>Photo Manager</source>
+        <translation type="unfinished">Каталогизатор проектов опалубочных систем</translation>
+    </message>
+    <message>
+        <location filename="aboutwindow.ui" line="29"/>
+        <source>1.0.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="aboutwindow.ui" line="36"/>
+        <source>Peri</source>
+        <translation type="unfinished">ООО &quot;Пери&quot;</translation>
+    </message>
+    <message>
+        <location filename="aboutwindow.ui" line="43"/>
+        <source>Harlamov Roman</source>
+        <translation type="unfinished">Харламов Роман</translation>
+    </message>
+</context>
+<context>
     <name>AttributesEditDialog</name>
     <message>
         <location filename="attributeseditdialog.ui" line="14"/>
@@ -75,28 +107,29 @@
         <translation type="unfinished">Категории</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="141"/>
+        <location filename="mainwindow.ui" line="138"/>
         <location filename="mainwindow.ui" line="366"/>
         <location filename="mainwindow.ui" line="615"/>
-        <location filename="mainwindow.cpp" line="102"/>
-        <location filename="mainwindow.cpp" line="663"/>
+        <location filename="mainwindow.cpp" line="103"/>
+        <location filename="mainwindow.cpp" line="664"/>
         <source>Features</source>
         <translation type="unfinished">Особенности</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="23"/>
-        <source>Peri Photo Project</source>
-        <translation type="unfinished"></translation>
+        <source>Photo Manager</source>
+        <oldsource>Peri Photo Project</oldsource>
+        <translation type="unfinished">Каталогизатор проектов опалубочных систем</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="78"/>
-        <location filename="mainwindow.cpp" line="98"/>
-        <location filename="mainwindow.cpp" line="659"/>
+        <location filename="mainwindow.cpp" line="99"/>
+        <location filename="mainwindow.cpp" line="660"/>
         <source>Preview</source>
         <translation type="unfinished">Показать превью</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="127"/>
+        <location filename="mainwindow.ui" line="131"/>
         <location filename="mainwindow.ui" line="373"/>
         <source>Project Name</source>
         <translation type="unfinished">Название проекта</translation>
@@ -108,7 +141,7 @@
         <translation type="unfinished">Опалубочные системы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="134"/>
+        <location filename="mainwindow.ui" line="124"/>
         <location filename="mainwindow.ui" line="352"/>
         <source>Project Date</source>
         <translation type="unfinished">Дата создания проекта</translation>
@@ -177,10 +210,30 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="519"/>
-        <location filename="mainwindow.cpp" line="101"/>
-        <location filename="mainwindow.cpp" line="662"/>
+        <location filename="mainwindow.cpp" line="102"/>
+        <location filename="mainwindow.cpp" line="663"/>
         <source>Formwork systems</source>
         <translation type="unfinished">Опалубочные системы</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="708"/>
+        <source>&amp;File</source>
+        <translation type="unfinished">Файл</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="714"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">Помощь</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="723"/>
+        <source>E&amp;xit</source>
+        <translation type="unfinished">Выход</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="728"/>
+        <source>&amp;About</source>
+        <translation type="unfinished">О программе...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="210"/>
@@ -262,106 +315,106 @@
         <translation type="obsolete">Редактировать БД</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="99"/>
-        <location filename="mainwindow.cpp" line="660"/>
+        <location filename="mainwindow.cpp" line="100"/>
+        <location filename="mainwindow.cpp" line="661"/>
         <source>Project name / File path</source>
         <translation type="unfinished">Название проекта / Путь к файлу</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="100"/>
-        <location filename="mainwindow.cpp" line="661"/>
+        <location filename="mainwindow.cpp" line="101"/>
+        <location filename="mainwindow.cpp" line="662"/>
         <source>Photo date</source>
         <translation type="unfinished">Дата создания фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="181"/>
+        <location filename="mainwindow.cpp" line="182"/>
         <source>Open images</source>
         <translation type="unfinished">Открыть фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="181"/>
-        <location filename="mainwindow.cpp" line="836"/>
+        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="837"/>
         <source>Images (*.jpg)</source>
         <translation type="unfinished">Фото (*.jpg)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="205"/>
-        <location filename="mainwindow.cpp" line="211"/>
-        <location filename="mainwindow.cpp" line="217"/>
-        <location filename="mainwindow.cpp" line="224"/>
-        <location filename="mainwindow.cpp" line="230"/>
+        <location filename="mainwindow.cpp" line="206"/>
+        <location filename="mainwindow.cpp" line="212"/>
+        <location filename="mainwindow.cpp" line="218"/>
+        <location filename="mainwindow.cpp" line="225"/>
+        <location filename="mainwindow.cpp" line="231"/>
         <source>Error!</source>
         <translation type="unfinished">Ошибка!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="205"/>
+        <location filename="mainwindow.cpp" line="206"/>
         <source>Please, input Project No!</source>
         <translation type="unfinished">Пожалуйста, введите номер проекта!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="211"/>
+        <location filename="mainwindow.cpp" line="212"/>
         <source>Please, select formworks!</source>
         <translation type="unfinished">Пожалуйста, выберите опалуб.систему!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="217"/>
+        <location filename="mainwindow.cpp" line="218"/>
         <source>Please, select features!</source>
         <translation type="unfinished">Пожалуйста, выберите особенности!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="224"/>
+        <location filename="mainwindow.cpp" line="225"/>
         <source>Please, select category!</source>
         <translation type="unfinished">Пожалуйста, выберите категорию!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="230"/>
+        <location filename="mainwindow.cpp" line="231"/>
         <source>Please, select photos!</source>
         <translation type="unfinished">Пожалуйста, выберите фото!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="410"/>
+        <location filename="mainwindow.cpp" line="411"/>
         <source>Formwork system</source>
         <translation type="unfinished">Опалубочная система</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="410"/>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="411"/>
+        <location filename="mainwindow.cpp" line="415"/>
         <source>Description</source>
         <translation type="unfinished">Описание</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="415"/>
         <source>Feature</source>
         <translation type="unfinished">Особенность</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="718"/>
+        <location filename="mainwindow.cpp" line="719"/>
         <source>Save images</source>
         <translation type="unfinished">Сохранить изображения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="745"/>
-        <location filename="mainwindow.cpp" line="842"/>
+        <location filename="mainwindow.cpp" line="746"/>
+        <location filename="mainwindow.cpp" line="843"/>
         <source>Photos were copied to directory</source>
         <translation type="unfinished">Фото были скопированы в директорию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="799"/>
+        <location filename="mainwindow.cpp" line="800"/>
         <source>Save</source>
         <translation type="unfinished">Сохранить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="800"/>
+        <location filename="mainwindow.cpp" line="801"/>
         <source>Print</source>
         <translation type="unfinished">Распечатать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="801"/>
+        <location filename="mainwindow.cpp" line="802"/>
         <source>Edit</source>
         <translation type="unfinished">Редактировать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="836"/>
+        <location filename="mainwindow.cpp" line="837"/>
         <source>Save file</source>
         <translation type="unfinished">Сохранить файлы</translation>
     </message>
@@ -374,24 +427,24 @@
         <translation type="obsolete">Новый элемент</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="514"/>
+        <location filename="mainwindow.cpp" line="515"/>
         <source>Apply changes</source>
         <translation type="unfinished">Применить изменения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="514"/>
+        <location filename="mainwindow.cpp" line="515"/>
         <source>Would you have to apply changes?</source>
         <translation type="unfinished">Вы желаете внести изменения?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="568"/>
-        <location filename="mainwindow.cpp" line="745"/>
-        <location filename="mainwindow.cpp" line="842"/>
+        <location filename="mainwindow.cpp" line="569"/>
+        <location filename="mainwindow.cpp" line="746"/>
+        <location filename="mainwindow.cpp" line="843"/>
         <source>Successfully</source>
         <translation type="unfinished">Успешно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="568"/>
+        <location filename="mainwindow.cpp" line="569"/>
         <source>Photos were added to DB</source>
         <translation type="unfinished">Фото были добавлены в БД</translation>
     </message>

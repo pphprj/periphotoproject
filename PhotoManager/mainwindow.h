@@ -100,6 +100,10 @@ private slots:
 
     void on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index);
 
+    void on_actionE_xit_triggered();
+
+    void on_action_About_triggered();
+
 private:
     void InitDatabase();
     void InitInterface();
