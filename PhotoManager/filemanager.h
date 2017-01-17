@@ -22,7 +22,7 @@ public:
     QVector<FileInfoStruct> AddFilesToDirectory(const QStringList& files, int compressionRate);
     QFileInfo AddPreviewToDirectory(const QIcon& icon, const QString& file);
 
-    bool CheckDirectory(const QString& path);
+    static bool CheckDirectory(const QString& path);
 
 private:
     bool CreateDirectory(const QString& path);

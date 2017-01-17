@@ -19,8 +19,16 @@ Categorie::~Categorie()
 
 QString Categorie::GetInsertRequest()
 {
-    return "INSERT INTO Categories (name, description) VALUES (" +
-            _name + "," +
-            _description +
+    return (QString)"INSERT INTO Categories (name, description) VALUES (" +
+            "'" + _name + "'" + "," +
+            "'" + _description + "'" +
             ")";
+}
+
+QString Categorie::GetUpdateRequest()
+{
+    return (QString)"UPDATE Categories SET " +
+            "name = " + "'" + _name + "'" + ", "
+            "description = " + "'" + _description + "'" + " "
+            "WHERE id = " + QString::number(_id);
 }

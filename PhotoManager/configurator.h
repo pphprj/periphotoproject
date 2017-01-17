@@ -13,6 +13,7 @@ public:
     QString GetUsername();
     QString GetPassword();
     QString GetProjectsDirectory();
+    QString GetRemoteDirectory();
     QString GetLastFolder();
     int GetCompressionRate();
     bool ShowEditDBTab();
@@ -23,6 +24,7 @@ private:
     QString _username;
     QString _password;
     QString _projectsDirectory;
+    QString _remoteProjectsDirectory;
     QString _lastFolder;
     int _compressionRate;
     bool _editDBTab;

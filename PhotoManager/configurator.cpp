@@ -12,8 +12,6 @@ Configurator::Configurator()
 
     settings.setIniCodec("Windows-1251");
 
-    QStringList l = settings.allKeys();
-
     settings.beginGroup("DBConnection");
     _host = settings.value("Host").toString();
     _username = settings.value("Username").toString();
@@ -23,6 +21,8 @@ Configurator::Configurator()
     settings.beginGroup("Files");
     _projectsDirectory = settings.value("Directory").toString();
     qDebug() << "prject dir " << _projectsDirectory;
+    _remoteProjectsDirectory = settings.value("RemoteDirectory").toString();
+    qDebug() << "remote dir " << _remoteProjectsDirectory;
     _lastFolder = settings.value("LastFolder").toString();
     qDebug() << "last folder " << _lastFolder;
     _compressionRate = settings.value("CompressionRate").toInt();
@@ -64,7 +64,13 @@ QString Configurator::GetPassword()
 
 QString Configurator::GetProjectsDirectory()
 {
-    return _projectsDirectory;
+    QString result = (_remoteProjectsDirectory.isEmpty()) ? _projectsDirectory : _remoteProjectsDirectory;
+    return result;
+}
+
+QString Configurator::GetRemoteDirectory()
+{
+    return _remoteProjectsDirectory;
 }
 
 QString Configurator::GetLastFolder()

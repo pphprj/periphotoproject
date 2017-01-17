@@ -33,14 +33,15 @@
       <item>
        <widget class="QCheckBox" name="checkBoxInProcess">
         <property name="text">
-         <string>In process</string>
+         <string>Chronology</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="checkBoxCurrentState">
         <property name="text">
-         <string>Current state</string>
+         <string>Business photo, 
+documentation</string>
         </property>
        </widget>
       </item>

@@ -49,6 +49,11 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
         _dateTimeFormat = "yyyy-MM-dd";
     }
 
+    QVector<Categorie> updateCats;
+    updateCats.push_back(Categorie(1, "Chronology", ""));
+    updateCats.push_back(Categorie(2, "Business photo, documentation", ""));
+    result = InsertOrUpdateElems(updateCats);
+
     return result;
 }
 

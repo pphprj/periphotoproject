@@ -154,14 +154,15 @@
              <item>
               <widget class="QCheckBox" name="checkBoxInProc">
                <property name="text">
-                <string>In process</string>
+                <string>Chronology</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCurrentState">
                <property name="text">
-                <string>Current state</string>
+                <string>Business photo,
+documentation</string>
                </property>
               </widget>
              </item>
@@ -273,14 +274,15 @@
              <item>
               <widget class="QCheckBox" name="checkBoxInProcSearch">
                <property name="text">
-                <string>In process</string>
+                <string>Chronology</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCurrentStateSearch">
                <property name="text">
-                <string>Current state</string>
+                <string>Business photo, 
+documentation</string>
                </property>
               </widget>
              </item>
@@ -477,14 +479,14 @@
              <item>
               <widget class="QCheckBox" name="checkBoxInProgressFilters">
                <property name="text">
-                <string>In process</string>
+                <string>Chronology</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCurrentStateFilters">
                <property name="text">
-                <string>Current state</string>
+                <string>Business photo, documentation</string>
                </property>
               </widget>
              </item>

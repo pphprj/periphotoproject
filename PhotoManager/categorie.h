@@ -10,6 +10,7 @@ public:
     Categorie(int id, const QString& name, const QString& descr);
     virtual ~Categorie();
     virtual QString GetInsertRequest();
+    virtual QString GetUpdateRequest();
 };
 
 #endif // CATEGORIE_H
