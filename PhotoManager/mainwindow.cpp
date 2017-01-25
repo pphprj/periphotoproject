@@ -233,11 +233,12 @@ void MainWindow::on_pushButtonAddToDB_clicked()
     }
 
     QString projectName = ui->lineEditProjectName->text();
-    if (projectName.isEmpty())
+    ProjectName pn = _loader->GetProjectNameByNo(projectNo);
+    if (!pn.GetName().isEmpty())
     {
-        ProjectName pn = _loader->GetProjectNameByNo(projectNo);
-        projectName = pn.GetName();
+        projectName = (pn.GetName() == projectName) ? projectName : pn.GetName();
     }
+
     _fileManager->CreateProjectDirectory(projectNo, projectName);
     _copierThread->setFileList(_files, _cfg->GetCompressionRate());
     _copierThread->start();
@@ -556,6 +557,11 @@ void MainWindow::finishedCopy()
 
     QString projectNo = ui->lineEditProjectNo->text();
     QString projectName = ui->lineEditProjectName->text();
+    ProjectName pn = _loader->GetProjectNameByNo(projectNo);
+    if (!pn.GetName().isEmpty())
+    {
+        projectName = (pn.GetName() == projectName) ? projectName : pn.GetName();
+    }
     QDate projectDate = ui->dateEditProjectDate->date();
     bool result = _loader->InsertToDatabase(projectNo, projectName, projectDate,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
@@ -800,6 +806,7 @@ void MainWindow::showContextMenu(QPoint pos)
         QAction* save = contextMenu.addAction(tr("Save"));
         QAction* print = contextMenu.addAction(tr("Print"));
         QAction* edit = contextMenu.addAction(tr("Edit"));
+        QAction* remove = contextMenu.addAction(tr("Remove"));
         QAction* selectedAction = contextMenu.exec(ui->tableWidgetPhotosSearch->mapToGlobal(pos));
         if (selectedAction)
         {
@@ -818,8 +825,16 @@ void MainWindow::showContextMenu(QPoint pos)
                 AttributesEditDialog* dlg = new AttributesEditDialog(this);
                 int index = ui->tableWidgetPhotosSearch->row(item);
                 dlg->LoadSelected(_searcher, _searchResult[index].photoId);
-                dlg->exec();
+                if (dlg->exec() == QDialog::Accepted)
+                {
+                    on_pushButtonSearch_clicked();
+                }
                 delete dlg;
+            }
+
+            if (selectedAction == remove)
+            {
+                removeSelected(item);
             }
         }
     }
@@ -832,7 +847,8 @@ void MainWindow::saveSelected(QTableWidgetItem* item)
         return;
     }
 
-    QString filePath = item->text();
+    int index = item->row();
+    QString filePath = _searchResult[index].filePath;
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     QString destinationFile = QFileDialog::getSaveFileName(this, tr("Save file"), destination, tr("Images (*.jpg)"));
     if (destinationFile != "")
@@ -854,7 +870,8 @@ void MainWindow::printSelected(QTableWidgetItem *item)
             return;
         }
 
-        QString filePath = item->text();
+        int index = item->row();
+        QString filePath = _searchResult[index].filePath;
 
         QPrinter printer(QPrinter::HighResolution);
         printer.setFullPage(true);
@@ -879,6 +896,30 @@ void MainWindow::printSelected(QTableWidgetItem *item)
     {
         qDebug() << exp.what();
     }
+}
+
+void MainWindow::removeSelected(QTableWidgetItem *item)
+{
+    if (!ConfirmWindow())
+        return;
+
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    int index = item->row();
+    QString filePath = _searchResult[index].filePath;
+    _fileManager->DeleteFileFromDirectory(filePath);
+    QString previewPath = _searchResult[index].previewPath;
+    _fileManager->DeleteFileFromDirectory(previewPath);
+
+    _dbm->DeletePhoto(_searchResult[index].photoId);
+    _dbm->DeletePreview(_searchResult[index].photoId);
+
+    ui->tableWidgetPhotosSearch->removeRow(index);
+
+    _searchResult.remove(index);
 }
 
 void MainWindow::on_pushButtonPrintSelected_clicked()

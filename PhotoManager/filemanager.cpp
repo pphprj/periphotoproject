@@ -98,3 +98,18 @@ QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &f
 
     return QFileInfo(previewFileName);
 }
+
+bool FileManager::DeleteFilesFromDirectory(const QStringList &files)
+{
+    bool result = true;
+    for (int i = 0; i < files.length(); i++)
+    {
+        result |= DeleteFileFromDirectory(files.at(i));
+    }
+    return result;
+}
+
+bool FileManager::DeleteFileFromDirectory(const QString &file)
+{
+    return QFile::remove(file);
+}

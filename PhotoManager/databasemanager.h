@@ -24,6 +24,7 @@ public:
     bool SelectFeatures(QVector<Feature>& elems);
     bool SelectCategories(QVector<Categorie>& elems);
     bool SelectProjectNames(QVector<ProjectName>& elems);
+    bool SelectProjectName(int projectId, QString& projectName);
     bool SelectPhotos(const QString& projectNo,
                       const QString& projectName,
                       const QDate& projectDate,
@@ -44,6 +45,7 @@ public:
                                const QString& features,
                                const QString& categories,
                                int photoId);
+    bool UpdateProjectName(int projectId, const QString& projectName);
 
     bool InsertTestValuesToCategoriesTable();
     bool InsertTestValuesToFormworkSystemsTable();
@@ -64,6 +66,9 @@ public:
                        const QString& name,
                        const QDate& creationDate,
                        const QString& description);
+
+    bool DeletePhoto(int photoID);
+    bool DeletePreview(int photoID);
 
     //return Project ID
     int CheckProjectNo(const QString& projectNo);

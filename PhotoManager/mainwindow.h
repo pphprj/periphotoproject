@@ -133,6 +133,7 @@ public slots:
     void showContextMenu(QPoint pos);
     void saveSelected(QTableWidgetItem* item);
     void printSelected(QTableWidgetItem* item);
+    void removeSelected(QTableWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;

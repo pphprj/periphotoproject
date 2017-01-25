@@ -249,6 +249,21 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
     return true;
 }
 
+bool DatabaseManager::SelectProjectName(int projectId, QString &projectName)
+{
+    if (!_db.isOpen()) return false;
+
+    QSqlQuery query;
+    if (query.exec("SELECT Name FROM Projects WHERE ID = " + QString::number(projectId)))
+    {
+        while (query.next())
+        {
+            projectName = query.value("Name").toString();
+        }
+    }
+    return true;
+}
+
 bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QString &projectName,
                                    const QDate &projectDate,
@@ -483,6 +498,15 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
             projectID = CheckProjectNo(projectNo);
         }
     }
+    else
+    {
+        QString projectNameFromDB;
+        SelectProjectName(projectID, projectNameFromDB);
+        if (projectNameFromDB.isEmpty())
+        {
+            UpdateProjectName(projectID, projectName);
+        }
+    }
 
     QString queryString = "INSERT INTO Photos ";
 
@@ -639,6 +663,58 @@ bool DatabaseManager::UpdatePhotoAttributes(const QString &formworkSystems, cons
             "Features = " + "'" + features + "'" + ", " +
             "Category = " + "'" + categories + "'" + " " +
             "WHERE ID = " + QString::number(photoId);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
+bool DatabaseManager::UpdateProjectName(int projectId, const QString &projectName)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"UPDATE Projects SET " +
+            "Name = " + "'" + projectName + "'" + " " +
+            "WHERE ID = " + QString::number(projectId);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
+bool DatabaseManager::DeletePhoto(int photoID)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"DELETE FROM Photos " +
+            "WHERE ID = " + QString::number(photoID);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
+bool DatabaseManager::DeletePreview(int photoID)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"DELETE FROM Previews " +
+            "WHERE PHOTOID = " + QString::number(photoID);
 
     QSqlQuery query;
     bool result = true;
