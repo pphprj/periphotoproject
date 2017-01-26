@@ -40,14 +40,17 @@ bool JpegFileCopier::copyFile(const QString &sourceFileName, const QString &dest
     {
          Exiv2::Image::AutoPtr imageSource = Exiv2::ImageFactory::open(sourceFileName.toStdWString());
          result = imageSource.get() != nullptr;
+         qDebug() << "open src jpeg file " << result;
          if (result)
          {
              imageSource->readMetadata();
              Exiv2::ExifData &ed = imageSource->exifData();
+             qDebug() << "exif data is empty " << ed.empty();
              Exiv2::Image::AutoPtr imageDestination = Exiv2::ImageFactory::open(destinationFileName.toStdWString());
              result = (imageDestination.get() != nullptr);
              if (result)
              {
+                 qDebug() << "open dest jpeg file " << result;
                  imageDestination->setExifData(ed);
                  imageDestination->writeMetadata();
              }

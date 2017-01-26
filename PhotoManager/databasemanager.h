@@ -72,6 +72,7 @@ public:
 
     //return Project ID
     int CheckProjectNo(const QString& projectNo);
+    int CheckPhoto(const QString& fileName);
     bool CheckTable(const QString& tableName);
 
 private:

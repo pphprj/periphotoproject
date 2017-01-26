@@ -1962,3 +1962,20 @@ QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+31 on QWidgetWind
 " "
 "SELECT Features FROM Photos WHERE ID = 59"
 " "
+prject dir  "C:/Романенко Артем"
+remote dir  "//Samsung-ПК/Романенко Артем"
+last folder  "C:/Photos/Греция 2016"
+compression rate  80
+edit DB tab  true
+QMetaObject::connectSlotsByName: No matching signal for on_pushButtonTestSQL_clicked()
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystems_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeatures_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem*)
+QMetaObject::connectSlotsByName: No matching signal for on_checkBoxInProgressFilter_clicked()
+QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+" "
+" "
+db connect result  true
+QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+31 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x741+8+31 (frame: 8, 31, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x523, maximum size: 16777215x16777215).

@@ -8,6 +8,7 @@ struct FileInfoStruct
 {
     QFileInfo fileInfo;
     QDateTime lastModified;
+    bool duplicated;
 };
 
 struct SearchResult

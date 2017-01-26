@@ -1125,3 +1125,47 @@ void MainWindow::on_action_About_triggered()
     about->exec();
     delete about;
 }
+
+void MainWindow::on_groupBoxCategoriesSearch_toggled(bool arg1)
+{
+    if (!arg1)
+    {
+        ui->checkBoxCurrentStateSearch->setVisible(false);
+        ui->checkBoxInProcSearch->setVisible(false);
+        ui->checkBoxMarketingSearch->setVisible(false);
+    }
+    else
+    {
+        ui->checkBoxCurrentStateSearch->setVisible(true);
+        ui->checkBoxInProcSearch->setVisible(true);
+        ui->checkBoxMarketingSearch->setVisible(true);
+    }
+}
+
+void MainWindow::on_groupBoxProjectSearch_toggled(bool arg1)
+{
+    on_groupBoxCategoriesSearch_toggled(arg1);
+
+    if (!arg1)
+    {
+        for (int i = 0; i < ui->gridLayout_6->count(); i++)
+        {
+            QWidget* widget = ui->gridLayout_6->itemAt(i)->widget();
+            if (widget != nullptr)
+            {
+                widget->setVisible(false);
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < ui->gridLayout_6->count(); i++)
+        {
+            QWidget* widget = ui->gridLayout_6->itemAt(i)->widget();
+            if (widget != nullptr)
+            {
+                widget->setVisible(true);
+            }
+        }
+    }
+}

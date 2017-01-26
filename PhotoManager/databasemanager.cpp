@@ -538,11 +538,22 @@ bool DatabaseManager::InsertValuesToPhotos(const QString &projectNo,
         FileInfoStruct file = photos[i];
         if (!file.fileInfo.filePath().isEmpty())
         {
-            QString fileDate = file.lastModified.date().toString(_dateTimeFormat);
-            QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
-            query.prepare(temp);
-            qDebug() << temp;
-            result = query.exec();
+            if (!file.duplicated)
+            {
+                QString fileDate = file.lastModified.date().toString(_dateTimeFormat);
+                QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
+                query.prepare(temp);
+                qDebug() << temp;
+                result = query.exec();
+            }
+            else
+            {
+                int photoId = CheckPhoto(file.fileInfo.filePath());
+                if (photoId != -1)
+                {
+                    UpdatePhotoAttributes(formworkSystems, features, categories, photoId);
+                }
+            }
             if (result)
             {
                 InsertPreview(query.lastInsertId().toInt(), previews[i]);
@@ -611,8 +622,13 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
         query.next();
         int id = query.value("ID").toInt();
         id = -1;
+
+        qDebug() << queryString << " result " << query.lastError().text();
+
         return true;
     }
+
+    qDebug() << queryString << " result " << query.lastError().text();
     return false;
 }
 
@@ -628,6 +644,27 @@ int DatabaseManager::CheckProjectNo(const QString &projectNo)
         query.next();
         result = query.value("ID").toInt();
     }
+
+    qDebug() <<"SELECT ID FROM Projects WHERE ProjectNo= '"  + projectNo + "'" << "result" << query.lastError().text();
+
+    return result;
+}
+
+int DatabaseManager::CheckPhoto(const QString &fileName)
+{
+    if (!_db.isOpen()) return -1;
+
+    int result = -1;
+
+    QSqlQuery query;
+    if (query.exec("SELECT ID FROM Photos WHERE FilePath= '"  + fileName + "'"))
+    {
+        query.next();
+        result = query.value("ID").toInt();
+    }
+
+    qDebug() <<"SELECT ID FROM Photos WHERE FilePath= '"  + fileName + "'" << "result" << query.lastError().text();
+
     return result;
 }
 

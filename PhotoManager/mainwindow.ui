@@ -219,11 +219,16 @@ documentation</string>
           <string>Search photos</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonSavePhotos">
-            <property name="text">
-             <string>Save selected photos</string>
+          <item row="3" column="0" colspan="4">
+           <widget class="QGroupBox" name="groupBoxPhotosSearch">
+            <property name="title">
+             <string>Photos</string>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QTableWidget" name="tableWidgetPhotosSearch"/>
+             </item>
+            </layout>
            </widget>
           </item>
           <item row="1" column="2">
@@ -239,10 +244,10 @@ documentation</string>
             </property>
            </spacer>
           </item>
-          <item row="1" column="3">
-           <widget class="QPushButton" name="pushButtonSearch">
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonSavePhotos">
             <property name="text">
-             <string>Search</string>
+             <string>Save selected photos</string>
             </property>
            </widget>
           </item>
@@ -253,22 +258,20 @@ documentation</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="4">
-           <widget class="QGroupBox" name="groupBoxPhotosSearch">
-            <property name="title">
-             <string>Photos</string>
+          <item row="1" column="3">
+           <widget class="QPushButton" name="pushButtonSearch">
+            <property name="text">
+             <string>Search</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <item>
-              <widget class="QTableWidget" name="tableWidgetPhotosSearch"/>
-             </item>
-            </layout>
            </widget>
           </item>
           <item row="0" column="3">
            <widget class="QGroupBox" name="groupBoxCategoriesSearch">
             <property name="title">
              <string>Categories</string>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
@@ -293,21 +296,72 @@ documentation</string>
                </property>
               </widget>
              </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="4">
+           <widget class="QGroupBox" name="groupBoxFilters">
+            <property name="title">
+             <string>Filters</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <spacer name="verticalSpacer_7">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
+              <widget class="QCheckBox" name="checkBoxOrderByName">
+               <property name="text">
+                <string>Order by name</string>
                </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Expanding</enum>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelOnlyDate">
+               <property name="text">
+                <string>Filter by date</string>
                </property>
-               <property name="sizeHint" stdset="0">
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxFilterByDate">
+               <property name="maximumSize">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>16777215</height>
                 </size>
                </property>
-              </spacer>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDateEdit" name="dateEditOnly">
+               <property name="calendarPopup">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxInProgressFilters">
+               <property name="text">
+                <string>Chronology</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxCurrentStateFilters">
+               <property name="text">
+                <string>Business photo, documentation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxMarketingFilters">
+               <property name="text">
+                <string>Marketing</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -316,6 +370,9 @@ documentation</string>
            <widget class="QGroupBox" name="groupBoxProjectSearch">
             <property name="title">
              <string>Project</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
              <item row="5" column="0">
@@ -427,73 +484,6 @@ documentation</string>
                </property>
                <property name="checked">
                 <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="4">
-           <widget class="QGroupBox" name="groupBoxFilters">
-            <property name="title">
-             <string>Filters</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QCheckBox" name="checkBoxOrderByName">
-               <property name="text">
-                <string>Order by name</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelOnlyDate">
-               <property name="text">
-                <string>Filter by date</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBoxFilterByDate">
-               <property name="maximumSize">
-                <size>
-                 <width>20</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDateEdit" name="dateEditOnly">
-               <property name="calendarPopup">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBoxInProgressFilters">
-               <property name="text">
-                <string>Chronology</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBoxCurrentStateFilters">
-               <property name="text">
-                <string>Business photo, documentation</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBoxMarketingFilters">
-               <property name="text">
-                <string>Marketing</string>
                </property>
               </widget>
              </item>

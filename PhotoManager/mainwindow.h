@@ -104,6 +104,10 @@ private slots:
 
     void on_action_About_triggered();
 
+    void on_groupBoxCategoriesSearch_toggled(bool arg1);
+
+    void on_groupBoxProjectSearch_toggled(bool arg1);
+
 private:
     void InitDatabase();
     void InitInterface();
