@@ -70,11 +70,12 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
 
     fileInfo.duplicated = QFile::exists(destinationFileName);
 
-    if (JpegFileCopier::copyFile(file, destinationFileName, compressionRate))
+    QDateTime creationDate;
+    if (JpegFileCopier::copyFile(file, destinationFileName, creationDate, compressionRate))
     {
         qDebug() << "copy was successfull";
         fileInfo.fileInfo.setFile(destinationFileName);
-        fileInfo.lastModified = sourceFile.lastModified();
+        fileInfo.lastModified = (creationDate.isNull()) ? sourceFile.lastModified() : creationDate;
         return fileInfo;
     }
     return FileInfoStruct();
