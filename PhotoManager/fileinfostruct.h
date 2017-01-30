@@ -19,6 +19,7 @@ struct SearchResult
     int photoId;
     QString categories;
     QString projectName;
+    QString projectNo;
     QDate photoDate;
 };
 

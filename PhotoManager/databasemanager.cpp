@@ -279,7 +279,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     bool result = false;
 
     QSqlQuery query;
-    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features, Projects.Name  ";
+    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features, Projects.Name, Projects.ProjectNo  ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -421,6 +421,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.photoDate = date;
             fnp.categories = query.value("Category").toString();
             fnp.projectName = query.value("Name").toString();
+            fnp.projectNo = query.value("ProjectNo").toString();
             photos.push_back(fnp);
         }
         result = true;

@@ -78,11 +78,14 @@ void MainWindow::InitInterface()
     ui->pushButtonNewFeature->setMinimumWidth(160);
     ui->pushButtonSystemsNew->setMinimumWidth(160);
     ui->dateEditProjectDate->setDateTime(QDateTime::currentDateTime());
-    ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
+    ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditProjectDateSearch->setEnabled(false);
     ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
     ui->dateEditPhotoIntervalBegin->setEnabled(false);
     ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    ui->dateEditOnly->setDateTime(QDateTime::currentDateTime());
     ui->dateEditPhotoIntervalEnd->setEnabled(false);
+    ui->dateEditOnly->setEnabled(false);
     ui->listWidgetPhotos->setIconSize(QSize(0, 0));
     ui->listWidgetPhotos->installEventFilter(this);
 
@@ -94,9 +97,10 @@ void MainWindow::InitInterface()
 
     ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
     ui->tableWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetPhotosSearch->setColumnCount(5);
+    ui->tableWidgetPhotosSearch->setColumnCount(6);
     QStringList headers;
     headers << tr("Preview")
+            << tr("Project No")
             << tr("Project name / File path")
             << tr("Photo date")
             << tr("Formwork systems")
@@ -664,6 +668,7 @@ void MainWindow::on_pushButtonSearch_clicked()
     ui->tableWidgetPhotosSearch->setRowCount(_searchResult.length());
     QStringList headers;
     headers << tr("Preview")
+            << tr("Project No")
             << tr("Project name / File path")
             << tr("Photo date")
             << tr("Formwork systems")
@@ -674,6 +679,8 @@ void MainWindow::on_pushButtonSearch_clicked()
     for (int i = 0; i < _searchResult.length(); i++)
     {
        SearchResult fnp = _searchResult[i];
+
+       QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
 
        QString text = fnp.projectName.isEmpty() ? fnp.filePath : fnp.projectName;
        QTableWidgetItem* itemName = new QTableWidgetItem(text);
@@ -686,7 +693,7 @@ void MainWindow::on_pushButtonSearch_clicked()
            itemImage->setIcon(QIcon(pm));
        }
 
-       QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString());
+       QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString("yyyy-MM-dd"));
 
        QVector<FormworkSystem> selectedFormworks;
        _searcher->SelectedFormworkSystems(selectedFormworks, fnp.photoId);
@@ -707,10 +714,11 @@ void MainWindow::on_pushButtonSearch_clicked()
        itemFeatures->setFlags(itemFeatures->flags() ^ Qt::ItemIsEditable);
 
        ui->tableWidgetPhotosSearch->setItem(i, 0, itemImage);
-       ui->tableWidgetPhotosSearch->setItem(i, 1, itemName);
-       ui->tableWidgetPhotosSearch->setItem(i, 2, itemDate);
-       ui->tableWidgetPhotosSearch->setItem(i, 3, itemFormworks);
-       ui->tableWidgetPhotosSearch->setItem(i, 4, itemFeatures);
+       ui->tableWidgetPhotosSearch->setItem(i, 1, itemProjecNo);
+       ui->tableWidgetPhotosSearch->setItem(i, 2, itemName);
+       ui->tableWidgetPhotosSearch->setItem(i, 3, itemDate);
+       ui->tableWidgetPhotosSearch->setItem(i, 4, itemFormworks);
+       ui->tableWidgetPhotosSearch->setItem(i, 5, itemFeatures);
 
     }
     QHeaderView* header = ui->tableWidgetPhotosSearch->verticalHeader();
