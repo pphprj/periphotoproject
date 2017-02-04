@@ -7,6 +7,7 @@
 #include "attributeseditdialog.h"
 #include "bigpreview.h"
 #include "aboutwindow.h"
+#include "confirmdeletedialog.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -93,6 +94,11 @@ void MainWindow::InitInterface()
     {
         //ui->tabWidgetSystem->setTabEnabled(2, false);
         ui->tabWidgetSystem->removeTab(2);
+    }
+
+    if (!_cfg->ShowDeleteButton())
+    {
+        ui->pushButtonDeleteSelected->setVisible(false);
     }
 
     ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
@@ -807,14 +813,17 @@ void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
 void MainWindow::showContextMenu(QPoint pos)
 {
     QTableWidgetItem* item = ui->tableWidgetPhotosSearch->itemAt(pos);
-    //QListWidgetItem* item = ui->listWidgetPhotosSearch->itemAt(pos);
     if (item != nullptr)
     {
         QMenu contextMenu;
         QAction* save = contextMenu.addAction(tr("Save"));
         QAction* print = contextMenu.addAction(tr("Print"));
         QAction* edit = contextMenu.addAction(tr("Edit"));
-        QAction* remove = contextMenu.addAction(tr("Remove"));
+        QAction* remove = nullptr;
+        if (_cfg->ShowDeleteButton())
+        {
+            remove = contextMenu.addAction(tr("Remove"));
+        }
         QAction* selectedAction = contextMenu.exec(ui->tableWidgetPhotosSearch->mapToGlobal(pos));
         if (selectedAction)
         {
@@ -842,7 +851,11 @@ void MainWindow::showContextMenu(QPoint pos)
 
             if (selectedAction == remove)
             {
-                removeSelected(item);
+                ConfirmDeleteDialog confirm(_cfg->GetDeletePassword(), this);
+                if (confirm.exec())
+                {
+                    removeSelected(item);
+                }
             }
         }
     }
@@ -908,9 +921,6 @@ void MainWindow::printSelected(QTableWidgetItem *item)
 
 void MainWindow::removeSelected(QTableWidgetItem *item)
 {
-    if (!ConfirmWindow())
-        return;
-
     if (item == nullptr)
     {
         return;
@@ -1174,6 +1184,33 @@ void MainWindow::on_groupBoxProjectSearch_toggled(bool arg1)
             {
                 widget->setVisible(true);
             }
+        }
+    }
+}
+
+void MainWindow::on_pushButtonDeleteSelected_clicked()
+{
+    ConfirmDeleteDialog confirm(_cfg->GetDeletePassword());
+    if (!confirm.exec())
+    {
+        return;
+    }
+
+    QList<QTableWidgetItem*> selected = ui->tableWidgetPhotosSearch->selectedItems();
+
+    if (selected.empty())
+    {
+        for (int i = 0; i < ui->tableWidgetPhotosSearch->rowCount(); i++)
+        {
+            QTableWidgetItem* item = ui->tableWidgetPhotosSearch->item(i, 0);
+            removeSelected(item);
+        }
+    }
+    else
+    {
+        foreach(QTableWidgetItem* item, selected)
+        {
+            removeSelected(item);
         }
     }
 }

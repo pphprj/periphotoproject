@@ -34,7 +34,9 @@ SOURCES += main.cpp\
     attributeseditdialog.cpp \
     bigpreview.cpp \
     jpegfilecopier.cpp \
-    aboutwindow.cpp
+    aboutwindow.cpp \
+    confirmdeletedialog.cpp \
+    passwordmanager.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -57,12 +59,15 @@ HEADERS  += mainwindow.h \
     attributeseditdialog.h \
     bigpreview.h \
     jpegfilecopier.h \
-    aboutwindow.h
+    aboutwindow.h \
+    confirmdeletedialog.h \
+    passwordmanager.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \
     bigpreview.ui \
-    aboutwindow.ui
+    aboutwindow.ui \
+    confirmdeletedialog.ui
 
 TRANSLATIONS = mainwindow_en.ts mainwindow_ru.ts
 

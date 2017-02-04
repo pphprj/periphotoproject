@@ -15,8 +15,10 @@ public:
     QString GetProjectsDirectory();
     QString GetRemoteDirectory();
     QString GetLastFolder();
+    QString GetDeletePassword();
     int GetCompressionRate();
     bool ShowEditDBTab();
+    bool ShowDeleteButton();
 
     void SetLastFolder(const QString& value);
 private:
@@ -28,6 +30,8 @@ private:
     QString _lastFolder;
     int _compressionRate;
     bool _editDBTab;
+    bool _deleteButton;
+    QString _deletePassword;
 };
 
 #endif // CONFIGURATOR_H

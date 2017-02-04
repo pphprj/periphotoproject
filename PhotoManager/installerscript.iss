@@ -50,10 +50,12 @@ Source: "..\deploy\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\Qt5Sql.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\deploy\Qt5Svg.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\settings.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\deploy\Инструкция PERI.docx"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\deploy\iconengines\qsvgicon.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
 Source: "..\deploy\imageformats\qdds.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 Source: "..\deploy\imageformats\qgif.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 Source: "..\deploy\imageformats\qicns.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
@@ -69,6 +71,10 @@ Source: "..\deploy\printsupport\windowsprintersupport.dll"; DestDir: "{app}\prin
 Source: "..\deploy\printsupport\windowsprintersupportd.dll"; DestDir: "{app}\printsupport"; Flags: ignoreversion
 Source: "..\deploy\sqldrivers\qsqlite.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 Source: "..\deploy\sqldrivers\qsqlodbc.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "..\deploy\sqldrivers\qsqlmysql.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "..\deploy\sqldrivers\qsqlpsql.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "..\deploy\translations\*.*"; DestDir: "{app}\translations"; Flags: ignoreversion
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

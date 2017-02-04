@@ -32,6 +32,10 @@ Configurator::Configurator()
     settings.beginGroup("Interface");
     _editDBTab = settings.value("EditDBTab", true).toBool();
     qDebug() << "edit DB tab " << _editDBTab;
+    _deleteButton = settings.value("DeleteButton", false).toBool();
+    qDebug() << "delete button " << _deleteButton;
+    _deletePassword = settings.value("DeletePassword").toString();
+    qDebug() << "delete password " << _deletePassword;
     settings.endGroup();
 }
 
@@ -91,4 +95,14 @@ int Configurator::GetCompressionRate()
 bool Configurator::ShowEditDBTab()
 {
     return _editDBTab;
+}
+
+bool Configurator::ShowDeleteButton()
+{
+    return _deleteButton;
+}
+
+QString Configurator::GetDeletePassword()
+{
+    return _deletePassword;
 }

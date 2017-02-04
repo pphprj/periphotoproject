@@ -108,6 +108,8 @@ private slots:
 
     void on_groupBoxProjectSearch_toggled(bool arg1);
 
+    void on_pushButtonDeleteSelected_clicked();
+
 private:
     void InitDatabase();
     void InitInterface();
