@@ -126,7 +126,7 @@ documentation</source>
         <location filename="mainwindow.ui" line="391"/>
         <location filename="mainwindow.ui" line="614"/>
         <location filename="mainwindow.cpp" line="113"/>
-        <location filename="mainwindow.cpp" line="681"/>
+        <location filename="mainwindow.cpp" line="683"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,7 +139,7 @@ documentation</source>
     <message>
         <location filename="mainwindow.ui" line="78"/>
         <location filename="mainwindow.cpp" line="108"/>
-        <location filename="mainwindow.cpp" line="676"/>
+        <location filename="mainwindow.cpp" line="678"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -255,7 +255,7 @@ documentation</source>
     <message>
         <location filename="mainwindow.ui" line="518"/>
         <location filename="mainwindow.cpp" line="112"/>
-        <location filename="mainwindow.cpp" line="680"/>
+        <location filename="mainwindow.cpp" line="682"/>
         <source>Formwork systems</source>
         <translation type="unfinished"></translation>
     </message>
@@ -288,7 +288,7 @@ documentation</source>
         <location filename="mainwindow.ui" line="103"/>
         <location filename="mainwindow.ui" line="363"/>
         <location filename="mainwindow.cpp" line="109"/>
-        <location filename="mainwindow.cpp" line="677"/>
+        <location filename="mainwindow.cpp" line="679"/>
         <source>Project No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -337,8 +337,14 @@ documentation</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="192"/>
-        <location filename="mainwindow.cpp" line="874"/>
-        <source>Images (*.jpg)</source>
+        <source>Open images</source>
+        <oldsource>Images (*.jpg)</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="192"/>
+        <location filename="mainwindow.cpp" line="876"/>
+        <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -376,88 +382,88 @@ documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="422"/>
+        <location filename="mainwindow.cpp" line="424"/>
         <source>Formwork system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="422"/>
-        <location filename="mainwindow.cpp" line="426"/>
+        <location filename="mainwindow.cpp" line="424"/>
+        <location filename="mainwindow.cpp" line="428"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="426"/>
+        <location filename="mainwindow.cpp" line="428"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="739"/>
+        <location filename="mainwindow.cpp" line="741"/>
         <source>Save images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="766"/>
-        <location filename="mainwindow.cpp" line="880"/>
+        <location filename="mainwindow.cpp" line="768"/>
+        <location filename="mainwindow.cpp" line="882"/>
         <source>Photos were copied to directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="819"/>
+        <location filename="mainwindow.cpp" line="821"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="820"/>
+        <location filename="mainwindow.cpp" line="822"/>
         <source>Print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="821"/>
+        <location filename="mainwindow.cpp" line="823"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="825"/>
+        <location filename="mainwindow.cpp" line="827"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="874"/>
+        <location filename="mainwindow.cpp" line="876"/>
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="526"/>
+        <location filename="mainwindow.cpp" line="528"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="110"/>
-        <location filename="mainwindow.cpp" line="678"/>
+        <location filename="mainwindow.cpp" line="680"/>
         <source>Project name / File path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="111"/>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="mainwindow.cpp" line="681"/>
         <source>Photo date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="526"/>
+        <location filename="mainwindow.cpp" line="528"/>
         <source>Would you have to apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="585"/>
-        <location filename="mainwindow.cpp" line="766"/>
-        <location filename="mainwindow.cpp" line="880"/>
+        <location filename="mainwindow.cpp" line="587"/>
+        <location filename="mainwindow.cpp" line="768"/>
+        <location filename="mainwindow.cpp" line="882"/>
         <source>Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="585"/>
+        <location filename="mainwindow.cpp" line="587"/>
         <source>Photos were added to DB</source>
         <translation type="unfinished"></translation>
     </message>

@@ -63,7 +63,11 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
     FileInfoStruct fileInfo;
 
     QFileInfo sourceFile(file);
-    QDateTime creationDate = JpegFileCopier::getCreationDate(file);
+    QDateTime creationDate;
+    if (sourceFile.suffix() != "pdf")
+    {
+        creationDate = JpegFileCopier::getCreationDate(file);
+    }
     creationDate = (creationDate.isNull()) ? sourceFile.lastModified() : creationDate;
     CreateFilesDirectory(creationDate.date());
 
@@ -72,8 +76,17 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
 
     fileInfo.duplicated = QFile::exists(destinationFileName);
 
+    bool copyResult = false;
+    if (sourceFile.suffix() == "pdf")
+    {
+        copyResult = QFile::copy(file, destinationFileName);
+    }
+    else
+    {
+        copyResult = JpegFileCopier::copyFile(file, destinationFileName, compressionRate);
+    }
 
-    if (JpegFileCopier::copyFile(file, destinationFileName, compressionRate))
+    if (copyResult)
     {
         qDebug() << "copy was successfull";
         fileInfo.fileInfo.setFile(destinationFileName);

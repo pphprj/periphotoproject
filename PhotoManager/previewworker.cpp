@@ -1,5 +1,7 @@
 #include "previewworker.h"
 
+#include <QFileInfo>
+
 PreviewWorker::PreviewWorker(QObject *parent) : QObject(parent)
 {
 }
@@ -26,7 +28,16 @@ QString PreviewWorker::getFileName()
 
 void PreviewWorker::process()
 {
-    QPixmap pm(_fileName);
+    QPixmap pm;
+    QFileInfo info(_fileName);
+    if (info.suffix() == "pdf")
+    {
+        pm = QPixmap(":/pdfs-512.png");
+    }
+    else
+    {
+        pm.load(_fileName);
+    }
     _pixmap = pm.scaled(400, 300, Qt::KeepAspectRatio).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     emit resultsReady(_pixmap, _fileName);

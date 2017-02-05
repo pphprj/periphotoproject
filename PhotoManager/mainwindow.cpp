@@ -189,7 +189,7 @@ void MainWindow::DeleteFileFromPreview(int num)
 
 void MainWindow::on_pushButtonLoadPhoto_clicked()
 {
-    QFileDialog fileDialog(this, tr("Open images"), _cfg->GetLastFolder(), tr("Images (*.jpg)"));
+    QFileDialog fileDialog(this, tr("Open images"), _cfg->GetLastFolder(), tr("Images (*.jpg *.jpeg);;Documents (*.pdf)"));
     fileDialog.setFileMode(QFileDialog::ExistingFiles);
     if (!fileDialog.exec())
     {
@@ -396,7 +396,9 @@ void MainWindow::dropEvent(QDropEvent *event)
     if (r.contains(pos))
     {
         if ((event->mimeData()->text().contains(".jpg", Qt::CaseInsensitive)) ||
-            (event->mimeData()->text().contains(".jpeg", Qt::CaseInsensitive)))
+            (event->mimeData()->text().contains(".jpeg", Qt::CaseInsensitive)) ||
+            (event->mimeData()->text().contains(".pdf", Qt::CaseInsensitive))
+           )
         {
             if (event->mimeData()->hasUrls())
             {
@@ -871,7 +873,7 @@ void MainWindow::saveSelected(QTableWidgetItem* item)
     int index = item->row();
     QString filePath = _searchResult[index].filePath;
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
-    QString destinationFile = QFileDialog::getSaveFileName(this, tr("Save file"), destination, tr("Images (*.jpg)"));
+    QString destinationFile = QFileDialog::getSaveFileName(this, tr("Save file"), destination, tr("Images (*.jpg *.jpeg);;Documents (*.pdf)"));
     if (destinationFile != "")
     {
         bool result = QFile::copy(filePath, destinationFile);
@@ -1128,8 +1130,16 @@ void MainWindow::on_lineEditProjectNameSearch_textEdited(const QString &arg1)
 void MainWindow::on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index)
 {
     SearchResult item = _searchResult[index.row()];
-    BigPreview* preview = new BigPreview(item.filePath, this);
-    preview->exec();
+    QFileInfo info(item.filePath);
+    if (info.suffix() == "pdf")
+    {
+        //QDesktopServices::openUrl(QUrl::fromLocalFile(item.filePath));
+    }
+    else
+    {
+        BigPreview* preview = new BigPreview(item.filePath, this);
+        preview->exec();
+    }
 }
 
 void MainWindow::on_actionE_xit_triggered()

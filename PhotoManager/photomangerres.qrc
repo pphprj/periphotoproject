@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>periphotoproject.ico</file>
+        <file>pdfs-512.png</file>
     </qresource>
 </RCC>
