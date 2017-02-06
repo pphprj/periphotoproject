@@ -140,6 +140,7 @@ public slots:
     void saveSelected(QTableWidgetItem* item);
     void printSelected(QTableWidgetItem* item);
     void removeSelected(QTableWidgetItem* item);
+    void sectionClickedSlot(int column);
 
 private:
     Ui::MainWindow *ui;

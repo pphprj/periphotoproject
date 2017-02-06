@@ -114,6 +114,7 @@ void MainWindow::InitInterface()
     ui->tableWidgetPhotosSearch->setHorizontalHeaderLabels(headers);
     ui->tableWidgetPhotosSearch->resizeColumnsToContents();
     connect(ui->tableWidgetPhotosSearch, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->tableWidgetPhotosSearch->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sectionClickedSlot(int)));
 }
 
 void MainWindow::LoadDatabase()
@@ -1223,4 +1224,10 @@ void MainWindow::on_pushButtonDeleteSelected_clicked()
             removeSelected(item);
         }
     }
+}
+
+void MainWindow::sectionClickedSlot(int column)
+{
+    Qt::SortOrder sortOrder = ui->tableWidgetPhotosSearch->horizontalHeader()->sortIndicatorOrder();
+    ui->tableWidgetPhotosSearch->sortByColumn(column, sortOrder);
 }
