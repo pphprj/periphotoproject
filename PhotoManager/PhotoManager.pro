@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     jpegfilecopier.cpp \
     aboutwindow.cpp \
     confirmdeletedialog.cpp \
-    passwordmanager.cpp
+    passwordmanager.cpp \
+    resultcontextmenu.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -61,7 +62,8 @@ HEADERS  += mainwindow.h \
     jpegfilecopier.h \
     aboutwindow.h \
     confirmdeletedialog.h \
-    passwordmanager.h
+    passwordmanager.h \
+    resultcontextmenu.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \

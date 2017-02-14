@@ -132,3 +132,11 @@ bool FileManager::DeleteFileFromDirectory(const QString &file)
 {
     return QFile::remove(file);
 }
+
+
+bool FileManager::SaveFileToDirectory(const QString &file, const QString &destinationFolder)
+{
+    QFileInfo fileInfo(file);
+    QString destinationFileName = destinationFolder + "\\" + fileInfo.fileName();
+    return QFile::copy(fileInfo.filePath(), destinationFileName);
+}

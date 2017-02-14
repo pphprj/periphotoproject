@@ -1,5 +1,8 @@
 #include "interfacemanager.h"
 
+#include <QCompleter>
+#include <QLineEdit>
+
 InterfaceManager::InterfaceManager(QObject *parent) : QObject(parent)
 {
 
@@ -25,4 +28,29 @@ void InterfaceManager::ClearComboboxChecked(QComboBox *comboBox)
         }
     }
     comboBox->setItemText(0, "");
+}
+
+
+void InterfaceManager::SetCompleter(QLineEdit *lineEdit, const QStringList& items)
+{
+    QCompleter* completer = new QCompleter(items);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    lineEdit->setCompleter(completer);
+}
+
+
+void InterfaceManager::EnableDateEditField(QDateEdit *dateEdit, bool isEnabled)
+{
+    if (dateEdit == nullptr) return;
+    if (isEnabled)
+    {
+        dateEdit->setEnabled(true);
+        dateEdit->setDateTime(QDateTime::currentDateTime());
+    }
+    else
+    {
+        dateEdit->setEnabled(false);
+        dateEdit->setDateTime(QDateTime(QDate(1970, 1, 1)));
+    }
 }

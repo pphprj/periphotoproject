@@ -8,6 +8,7 @@
 #include "bigpreview.h"
 #include "aboutwindow.h"
 #include "confirmdeletedialog.h"
+#include "resultcontextmenu.h"
 
 #include <QtGui>
 #include <QFileDialog>
@@ -631,10 +632,7 @@ void MainWindow::on_lineEditProjectNo_textEdited(const QString &arg1)
         }
     }
 
-    QCompleter* completer = new QCompleter(items);
-    completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
-    ui->lineEditProjectNo->setCompleter(completer);
+    InterfaceManager::SetCompleter(ui->lineEditProjectNo, items);
 }
 
 void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
@@ -649,10 +647,7 @@ void MainWindow::on_lineEditProjectName_textEdited(const QString &arg1)
         }
     }
 
-    QCompleter* completer = new QCompleter(items);
-    completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
-    ui->lineEditProjectName->setCompleter(completer);
+    InterfaceManager::SetCompleter(ui->lineEditProjectName, items);
 }
 
 void MainWindow::on_pushButtonSearch_clicked()
@@ -747,9 +742,7 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
     {
         for (int i = 0; i < _searchResult.length(); i++)
         {
-            QFileInfo fileInfo(_searchResult[i].filePath);
-            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
-            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+            result &= _fileManager->SaveFileToDirectory(_searchResult[i].filePath, saveDirectory);
         }
     }
     else
@@ -758,9 +751,7 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
         {
             QTableWidgetItem* item = selected[i];
             SearchResult res = _searchResult[item->row()];
-            QFileInfo fileInfo(res.filePath);
-            QString destinationFileName = saveDirectory + "\\" + fileInfo.fileName();
-            result &= QFile::copy(fileInfo.filePath(), destinationFileName);
+            result &= _fileManager->SaveFileToDirectory(res.filePath, saveDirectory);
         }
     }
 
@@ -772,96 +763,30 @@ void MainWindow::on_pushButtonSavePhotos_clicked()
 
 void MainWindow::on_checkBoxDisableProjectDate_clicked()
 {
-    if (ui->checkBoxDisableProjectDate->isChecked())
-    {
-        ui->dateEditProjectDateSearch->setEnabled(true);
-        ui->dateEditProjectDateSearch->setDateTime(QDateTime::currentDateTime());
-    }
-    else
-    {
-        ui->dateEditProjectDateSearch->setEnabled(false);
-        ui->dateEditProjectDateSearch->setDateTime(QDateTime(QDate(1970, 1, 1)));
-    }
+    InterfaceManager::EnableDateEditField(ui->dateEditProjectDateSearch,
+                                          ui->checkBoxDisableProjectDate->isChecked());
 }
 
 void MainWindow::on_checkBoxDisableIntervalBegin_clicked()
 {
-    if (ui->checkBoxDisableIntervalBegin->isChecked())
-    {
-        ui->dateEditPhotoIntervalBegin->setEnabled(true);
-        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime::currentDateTime());
-    }
-    else
-    {
-        ui->dateEditPhotoIntervalBegin->setEnabled(false);
-        ui->dateEditPhotoIntervalBegin->setDateTime(QDateTime(QDate(1970, 1, 1)));
-    }
+    InterfaceManager::EnableDateEditField(ui->dateEditPhotoIntervalBegin,
+                                          ui->checkBoxDisableIntervalBegin->isChecked());
 }
 
 void MainWindow::on_checkBoxDisableIntervalEnd_clicked()
 {
-    if (ui->checkBoxDisableIntervalEnd->isChecked())
-    {
-        ui->dateEditPhotoIntervalEnd->setEnabled(true);
-        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime::currentDateTime());
-    }
-    else
-    {
-        ui->dateEditPhotoIntervalEnd->setEnabled(false);
-        ui->dateEditPhotoIntervalEnd->setDateTime(QDateTime(QDate(1970, 1, 1)));
-    }
+    InterfaceManager::EnableDateEditField(ui->dateEditPhotoIntervalEnd,
+                                          ui->checkBoxDisableIntervalEnd->isChecked());
 }
 
 
 void MainWindow::showContextMenu(QPoint pos)
 {
-    QTableWidgetItem* item = ui->tableWidgetPhotosSearch->itemAt(pos);
-    if (item != nullptr)
-    {
-        QMenu contextMenu;
-        QAction* save = contextMenu.addAction(tr("Save"));
-        QAction* print = contextMenu.addAction(tr("Print"));
-        QAction* edit = contextMenu.addAction(tr("Edit"));
-        QAction* remove = nullptr;
-        if (_cfg->ShowDeleteButton())
-        {
-            remove = contextMenu.addAction(tr("Remove"));
-        }
-        QAction* selectedAction = contextMenu.exec(ui->tableWidgetPhotosSearch->mapToGlobal(pos));
-        if (selectedAction)
-        {
-            if (selectedAction == save)
-            {
-                saveSelected(item);
-            }
-
-            if (selectedAction == print)
-            {
-                printSelected(item);
-            }
-
-            if (selectedAction == edit)
-            {
-                AttributesEditDialog* dlg = new AttributesEditDialog(this);
-                int index = ui->tableWidgetPhotosSearch->row(item);
-                dlg->LoadSelected(_searcher, _searchResult[index].photoId);
-                if (dlg->exec() == QDialog::Accepted)
-                {
-                    on_pushButtonSearch_clicked();
-                }
-                delete dlg;
-            }
-
-            if (selectedAction == remove)
-            {
-                ConfirmDeleteDialog confirm(_cfg->GetDeletePassword(), this);
-                if (confirm.exec())
-                {
-                    removeSelected(item);
-                }
-            }
-        }
-    }
+    ResultContextMenu contexMenu(pos,
+                                 ui->tableWidgetPhotosSearch,
+                                 _cfg->ShowDeleteButton(),
+                                 this);
+    contexMenu.Execute();
 }
 
 void MainWindow::saveSelected(QTableWidgetItem* item)
@@ -922,7 +847,28 @@ void MainWindow::printSelected(QTableWidgetItem *item)
     }
 }
 
+void MainWindow::editSelected(QTableWidgetItem *item)
+{
+    AttributesEditDialog* dlg = new AttributesEditDialog(this);
+    int index = ui->tableWidgetPhotosSearch->row(item);
+    dlg->LoadSelected(_searcher, _searchResult[index].photoId);
+    if (dlg->exec() == QDialog::Accepted)
+    {
+        on_pushButtonSearch_clicked();
+    }
+    delete dlg;
+}
+
 void MainWindow::removeSelected(QTableWidgetItem *item)
+{
+    ConfirmDeleteDialog confirm(_cfg->GetDeletePassword(), this);
+    if (confirm.exec())
+    {
+        RemoveItem(item);
+    }
+}
+
+void MainWindow::RemoveItem(QTableWidgetItem *item)
 {
     if (item == nullptr)
     {
@@ -1214,14 +1160,14 @@ void MainWindow::on_pushButtonDeleteSelected_clicked()
         for (int i = 0; i < ui->tableWidgetPhotosSearch->rowCount(); i++)
         {
             QTableWidgetItem* item = ui->tableWidgetPhotosSearch->item(i, 0);
-            removeSelected(item);
+            RemoveItem(item);
         }
     }
     else
     {
         foreach(QTableWidgetItem* item, selected)
         {
-            removeSelected(item);
+            RemoveItem(item);
         }
     }
 }

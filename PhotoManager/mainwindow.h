@@ -130,16 +130,23 @@ private:
 
     bool ConfirmWindow();
 
+    void RemoveItem(QTableWidgetItem* item);
+
     bool eventFilter(QObject *watched, QEvent *event);
 
 
 public slots:
     void setProgressBarValue(int value);
+
     void finishedCopy();
+
     void showContextMenu(QPoint pos);
+
     void saveSelected(QTableWidgetItem* item);
     void printSelected(QTableWidgetItem* item);
     void removeSelected(QTableWidgetItem* item);
+    void editSelected(QTableWidgetItem* item);
+
     void sectionClickedSlot(int column);
 
 private:

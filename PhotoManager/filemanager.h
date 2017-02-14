@@ -22,6 +22,8 @@ public:
     QVector<FileInfoStruct> AddFilesToDirectory(const QStringList& files, int compressionRate);
     QFileInfo AddPreviewToDirectory(const QIcon& icon, const QString& file);
 
+    bool SaveFileToDirectory(const QString& file, const QString& destinationFolder);
+
     bool DeleteFilesFromDirectory(const QStringList& files);
     bool DeleteFileFromDirectory(const QString& file);
 

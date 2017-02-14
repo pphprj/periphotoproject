@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QTableWidget>
 #include <QStandardItem>
+#include <QDateEdit>
 
 #include "tableabstractelemmanager.h"
 
@@ -158,7 +159,12 @@ public:
     }
 
     static void NewItem(QTableWidget* table);
+
     static void ClearComboboxChecked(QComboBox* comboBox);
+
+    static void SetCompleter(QLineEdit* lineEdit, const QStringList& items);
+
+    static void EnableDateEditField(QDateEdit* dateEdit, bool isEnabled);
 
 signals:
 
