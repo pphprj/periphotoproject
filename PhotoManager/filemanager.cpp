@@ -71,7 +71,7 @@ FileInfoStruct FileManager::AddFileToDirectory(const QString &file, int compress
     creationDate = (creationDate.isNull()) ? sourceFile.lastModified() : creationDate;
     CreateFilesDirectory(creationDate.date());
 
-    QString destination = _projectDirectory + "\\" + sourceFile.lastModified().date().toString("yyyy-MM-dd") + "\\";
+    QString destination = _projectDirectory + "\\" + creationDate.date().toString("yyyy-MM-dd") + "\\";
     QString destinationFileName = destination + sourceFile.fileName();
 
     fileInfo.duplicated = QFile::exists(destinationFileName);
@@ -108,6 +108,10 @@ QVector<FileInfoStruct> FileManager::AddFilesToDirectory(const QStringList &file
 
 QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &file)
 {
+    if (icon.isNull())
+    {
+        return QFileInfo();
+    }
     QFileInfo sourceFile(file);
     CreatePreviewDirectory(sourceFile.lastModified().date());
 

@@ -14,6 +14,8 @@
 #include "photoloader.h"
 #include "photosearcher.h"
 
+#include "additionpage.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -33,14 +35,12 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private slots:
-    void on_pushButtonTestSQL_clicked();
 
     void on_pushButtonLoadPhoto_clicked();
 
     void on_pushButtonAddToDB_clicked();
 
-    void on_comboBoxSystems_ModelItemChanged(QStandardItem *item);
-    void on_comboBoxFeatures_ModelItemChanged(QStandardItem *item);
+
     void on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item);
     void on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item);
 
@@ -63,10 +63,6 @@ private slots:
     void on_checkBoxEnablePreview_clicked();
 
     void on_comboBoxSystems_currentIndexChanged(int index);
-
-    void on_lineEditProjectNo_textEdited(const QString &arg1);
-
-    void on_lineEditProjectName_textEdited(const QString &arg1);
 
     void on_pushButtonSearch_clicked();
 
@@ -114,7 +110,7 @@ private:
     void InitDatabase();
     void InitInterface();
 
-    QString GetSelectedCategories();
+
     QVector<Categorie> GetSelectedCategoriesSearch();
 
     void ClearInterface(int tabIndex);
@@ -123,8 +119,8 @@ private:
     void LoadDatabase();
 
 
-    void AddFileToPreview(const QString& fileName);
-    void DeleteFileFromPreview(int num);
+
+
 
     void EnableDranNDrop();
 
@@ -136,9 +132,7 @@ private:
 
 
 public slots:
-    void setProgressBarValue(int value);
 
-    void finishedCopy();
 
     void showContextMenu(QPoint pos);
 
@@ -153,12 +147,12 @@ private:
     Ui::MainWindow *ui;
     DatabaseManager* _dbm;
 
-    QStringList _files;
+  //  QStringList _files;
     QDate _filesDate;
     bool _dbChangesFlag;
 
-    QVector<FormworkSystem> _selectedSystems;
-    QVector<Feature> _selectedFeatures;
+   // QVector<FormworkSystem> _selectedSystems;
+   // QVector<Feature> _selectedFeatures;
 
     QVector<FormworkSystem> _selectedSystemSearch;
     QVector<Feature> _selectedFeaturesSearch;
@@ -166,11 +160,13 @@ private:
 
     FileManager* _fileManager;
     Configurator* _cfg;
-    FilecopierThread* _copierThread;
-    PreviewSession* _previewSession;
+    //FilecopierThread* _copierThread;
+    //PreviewSession* _previewSession;
 
-    PhotoLoader* _loader;
+    //PhotoLoader* _loader;
     PhotoSearcher* _searcher;
+
+    AdditionPage* _addPage;
 };
 
 #endif // MAINWINDOW_H

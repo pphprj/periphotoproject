@@ -37,7 +37,10 @@ SOURCES += main.cpp\
     aboutwindow.cpp \
     confirmdeletedialog.cpp \
     passwordmanager.cpp \
-    resultcontextmenu.cpp
+    resultcontextmenu.cpp \
+    imageprinter.cpp \
+    page.cpp \
+    additionpage.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -63,7 +66,10 @@ HEADERS  += mainwindow.h \
     aboutwindow.h \
     confirmdeletedialog.h \
     passwordmanager.h \
-    resultcontextmenu.h
+    resultcontextmenu.h \
+    imageprinter.h \
+    page.h \
+    additionpage.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \
