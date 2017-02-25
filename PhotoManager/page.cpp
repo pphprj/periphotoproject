@@ -52,13 +52,9 @@ void Page::LoadDatabase()
     _loader->LoadDatabase();
 }
 
-QString Page::GetSelectedCategories()
+/*QString Page::GetSelectedCategories()
 {
     QVector<Categorie> selected;
-
-    //if (ui->checkBoxInProc->isChecked()) selected.push_back(_loader->GetCategories()[0]);
-    //if (ui->checkBoxCurrentState->isChecked()) selected.push_back(_loader->GetCategories()[1]);
-    //if (ui->checkBoxMarketing->isChecked()) selected.push_back(_loader->GetCategories()[2]);
 
     for (int i = 0; i < _categories.length(); i++)
     {
@@ -69,16 +65,21 @@ QString Page::GetSelectedCategories()
     }
 
     return TableAbstractElemManager::CreateIDsList(selected);
-}
+}*/
 
-void Page::UpdateFormorkSystems(QTableWidget *table)
+QVector<Categorie> Page::GetSelectedCategories()
 {
-    InterfaceManager::ApplyChanges(_loader->GetFormworkSystems(), table);
-}
+    QVector<Categorie> selected;
 
-void Page::UpdateFeatures(QTableWidget *table)
-{
-    InterfaceManager::ApplyChanges(_loader->GetFeatures(), table);
+    for (int i = 0; i < _categories.length(); i++)
+    {
+        if (_categories[i]->isChecked())
+        {
+            selected.push_back(_loader->GetCategories()[i]);
+        }
+    }
+
+    return selected;
 }
 
 void Page::formorksSystemModelItemChangedSlot(QStandardItem *item)

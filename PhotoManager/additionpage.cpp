@@ -3,6 +3,8 @@
 #include <QtGui>
 #include <QMessageBox>
 
+#include "tableabstractelemmanager.h"
+
 AdditionPage::AdditionPage(DatabaseManager *databaseManager,
                            FileManager *fileManager,
                            Configurator *cfg,
@@ -81,7 +83,7 @@ void AdditionPage::AddFilesToDatabase()
         return;
     }
 
-    QString selectedCategories = GetSelectedCategories();
+    QString selectedCategories = TableAbstractElemManager::CreateIDsList(GetSelectedCategories());
     if (selectedCategories.isEmpty())
     {
         QMessageBox::critical(nullptr, tr("Error!"), tr("Please, select category!"));
@@ -139,8 +141,9 @@ void AdditionPage::finishedCopy()
         projectName = (pn.GetName() == projectName) ? projectName : pn.GetName();
     }
     QDate projectDate = _projectDate->date();
+    QString selectedCategories = TableAbstractElemManager::CreateIDsList(GetSelectedCategories());
     bool result = _loader->InsertToDatabase(projectNo, projectName, projectDate,
-                                            _selectedSystems, _selectedFeatures, GetSelectedCategories(),
+                                            _selectedSystems, _selectedFeatures, selectedCategories,
                                             files,
                                             previews);
 

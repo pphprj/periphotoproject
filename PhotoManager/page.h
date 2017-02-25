@@ -7,7 +7,6 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QStandardItem>
-#include <QTableWidget>
 
 #include "photoloader.h"
 #include "databasemanager.h"
@@ -34,10 +33,8 @@ public:
 
     virtual void ClearInterface() = 0;
 
-    QString GetSelectedCategories();
-
-    void UpdateFormorkSystems(QTableWidget* table);
-    void UpdateFeatures(QTableWidget* table);
+    //QString GetSelectedCategories();
+    QVector<Categorie> GetSelectedCategories();
 
 signals:
 

@@ -9,12 +9,10 @@
 #include "databasemanager.h"
 #include "filemanager.h"
 #include "configurator.h"
-#include "filecopierthread.h"
-#include "previewsession.h"
-#include "photoloader.h"
-#include "photosearcher.h"
 
 #include "additionpage.h"
+#include "searchpage.h"
+#include "editdbpage.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,23 +38,15 @@ private slots:
 
     void on_pushButtonAddToDB_clicked();
 
-
-    void on_comboBoxSystemsSearch_ModelItemChanged(QStandardItem *item);
-    void on_comboBoxFeaturesSearch_ModelItemChanged(QStandardItem *item);
-
     void on_tabWidgetSystem_currentChanged(int index);
 
     void on_pushButtonApplySystem_clicked();
-
-    void on_tableWidgetSystems_itemChanged(QTableWidgetItem *item);
 
     void on_pushButtonSystemsNew_clicked();
 
     void on_pushButtonNewFeature_clicked();
 
     void on_pushButtonApplyFeature_clicked();
-
-    void on_tableWidgetFeatures_itemChanged(QTableWidgetItem *item);
 
     void on_tabWidgetSystem_tabBarClicked(int index);
 
@@ -80,19 +70,7 @@ private slots:
 
     void on_dateEditOnly_dateChanged(const QDate &date);
 
-    void on_checkBoxInProgressFilter_clicked();
-
-    void on_checkBoxCurrentStateFilters_clicked();
-
-    void on_checkBoxMarketingFilters_clicked();
-
-    void on_checkBoxInProgressFilters_clicked();
-
     void on_checkBoxFilterByDate_clicked();
-
-    void on_lineEditProjectNoSearch_textEdited(const QString &arg1);
-
-    void on_lineEditProjectNameSearch_textEdited(const QString &arg1);
 
     void on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index);
 
@@ -110,63 +88,29 @@ private:
     void InitDatabase();
     void InitInterface();
 
-
-    QVector<Categorie> GetSelectedCategoriesSearch();
-
     void ClearInterface(int tabIndex);
 
     void LoadInterface();
     void LoadDatabase();
 
-
-
-
-
     void EnableDranNDrop();
 
     bool ConfirmWindow();
 
-    void RemoveItem(QTableWidgetItem* item);
-
-    bool eventFilter(QObject *watched, QEvent *event);
 
 
-public slots:
-
-
-    void showContextMenu(QPoint pos);
-
-    void saveSelected(QTableWidgetItem* item);
-    void printSelected(QTableWidgetItem* item);
-    void removeSelected(QTableWidgetItem* item);
-    void editSelected(QTableWidgetItem* item);
-
-    void sectionClickedSlot(int column);
+    bool eventFilter(QObject *watched, QEvent *event);  
 
 private:
     Ui::MainWindow *ui;
     DatabaseManager* _dbm;
 
-  //  QStringList _files;
-    QDate _filesDate;
-    bool _dbChangesFlag;
-
-   // QVector<FormworkSystem> _selectedSystems;
-   // QVector<Feature> _selectedFeatures;
-
-    QVector<FormworkSystem> _selectedSystemSearch;
-    QVector<Feature> _selectedFeaturesSearch;
-    QVector<SearchResult> _searchResult;
-
     FileManager* _fileManager;
     Configurator* _cfg;
-    //FilecopierThread* _copierThread;
-    //PreviewSession* _previewSession;
-
-    //PhotoLoader* _loader;
-    PhotoSearcher* _searcher;
 
     AdditionPage* _addPage;
+    SearchPage* _searchPage;
+    EditDBPage* _editDBPage;
 };
 
 #endif // MAINWINDOW_H

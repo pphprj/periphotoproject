@@ -40,7 +40,9 @@ SOURCES += main.cpp\
     resultcontextmenu.cpp \
     imageprinter.cpp \
     page.cpp \
-    additionpage.cpp
+    additionpage.cpp \
+    editdbpage.cpp \
+    searchpage.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -69,7 +71,9 @@ HEADERS  += mainwindow.h \
     resultcontextmenu.h \
     imageprinter.h \
     page.h \
-    additionpage.h
+    additionpage.h \
+    editdbpage.h \
+    searchpage.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \
