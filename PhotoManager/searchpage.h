@@ -24,7 +24,8 @@ public:
     void SavePhotos();
     void PrintPhotos();
     void DeletePhotos();
-    //void SavePhoto()
+
+    void RefreshProjects();
 
     void OrderDateOnly(const QDate& date);
     void OrderByDate();

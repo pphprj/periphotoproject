@@ -26,6 +26,9 @@ public:
 
     void AddFilesToDatabase();
 
+signals:
+    void refreshProjects();
+
 public slots:
     void setProgressBarValue(int value);
     void finishedCopy();

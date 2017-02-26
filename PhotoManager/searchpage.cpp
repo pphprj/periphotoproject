@@ -55,6 +55,8 @@ void SearchPage::InitSearchPageInterface(QDateEdit *beginInterval, QDateEdit *en
 
 void SearchPage::SearchPhotos()
 {
+    ClearInterface();
+
     QString projectNo = _projectNo->text();
     QString projectName = _projectName->text();
     QDate projectDate = _projectDate->date();
@@ -223,6 +225,11 @@ void SearchPage::DeletePhotos()
             RemoveItem(item);
         }
     }
+}
+
+void SearchPage::RefreshProjects()
+{
+    _searcher->RefreshProjectNames();
 }
 
 void SearchPage::RemoveItem(QTableWidgetItem *item)

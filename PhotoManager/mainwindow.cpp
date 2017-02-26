@@ -181,12 +181,6 @@ void MainWindow::ClearInterface(int tabIndex)
     }
 }
 
-
-void MainWindow::EnableDranNDrop()
-{
-    ui->listWidgetPhotos->setDragDropMode(QAbstractItemView::InternalMove);
-}
-
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -475,5 +469,10 @@ void MainWindow::on_groupBoxProjectSearch_toggled(bool arg1)
 void MainWindow::on_pushButtonDeleteSelected_clicked()
 {
     _searchPage->DeletePhotos();
+}
+
+void MainWindow::refreshProjectsSlot()
+{
+    _searchPage->RefreshProjects();
 }
 

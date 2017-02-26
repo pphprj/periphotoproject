@@ -43,6 +43,12 @@ void Page::FillInterface()
     InterfaceManager::FillCombobox(_loader->GetFeatures(), _features);
     connect(_features->model(), SIGNAL(itemChanged(QStandardItem*)), this, SLOT(featuresModelItemChangedSlot(QStandardItem*)));
 
+    disconnect(_formorkSystems, SIGNAL(activated(int)), 0, 0);
+    connect(_formorkSystems, SIGNAL(activated(int)), this, SLOT(formworkSystemItemActivatedSlot(int)));
+
+    disconnect(_features, SIGNAL(activated(int)), 0, 0);
+    connect(_features, SIGNAL(activated(int)), this, SLOT(featuresItemActivatedSlot(int)));
+
     _selectedFeatures.clear();
     _selectedSystems.clear();
 }
@@ -51,21 +57,6 @@ void Page::LoadDatabase()
 {
     _loader->LoadDatabase();
 }
-
-/*QString Page::GetSelectedCategories()
-{
-    QVector<Categorie> selected;
-
-    for (int i = 0; i < _categories.length(); i++)
-    {
-        if (_categories[i]->isChecked())
-        {
-            selected.push_back(_loader->GetCategories()[i]);
-        }
-    }
-
-    return TableAbstractElemManager::CreateIDsList(selected);
-}*/
 
 QVector<Categorie> Page::GetSelectedCategories()
 {
@@ -146,5 +137,17 @@ void Page::projectNameLineEditTextEditedSlot(const QString &arg1)
     }
 
     InterfaceManager::SetCompleter(_projectName, items);
+}
+
+void Page::formworkSystemItemActivatedSlot(int index)
+{
+    QStandardItem* item = InterfaceManager::ActivateComboBoxItem(_formorkSystems->model(), index);
+    formorksSystemModelItemChangedSlot(item);
+}
+
+void Page::featuresItemActivatedSlot(int index)
+{
+    QStandardItem* item = InterfaceManager::ActivateComboBoxItem(_features->model(), index);
+    featuresModelItemChangedSlot(item);
 }
 

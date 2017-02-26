@@ -33,7 +33,6 @@ public:
 
     virtual void ClearInterface() = 0;
 
-    //QString GetSelectedCategories();
     QVector<Categorie> GetSelectedCategories();
 
 signals:
@@ -45,6 +44,9 @@ public slots:
 
     void projectNoLineEditTextEditedSlot(const QString& arg1);
     void projectNameLineEditTextEditedSlot(const QString& arg1);
+
+    void formworkSystemItemActivatedSlot(int index);
+    void featuresItemActivatedSlot(int index);
 
 protected:
     QLineEdit* _projectNo;

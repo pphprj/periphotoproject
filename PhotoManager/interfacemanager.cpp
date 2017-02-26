@@ -54,3 +54,18 @@ void InterfaceManager::EnableDateEditField(QDateEdit *dateEdit, bool isEnabled)
         dateEdit->setDateTime(QDateTime(QDate(1970, 1, 1)));
     }
 }
+
+QStandardItem* InterfaceManager::ActivateComboBoxItem(QAbstractItemModel *model, int index)
+{
+    QStandardItemModel* standardModel = qobject_cast<QStandardItemModel*>(model);
+    QStandardItem* item = standardModel->item(index);
+    if (item->checkState() == Qt::Checked)
+    {
+        item->setCheckState(Qt::Unchecked);
+    }
+    else
+    {
+        item->setCheckState(Qt::Checked);
+    }
+    return item;
+}

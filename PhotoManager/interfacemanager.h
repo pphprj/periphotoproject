@@ -29,7 +29,7 @@ public:
 
         QStandardItem* itemDisableAll = new QStandardItem(tr("Disable all"));
 
-        itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        itemDisableAll->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         itemDisableAll->setData(Qt::Unchecked, Qt::CheckStateRole);
 
         model->setItem(1, 0, itemDisableAll);
@@ -39,7 +39,7 @@ public:
             T elem = elems[i - 2];
             QStandardItem* item = new QStandardItem(elem.GetName());
 
-            item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+            item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
             item->setData(Qt::Unchecked, Qt::CheckStateRole);
 
             model->setItem(i, 0, item);
@@ -156,6 +156,7 @@ public:
     {
         QString selectedList = TableAbstractElemManager::CreateNamesList(selected);
         comboBox->setItemText(0, selectedList);
+        comboBox->setCurrentIndex(0);
     }
 
     static void NewItem(QTableWidget* table);
@@ -165,6 +166,8 @@ public:
     static void SetCompleter(QLineEdit* lineEdit, const QStringList& items);
 
     static void EnableDateEditField(QDateEdit* dateEdit, bool isEnabled);
+
+    static QStandardItem* ActivateComboBoxItem(QAbstractItemModel* model, int index);
 
 signals:
 

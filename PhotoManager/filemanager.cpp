@@ -113,7 +113,13 @@ QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &f
         return QFileInfo();
     }
     QFileInfo sourceFile(file);
-    CreatePreviewDirectory(sourceFile.lastModified().date());
+    QDateTime creationDate;
+    if (sourceFile.suffix() != "pdf")
+    {
+        creationDate = JpegFileCopier::getCreationDate(file);
+    }
+    creationDate = (creationDate.isNull()) ? sourceFile.lastModified() : creationDate;
+    CreatePreviewDirectory(creationDate.date());
 
     QString previewFileName = _previewDirectory + "\\" + sourceFile.baseName() + ".png";
 

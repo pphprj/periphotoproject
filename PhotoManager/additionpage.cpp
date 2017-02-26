@@ -12,8 +12,10 @@ AdditionPage::AdditionPage(DatabaseManager *databaseManager,
     Page(databaseManager, fileManager, cfg, parent)
 {
     _copierThread = new FilecopierThread(_fileManager);
-    QObject::connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
-    QObject::connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
+    connect(_copierThread, SIGNAL(progress(int)), this, SLOT(setProgressBarValue(int)));
+    connect(_copierThread, SIGNAL(finished()), this, SLOT(finishedCopy()));
+
+    connect(this, SIGNAL(refreshProjects()), parent, SLOT(refreshProjectsSlot()));
 
     _previewSession = nullptr;
 }
@@ -150,10 +152,8 @@ void AdditionPage::finishedCopy()
     if (result)
     {
         _loader->RefreshProjectNames();
-        //TODO refresh searcher
-        //_searcher->RefreshProjectNames();
+        emit refreshProjects();
         QMessageBox::information(nullptr, tr("Successfully"), tr("Photos were added to DB"));
-       // _photoList->clear();
         ClearInterface();
     }
     qDebug() << "finishedCopy end" << result;

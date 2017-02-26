@@ -84,6 +84,8 @@ private slots:
 
     void on_pushButtonDeleteSelected_clicked();
 
+    void refreshProjectsSlot();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -93,11 +95,7 @@ private:
     void LoadInterface();
     void LoadDatabase();
 
-    void EnableDranNDrop();
-
     bool ConfirmWindow();
-
-
 
     bool eventFilter(QObject *watched, QEvent *event);  
 
