@@ -86,3 +86,15 @@ ProjectName PhotoLoader::GetProjectNameByNo(const QString &projectNo)
     }
     return ProjectName();
 }
+
+ProjectName PhotoLoader::GetProjectNoByName(const QString &projectName)
+{
+    foreach (ProjectName name, _projectNames)
+    {
+        if (name.GetName() == projectName)
+        {
+            return name;
+        }
+    }
+    return ProjectName();
+}

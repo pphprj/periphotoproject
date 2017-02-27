@@ -67,10 +67,28 @@ void AdditionPage::DeleteFileFromPreview(int num)
 void AdditionPage::AddFilesToDatabase()
 {
     QString projectNo = _projectNo->text();
+    QString projectName = _projectName->text();
+
     if (projectNo.isEmpty())
     {
-        QMessageBox::critical(nullptr, tr("Error!"), tr("Please, input Project No!"));
-        return;
+        if (projectName.isEmpty())
+        {
+            QMessageBox::critical(nullptr, tr("Error!"), tr("Please, input Project No or Project Name!"));
+            return;
+        }
+        else
+        {
+            ProjectName pno = _loader->GetProjectNoByName(projectName);
+            if (pno.GetProjectNo().isEmpty())
+            {
+                QMessageBox::critical(nullptr, tr("Error!"), tr("Wrong Project Name!"));
+                return;
+            }
+            else
+            {
+                projectNo = pno.GetProjectNo();
+            }
+        }
     }
 
     if (_selectedSystems.isEmpty())
@@ -98,7 +116,6 @@ void AdditionPage::AddFilesToDatabase()
         return;
     }
 
-    QString projectName = _projectName->text();
     ProjectName pn = _loader->GetProjectNameByNo(projectNo);
     if (!pn.GetName().isEmpty())
     {
