@@ -36,7 +36,13 @@ SOURCES += main.cpp\
     jpegfilecopier.cpp \
     aboutwindow.cpp \
     confirmdeletedialog.cpp \
-    passwordmanager.cpp
+    passwordmanager.cpp \
+    resultcontextmenu.cpp \
+    imageprinter.cpp \
+    page.cpp \
+    additionpage.cpp \
+    editdbpage.cpp \
+    searchpage.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -61,7 +67,13 @@ HEADERS  += mainwindow.h \
     jpegfilecopier.h \
     aboutwindow.h \
     confirmdeletedialog.h \
-    passwordmanager.h
+    passwordmanager.h \
+    resultcontextmenu.h \
+    imageprinter.h \
+    page.h \
+    additionpage.h \
+    editdbpage.h \
+    searchpage.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \

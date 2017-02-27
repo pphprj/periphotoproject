@@ -108,6 +108,10 @@ QVector<FileInfoStruct> FileManager::AddFilesToDirectory(const QStringList &file
 
 QFileInfo FileManager::AddPreviewToDirectory(const QIcon &icon, const QString &file)
 {
+    if (icon.isNull())
+    {
+        return QFileInfo();
+    }
     QFileInfo sourceFile(file);
     QDateTime creationDate;
     if (sourceFile.suffix() != "pdf")
@@ -137,4 +141,12 @@ bool FileManager::DeleteFilesFromDirectory(const QStringList &files)
 bool FileManager::DeleteFileFromDirectory(const QString &file)
 {
     return QFile::remove(file);
+}
+
+
+bool FileManager::SaveFileToDirectory(const QString &file, const QString &destinationFolder)
+{
+    QFileInfo fileInfo(file);
+    QString destinationFileName = destinationFolder + "\\" + fileInfo.fileName();
+    return QFile::copy(fileInfo.filePath(), destinationFileName);
 }

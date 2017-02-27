@@ -23,6 +23,7 @@ public:
     QVector<Categorie>& GetCategories();
     QVector<ProjectName>& GetProjectNames();
     ProjectName GetProjectNameByNo(const QString& projectNo);
+    ProjectName GetProjectNoByName(const QString& projectName);
 
 signals:
 
