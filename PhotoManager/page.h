@@ -7,6 +7,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QStandardItem>
+#include <QPlainTextEdit>
 
 #include "photoloader.h"
 #include "databasemanager.h"
@@ -23,6 +24,7 @@ public:
     virtual ~Page();
 
     virtual void InitInterface(QLineEdit* projectNo, QLineEdit* projectName, QDateEdit* projectDate,
+                               QLineEdit* companyName, QPlainTextEdit* description,
                        QComboBox* formorkSystems, QComboBox* features, const QVector<QCheckBox*>& categories);
 
     virtual void FillInterface();
@@ -52,6 +54,8 @@ protected:
     QLineEdit* _projectNo;
     QLineEdit* _projectName;
     QDateEdit* _projectDate;
+    QLineEdit* _companyName;
+    QPlainTextEdit* _description;
     QComboBox* _formorkSystems;
     QComboBox* _features;
     QVector<QCheckBox*> _categories;

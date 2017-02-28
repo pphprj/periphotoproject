@@ -17,6 +17,7 @@ Page::~Page()
 }
 
 void Page::InitInterface(QLineEdit *projectNo, QLineEdit *projectName, QDateEdit *projectDate,
+                         QLineEdit *companyName, QPlainTextEdit *description,
                                  QComboBox *formorkSystems, QComboBox *features, const QVector<QCheckBox*>& categories)
 {
     _projectNo = projectNo;
@@ -28,6 +29,9 @@ void Page::InitInterface(QLineEdit *projectNo, QLineEdit *projectName, QDateEdit
     {
         _categories.push_back(cb);
     }
+
+    _companyName = companyName;
+    _description = description;
 
     connect(_projectNo, SIGNAL(textEdited(QString)), this, SLOT(projectNoLineEditTextEditedSlot(QString)));
     connect(_projectName, SIGNAL(textEdited(QString)), this, SLOT(projectNameLineEditTextEditedSlot(QString)));

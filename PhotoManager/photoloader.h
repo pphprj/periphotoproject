@@ -14,7 +14,7 @@ public:
 
     bool LoadDatabase();
     bool RefreshProjectNames();
-    bool InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
+    bool InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate, QString& companyName, QString& description,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QString& selectedCategories,
                           QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews);
 

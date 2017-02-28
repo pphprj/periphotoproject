@@ -35,7 +35,7 @@ bool PhotoLoader::RefreshProjectNames()
     return result;
 }
 
-bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate,
+bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate, QString& companyName, QString& description,
                                    QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QString& selectedCategories,
                                    QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews)
 {
@@ -43,9 +43,38 @@ bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDa
 
     QString selectedFts = TableAbstractElemManager::CreateIDsList(selectedFeatures);
 
-    bool result = _dbm->InsertValuesToPhotos(projectNo,
-                                             projectName,
-                                             projectDate,
+    int projectID = _dbm->CheckProjectNo(projectNo);
+    if (projectID == -1)
+    {
+        qDebug() << "projectID == -1";
+        return false;
+    }
+
+    if (projectID == 0)
+    {
+        if (_dbm->InsertProject(projectNo, projectName, projectDate, companyName, description))
+        {
+            projectID = _dbm->CheckProjectNo(projectNo);
+        }
+    }
+    else
+    {
+        QString projectNameFromDB;
+        _dbm->SelectProjectName(projectID, projectNameFromDB);
+        if (projectNameFromDB.isEmpty())
+        {
+            _dbm->UpdateProjectName(projectID, projectName);
+        }
+
+        QString companyNameFromDB;
+        _dbm->SelectCompanyName(projectID, companyNameFromDB);
+        if (companyNameFromDB.isEmpty())
+        {
+            _dbm->UpdateCompanyName(projectID, companyName);
+        }
+    }
+
+    bool result = _dbm->InsertValuesToPhotos(projectID,
                                              selectedFws,
                                              selectedFts,
                                              selectedCategories,

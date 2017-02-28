@@ -102,6 +102,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxCurrentState);
     cbxs.push_back(ui->checkBoxMarketing);
     _addPage->InitInterface(ui->lineEditProjectNo, ui->lineEditProjectName, ui->dateEditProjectDate,
+                            ui->lineEditCompanyName, ui->plainTextEditDescription,
                             ui->comboBoxSystems, ui->comboBoxFeatures, cbxs);
     _addPage->InitAdditionPageInterface(ui->listWidgetPhotos, ui->progressBar);
     _addPage->CreateLoader();
@@ -112,6 +113,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxCurrentStateSearch);
     cbxs.push_back(ui->checkBoxMarketingSearch);
     _searchPage->InitInterface(ui->lineEditProjectNoSearch, ui->lineEditProjectNameSearch, ui->dateEditProjectDateSearch,
+                               nullptr, nullptr,
                                ui->comboBoxSystemsSearch, ui->comboBoxFeaturesSearch, cbxs);
     cbxs.clear();
     cbxs.push_back(ui->checkBoxInProgressFilters);
