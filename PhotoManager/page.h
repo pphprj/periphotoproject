@@ -46,6 +46,7 @@ public slots:
 
     void projectNoLineEditTextEditedSlot(const QString& arg1);
     void projectNameLineEditTextEditedSlot(const QString& arg1);
+    void companyNameLineEditTextEditedSlot(const QString& arg1);
 
     void formworkSystemItemActivatedSlot(int index);
     void featuresItemActivatedSlot(int index);

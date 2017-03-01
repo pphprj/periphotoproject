@@ -84,14 +84,16 @@ void MainWindow::InitInterface()
 
     ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
     ui->tableWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetPhotosSearch->setColumnCount(6);
+    ui->tableWidgetPhotosSearch->setColumnCount(8);
     QStringList headers;
     headers << tr("Preview")
+            << tr("Photo date")
             << tr("Project No")
             << tr("Project name / File path")
-            << tr("Photo date")
+            << tr("Company")
             << tr("Formwork systems")
-            << tr("Features");
+            << tr("Features")
+            << tr("Description");
     ui->tableWidgetPhotosSearch->setHorizontalHeaderLabels(headers);
     ui->tableWidgetPhotosSearch->resizeColumnsToContents();
 
@@ -113,7 +115,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxCurrentStateSearch);
     cbxs.push_back(ui->checkBoxMarketingSearch);
     _searchPage->InitInterface(ui->lineEditProjectNoSearch, ui->lineEditProjectNameSearch, ui->dateEditProjectDateSearch,
-                               nullptr, nullptr,
+                               ui->lineEditCompanyNameSearch, nullptr,
                                ui->comboBoxSystemsSearch, ui->comboBoxFeaturesSearch, cbxs);
     cbxs.clear();
     cbxs.push_back(ui->checkBoxInProgressFilters);

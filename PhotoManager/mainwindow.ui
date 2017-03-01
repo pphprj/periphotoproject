@@ -45,45 +45,14 @@
           <string>Add new photos</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="3">
-           <widget class="QPushButton" name="pushButtonAddToDB">
-            <property name="text">
-             <string>Add to DB</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonLoadPhoto">
-            <property name="text">
-             <string>Load photo</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBoxEnablePreview">
-            <property name="text">
-             <string>Preview</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="3">
            <widget class="QGroupBox" name="groupBoxProject">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Project</string>
             </property>
@@ -174,6 +143,12 @@
           </item>
           <item row="0" column="3">
            <widget class="QGroupBox" name="groupBoxCategories">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Categories</string>
             </property>
@@ -205,6 +180,9 @@ documentation</string>
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Preferred</enum>
+               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
@@ -216,7 +194,7 @@ documentation</string>
             </layout>
            </widget>
           </item>
-          <item row="4" column="0" colspan="4">
+          <item row="5" column="0" colspan="4">
            <widget class="QGroupBox" name="groupBoxPhotos">
             <property name="title">
              <string>Photos</string>
@@ -238,14 +216,51 @@ documentation</string>
             </layout>
            </widget>
           </item>
-          <item row="5" column="1" colspan="3">
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="checkBoxEnablePreview">
+            <property name="text">
+             <string>Preview</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QPushButton" name="pushButtonAddToDB">
+            <property name="text">
+             <string>Add to DB</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushButtonLoadPhoto">
+            <property name="text">
+             <string>Load photo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="3">
            <widget class="QProgressBar" name="progressBar">
             <property name="value">
              <number>0</number>
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="6" column="0">
            <widget class="QLabel" name="labelFilesCopied">
             <property name="text">
              <string>Files were copied</string>
@@ -492,6 +507,16 @@ documentation</string>
                 <bool>false</bool>
                </property>
               </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelCompanyNameSearch">
+               <property name="text">
+                <string>Company</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="lineEditCompanyNameSearch"/>
              </item>
             </layout>
            </widget>

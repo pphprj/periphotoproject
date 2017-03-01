@@ -60,11 +60,12 @@ void SearchPage::SearchPhotos()
     QString projectNo = _projectNo->text();
     QString projectName = _projectName->text();
     QDate projectDate = _projectDate->date();
+    QString company = _companyName->text();
 
     QDate intervalBegin = _beginInterval->date();
     QDate intervalEnd = _endInterval->date();
 
-    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate,
+    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate, company,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
                                             intervalBegin, intervalEnd,
                                             _searchResult);
@@ -75,11 +76,13 @@ void SearchPage::SearchPhotos()
     _tableResults->setRowCount(_searchResult.length());
     QStringList headers;
     headers << tr("Preview")
+            << tr("Photo date")
             << tr("Project No")
             << tr("Project name / File path")
-            << tr("Photo date")
+            << tr("Company")
             << tr("Formwork systems")
-            << tr("Features");
+            << tr("Features")
+            << tr("Description");
 
     _tableResults->setHorizontalHeaderLabels(headers);
 
@@ -113,19 +116,25 @@ void SearchPage::SearchPhotos()
        QString features = TableAbstractElemManager::CreateNamesList(selectedFeatures);
        QTableWidgetItem* itemFeatures = new QTableWidgetItem(features);
 
+       QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
+       QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
 
        itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
        itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
        itemName->setFlags(itemName->flags() ^ Qt::ItemIsEditable);
        itemFormworks->setFlags(itemFormworks->flags() ^ Qt::ItemIsEditable);
        itemFeatures->setFlags(itemFeatures->flags() ^ Qt::ItemIsEditable);
+       itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
+       itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
 
        _tableResults->setItem(i, 0, itemImage);
-       _tableResults->setItem(i, 1, itemProjecNo);
-       _tableResults->setItem(i, 2, itemName);
-       _tableResults->setItem(i, 3, itemDate);
-       _tableResults->setItem(i, 4, itemFormworks);
-       _tableResults->setItem(i, 5, itemFeatures);
+       _tableResults->setItem(i, 1, itemDate);
+       _tableResults->setItem(i, 2, itemProjecNo);
+       _tableResults->setItem(i, 3, itemName);
+       _tableResults->setItem(i, 4, itemCompany);
+       _tableResults->setItem(i, 5, itemFormworks);
+       _tableResults->setItem(i, 6, itemFeatures);
+       _tableResults->setItem(i, 7, itemDescription);
 
     }
     QHeaderView* header = _tableResults->verticalHeader();

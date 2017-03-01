@@ -237,7 +237,7 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
     if (!_db.isOpen()) return false;
 
     QSqlQuery query;
-    if (query.exec("SELECT ID, ProjectNo, Name, Description FROM Projects"))
+    if (query.exec("SELECT ID, ProjectNo, Name, CompanyName, Description FROM Projects"))
     {
         while (query.next())
         {
@@ -245,7 +245,8 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
             QString projectNo = query.value("ProjectNo").toString();
             QString name = query.value("Name").toString();
             QString description = query.value("Description").toString();
-            elems.push_back(ProjectName(id, projectNo, name, description));
+            QString company = query.value("CompanyName").toString();
+            elems.push_back(ProjectName(id, projectNo, name, company, description));
         }
     }
     return true;
@@ -276,7 +277,22 @@ bool DatabaseManager::SelectCompanyName(int projectId, QString &companyName)
     {
         while (query.next())
         {
-            companyName = query.value("Name").toString();
+            companyName = query.value("CompanyName").toString();
+        }
+    }
+    return true;
+}
+
+bool DatabaseManager::SelectDescription(int projectId, QString &description)
+{
+    if (!_db.isOpen()) return false;
+
+    QSqlQuery query;
+    if (query.exec("SELECT Description FROM Projects WHERE ID = " + QString::number(projectId)))
+    {
+        while (query.next())
+        {
+            description = query.value("Description").toString();
         }
     }
     return true;
@@ -285,6 +301,7 @@ bool DatabaseManager::SelectCompanyName(int projectId, QString &companyName)
 bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QString &projectName,
                                    const QDate &projectDate,
+                                   const QString& company,
                                    const QVector<FormworkSystem> &formworkSystems,
                                    const QVector<Feature> &features,
                                    const QVector<Categorie> &categories,
@@ -297,7 +314,8 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     bool result = false;
 
     QSqlQuery query;
-    QString sqlQuery = "SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features, Projects.Name, Projects.ProjectNo  ";
+    QString sqlQuery = (QString)"SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features," +
+            " Projects.Name, Projects.ProjectNo, Projects.CompanyName, Projects.Description  ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -312,6 +330,11 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " AND ";
         sqlQuery += QString("(Projects.CreationTime = ") + "'" + projectDate.toString(_dateTimeFormat) + "')";
+    }
+    if (!company.isEmpty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(CompanyName LIKE ") + "'%" + company + "%')";
     }
 
     sqlQuery += " WHERE ";
@@ -440,6 +463,8 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.categories = query.value("Category").toString();
             fnp.projectName = query.value("Name").toString();
             fnp.projectNo = query.value("ProjectNo").toString();
+            fnp.companyName = query.value("CompanyName").toString();
+            fnp.description = query.value("Description").toString();
             photos.push_back(fnp);
         }
         result = true;
@@ -743,6 +768,24 @@ bool DatabaseManager::UpdateCompanyName(int projectId, const QString &companyNam
     return result;
 }
 
+bool DatabaseManager::UpdateDescription(int projectId, const QString &description)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"UPDATE Projects SET " +
+            "Description = " + "'" + description + "'" + " " +
+            "WHERE ID = " + QString::number(projectId);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
 bool DatabaseManager::UpdateTable(const QString &table, const QString &columnName, const QString &columnType)
 {
     if (!_db.isOpen()) return false;
@@ -757,7 +800,7 @@ bool DatabaseManager::UpdateTable(const QString &table, const QString &columnNam
     qDebug() << queryStr;
     qDebug() << query.lastError().text();
 
-    return result;
+    return true;
 }
 
 bool DatabaseManager::DeletePhoto(int photoID)

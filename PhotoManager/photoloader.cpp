@@ -72,6 +72,13 @@ bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDa
         {
             _dbm->UpdateCompanyName(projectID, companyName);
         }
+
+        QString descriptionFormDB;
+        _dbm->SelectDescription(projectID, descriptionFormDB);
+        if (descriptionFormDB.isEmpty())
+        {
+            _dbm->UpdateDescription(projectID, description);
+        }
     }
 
     bool result = _dbm->InsertValuesToPhotos(projectID,

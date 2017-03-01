@@ -35,6 +35,7 @@ void Page::InitInterface(QLineEdit *projectNo, QLineEdit *projectName, QDateEdit
 
     connect(_projectNo, SIGNAL(textEdited(QString)), this, SLOT(projectNoLineEditTextEditedSlot(QString)));
     connect(_projectName, SIGNAL(textEdited(QString)), this, SLOT(projectNameLineEditTextEditedSlot(QString)));
+    connect(_companyName, SIGNAL(textEdited(QString)), this, SLOT(companyNameLineEditTextEditedSlot(QString)));
 }
 
 void Page::FillInterface()
@@ -141,6 +142,24 @@ void Page::projectNameLineEditTextEditedSlot(const QString &arg1)
     }
 
     InterfaceManager::SetCompleter(_projectName, items);
+}
+
+void Page::companyNameLineEditTextEditedSlot(const QString &arg1)
+{
+    QStringList items;
+
+    foreach (ProjectName name, _loader->GetProjectNames())
+    {
+        if (name.GetCompanyName().contains(arg1, Qt::CaseInsensitive))
+        {
+            if (!items.contains(name.GetCompanyName()))
+            {
+                items.push_back(name.GetCompanyName());
+            }
+        }
+    }
+
+    InterfaceManager::SetCompleter(_companyName, items);
 }
 
 void Page::formworkSystemItemActivatedSlot(int index)

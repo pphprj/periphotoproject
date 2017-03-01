@@ -20,6 +20,8 @@ struct SearchResult
     QString categories;
     QString projectName;
     QString projectNo;
+    QString companyName;
+    QString description;
     QDate photoDate;
 };
 

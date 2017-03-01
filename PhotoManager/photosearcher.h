@@ -9,7 +9,7 @@ class PhotoSearcher : public PhotoLoader
 public:
     explicit PhotoSearcher(DatabaseManager* manager, QObject *parent = 0);
 
-    bool SearchPhotos(QString& projectNo, QString& projectName, QDate& projectDate,
+    bool SearchPhotos(QString& projectNo, QString& projectName, QDate& projectDate, QString& companyName,
                           QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatires, QVector<Categorie>& selectedCategories,
                           QDate& intervalBegin, QDate& intervalEnd,
                           QVector<SearchResult>& photos);
