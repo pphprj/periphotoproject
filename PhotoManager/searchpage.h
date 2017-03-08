@@ -30,7 +30,10 @@ public:
     void OrderDateOnly(const QDate& date);
     void OrderByDate();
 
-    void ShowItemPreview(int index);
+    void ShowItemPreview(QTableWidgetItem* item);
+
+    int GetSearchResultIndexByItem(QTableWidgetItem* item);
+    QTableWidgetItem* GetItemByIndex(int index);
 
 public slots:
     void showContextMenu(QPoint pos);
@@ -42,7 +45,6 @@ public slots:
 
     void sectionClickedSlot(int column);
     void checkBoxClickedSlot();
-
 private:
     void RemoveItem(QTableWidgetItem* item);
 

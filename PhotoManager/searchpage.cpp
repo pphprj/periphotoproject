@@ -3,6 +3,7 @@
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "resultcontextmenu.h"
 #include "attributeseditdialog.h"
@@ -51,6 +52,8 @@ void SearchPage::InitSearchPageInterface(QDateEdit *beginInterval, QDateEdit *en
 
     connect(_tableResults, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(_tableResults->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sectionClickedSlot(int)));
+
+    qDebug() << "Init search page";
 }
 
 void SearchPage::SearchPhotos()
@@ -71,7 +74,10 @@ void SearchPage::SearchPhotos()
                                             _searchResult);
 
     if (!result)
+    {
+        qDebug() << "Search was crashed";
         return;
+    }
 
     _tableResults->setRowCount(_searchResult.length());
     QStringList headers;
@@ -82,13 +88,17 @@ void SearchPage::SearchPhotos()
             << tr("Company")
             << tr("Formwork systems")
             << tr("Features")
-            << tr("Description");
+            << tr("Description")
+            << "";
 
     _tableResults->setHorizontalHeaderLabels(headers);
+
+    qDebug() << "Search result " << _searchResult.length();
 
     for (int i = 0; i < _searchResult.length(); i++)
     {
        SearchResult fnp = _searchResult[i];
+       qDebug() << fnp;
 
        QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
 
@@ -119,6 +129,8 @@ void SearchPage::SearchPhotos()
        QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
        QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
 
+       QTableWidgetItem* itemHidden = new QTableWidgetItem(QString::number(i));
+
        itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
        itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
        itemName->setFlags(itemName->flags() ^ Qt::ItemIsEditable);
@@ -135,12 +147,14 @@ void SearchPage::SearchPhotos()
        _tableResults->setItem(i, 5, itemFormworks);
        _tableResults->setItem(i, 6, itemFeatures);
        _tableResults->setItem(i, 7, itemDescription);
+       _tableResults->setItem(i, 8, itemHidden);
 
     }
     QHeaderView* header = _tableResults->verticalHeader();
     header->setSectionResizeMode(QHeaderView::Fixed);
     header->setDefaultSectionSize(100);
     _tableResults->resizeColumnsToContents();
+    _tableResults->setColumnHidden(8, true);
 }
 
 void SearchPage::SavePhotos()
@@ -162,8 +176,13 @@ void SearchPage::SavePhotos()
         for (int i = 0; i < selected.length(); i++)
         {
             QTableWidgetItem* item = selected[i];
-            SearchResult res = _searchResult[item->row()];
-            result &= _fileManager->SaveFileToDirectory(res.filePath, saveDirectory);
+            int index = GetSearchResultIndexByItem(item);
+            qDebug() << "Save Index " << index;
+            if (index != -1)
+            {
+                SearchResult res = _searchResult[index];
+                result &= _fileManager->SaveFileToDirectory(res.filePath, saveDirectory);
+            }
         }
     }
 
@@ -195,8 +214,13 @@ void SearchPage::PrintPhotos()
                 for (int i = 0; i < selected.length(); i++)
                 {
                     QTableWidgetItem* item = selected[i];
-                    SearchResult res = _searchResult[item->row()];
-                    printer->PrintImage(res.filePath);
+                    int index = GetSearchResultIndexByItem(item);
+                    qDebug() << "Print Index " << index;
+                    if (index != -1)
+                    {
+                        SearchResult res = _searchResult[index];
+                        printer->PrintImage(res.filePath);
+                    }
                 }
             }
         }
@@ -248,7 +272,8 @@ void SearchPage::RemoveItem(QTableWidgetItem *item)
         return;
     }
 
-    int index = item->row();
+    int index = GetSearchResultIndexByItem(item);
+    qDebug() << "Remove Index " << index;
     QString filePath = _searchResult[index].filePath;
     _fileManager->DeleteFileFromDirectory(filePath);
     QString previewPath = _searchResult[index].previewPath;
@@ -270,11 +295,13 @@ void SearchPage::OrderDateOnly(const QDate &date)
     {
         if (orderDate != _searchResult[i].photoDate)
         {
-            _tableResults->setRowHidden(i, true);
+            QTableWidgetItem* item = GetItemByIndex(i);
+            _tableResults->setRowHidden(item->row(), true);
         }
         else
         {
-            _tableResults->setRowHidden(i, false);
+            QTableWidgetItem* item = GetItemByIndex(i);
+            _tableResults->setRowHidden(item->row(), false);
         }
     }
 }
@@ -296,22 +323,46 @@ void SearchPage::OrderByDate()
     }
 }
 
-void SearchPage::ShowItemPreview(int index)
+void SearchPage::ShowItemPreview(QTableWidgetItem* item)
 {
-    if (index < 0) return;
-    if (index >= _searchResult.length()) return;
+    if (item == nullptr) return;
 
-    SearchResult item = _searchResult[index];
-    QFileInfo info(item.filePath);
+    int index = GetSearchResultIndexByItem(item);
+    qDebug() << "Show Index " << index;
+    SearchResult searchItem = _searchResult[index];
+    QFileInfo info(searchItem.filePath);
     if (info.suffix() == "pdf")
     {
         //QDesktopServices::openUrl(QUrl::fromLocalFile(item.filePath));
     }
     else
     {
-        BigPreview* preview = new BigPreview(item.filePath);
+        BigPreview* preview = new BigPreview(searchItem.filePath);
         preview->exec();
     }
+}
+
+int SearchPage::GetSearchResultIndexByItem(QTableWidgetItem *item)
+{
+    if (item == nullptr)
+        return -1;
+
+    QString index = _tableResults->item(item->row(), 8)->text();
+    return index.toInt();
+}
+
+QTableWidgetItem* SearchPage::GetItemByIndex(int index)
+{
+    QTableWidgetItem* result = nullptr;
+    for (int i = 0; i < _tableResults->rowCount(); i++)
+    {
+        result = _tableResults->item(i, 8);
+        if (index == result->text().toInt())
+        {
+            break;
+        }
+    }
+    return result;
 }
 
 void SearchPage::showContextMenu(QPoint pos)
@@ -330,7 +381,8 @@ void SearchPage::saveSelected(QTableWidgetItem* item)
         return;
     }
 
-    int index = item->row();
+    int index = GetSearchResultIndexByItem(item);
+    qDebug() << "Save Index " << index;
     QString filePath = _searchResult[index].filePath;
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     QString destinationFile = QFileDialog::getSaveFileName(nullptr, tr("Save file"), destination, tr("Images (*.jpg *.jpeg);;Documents (*.pdf)"));
@@ -353,7 +405,8 @@ void SearchPage::printSelected(QTableWidgetItem *item)
             return;
         }
 
-        int index = item->row();
+        int index = GetSearchResultIndexByItem(item);
+        qDebug() << "Print Index " << index;
         QString filePath = _searchResult[index].filePath;
         ImagePrinter* printer = new ImagePrinter();
 
@@ -373,7 +426,8 @@ void SearchPage::printSelected(QTableWidgetItem *item)
 void SearchPage::editSelected(QTableWidgetItem *item)
 {
     AttributesEditDialog* dlg = new AttributesEditDialog();
-    int index = _tableResults->row(item);
+    int index = GetSearchResultIndexByItem(item);
+    qDebug() << "Edit Index " << index;
     dlg->LoadSelected(_searcher, _searchResult[index].photoId);
     if (dlg->exec() == QDialog::Accepted)
     {
@@ -414,11 +468,13 @@ void SearchPage::checkBoxClickedSlot()
     {
         if (_searchResult[i].categories.indexOf(search) == -1)
         {
-            _tableResults->setRowHidden(i, true);
+            QTableWidgetItem* item = GetItemByIndex(i);
+            _tableResults->setRowHidden(item->row(), true);
         }
         else
         {
-            _tableResults->setRowHidden(i, false);
+            QTableWidgetItem* item = GetItemByIndex(i);
+            _tableResults->setRowHidden(item->row(), false);
         }
     }
 }

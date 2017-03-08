@@ -89,19 +89,32 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Filename: {app}\settings.ini; Section: DBConnection; Key: Host; String: {code:GetHost}
 Filename: {app}\settings.ini; Section: DBConnection; Key: Username; String: {code:GetUserName}
 Filename: {app}\settings.ini; Section: DBConnection; Key: Password; String: {code:GetPassword}
+Filename: {app}\settings.ini; Section: Files; Key: Directory; String: {code:GetDirectory}
+Filename: {app}\settings.ini; Section: Files; Key: RemoteDirectory; String: {code:GetRemoteDirectory}
 
 [Code]
 var
 AuthPage : TInputQueryWizardPage;
+DirPage : TInputDirWizardPage;
 
 procedure InitializeWizard;
 begin
-AuthPage := CreateInputQueryPage(wpSelectTasks,
+  AuthPage := CreateInputQueryPage(wpSelectTasks,
     ExpandConstant('{cm:ConnectToDB}'), ExpandConstant('{cm:EnterInfoConnectToDB}'),
     '');
   AuthPage.Add(ExpandConstant('{cm:CDBHost}'), False);
   AuthPage.Add(ExpandConstant('{cm:CDBUsername}'), False);
   AuthPage.Add(ExpandConstant('{cm:CDBPassword}'), True);
+
+  DirPage := CreateInputDirPage(AuthPage.ID, 
+    ExpandConstant('{cm:SelectStoreFolder}'), 
+    ExpandConstant('{cm:StoreFolderDescription}'), 
+    '', 
+    False, 
+    SetupMessage(msgNewFolderName));
+  DirPage.Add(ExpandConstant('{cm:StoreFolder}'));
+  DirPage.Add(ExpandConstant('{cm:RemoteFolder}'));
+
 end;
 
 function AuthForm_NextButtonClick(Page: TWizardPage): Boolean;
@@ -109,17 +122,34 @@ begin
   Result := True;
 end;
 
-function GetHost(Param: String): string;
+function DirPage_NextButtonClick(Page: TWizardPage): Boolean;
+begin
+  Result := True;
+end;
+
+function GetHost(Param: String): String;
 begin
   result := AuthPage.Values[0];
 end;
 
-function GetUserName(Param: String): string;
+function GetUserName(Param: String): String;
 begin
   result := AuthPage.Values[1];
 end;
 
-function GetPassword(Param: String): string;
+function GetPassword(Param: String): String;
 begin
   result := AuthPage.Values[2];
+end;
+
+function GetDirectory(Param: String) : String;
+begin
+  Result := DirPage.Values[0];
+  StringChangeEx(Result, '\', '/', True);
+end;
+
+function GetRemoteDirectory(Param: String) : String;
+begin
+  Result := DirPage.Values[1];
+  StringChangeEx(Result, '\', '/', True);
 end;

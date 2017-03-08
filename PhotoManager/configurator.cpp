@@ -47,6 +47,8 @@ Configurator::~Configurator()
     settings.setIniCodec("Windows-1251");
 
     settings.beginGroup("Files");
+    settings.setValue("Directory", _projectsDirectory);
+    settings.setValue("RemoteDirectory", _remoteProjectsDirectory);
     settings.setValue("LastFolder", _lastFolder);
     settings.endGroup();
 }

@@ -84,7 +84,7 @@ void MainWindow::InitInterface()
 
     ui->tableWidgetSearchResult->setIconSize(QSize(100, 100));
     ui->tableWidgetSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetSearchResult->setColumnCount(8);
+    ui->tableWidgetSearchResult->setColumnCount(9);
     QStringList headers;
     headers << tr("Preview")
             << tr("Photo date")
@@ -93,9 +93,11 @@ void MainWindow::InitInterface()
             << tr("Company")
             << tr("Formwork systems")
             << tr("Features")
-            << tr("Description");
+            << tr("Description")
+            << "";
     ui->tableWidgetSearchResult->setHorizontalHeaderLabels(headers);
     ui->tableWidgetSearchResult->resizeColumnsToContents();
+    ui->tableWidgetSearchResult->setColumnHidden(8, true);
 
 
     _addPage = new AdditionPage(_dbm, _fileManager, _cfg, this);
@@ -394,7 +396,7 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
 
 void MainWindow::on_checkBoxOrderByName_clicked()
 {
-    ui->tableWidgetSearchResult->sortItems(1);
+    ui->tableWidgetSearchResult->sortItems(3);
 }
 
 void MainWindow::on_dateEditOnly_dateChanged(const QDate &date)
@@ -411,7 +413,8 @@ void MainWindow::on_checkBoxFilterByDate_clicked()
 
 void MainWindow::on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index)
 {
-    _searchPage->ShowItemPreview(index.row());
+    QTableWidgetItem* item = ui->tableWidgetSearchResult->item(index.row(), index.column());
+    _searchPage->ShowItemPreview(item);
 }
 
 void MainWindow::on_actionE_xit_triggered()
@@ -483,5 +486,6 @@ void MainWindow::refreshProjectsSlot()
 
 void MainWindow::on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index)
 {
-    _searchPage->ShowItemPreview(index.row());
+    QTableWidgetItem* item = ui->tableWidgetSearchResult->item(index.row(), index.column());
+    _searchPage->ShowItemPreview(item);
 }
