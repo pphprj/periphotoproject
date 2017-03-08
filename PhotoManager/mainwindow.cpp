@@ -82,9 +82,9 @@ void MainWindow::InitInterface()
         ui->pushButtonDeleteSelected->setVisible(false);
     }
 
-    ui->tableWidgetPhotosSearch->setIconSize(QSize(100, 100));
-    ui->tableWidgetPhotosSearch->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetPhotosSearch->setColumnCount(8);
+    ui->tableWidgetSearchResult->setIconSize(QSize(100, 100));
+    ui->tableWidgetSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableWidgetSearchResult->setColumnCount(8);
     QStringList headers;
     headers << tr("Preview")
             << tr("Photo date")
@@ -94,8 +94,8 @@ void MainWindow::InitInterface()
             << tr("Formwork systems")
             << tr("Features")
             << tr("Description");
-    ui->tableWidgetPhotosSearch->setHorizontalHeaderLabels(headers);
-    ui->tableWidgetPhotosSearch->resizeColumnsToContents();
+    ui->tableWidgetSearchResult->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetSearchResult->resizeColumnsToContents();
 
 
     _addPage = new AdditionPage(_dbm, _fileManager, _cfg, this);
@@ -121,7 +121,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxInProgressFilters);
     cbxs.push_back(ui->checkBoxCurrentStateFilters);
     cbxs.push_back(ui->checkBoxMarketingFilters);
-    _searchPage->InitSearchPageInterface(ui->dateEditPhotoIntervalBegin, ui->dateEditPhotoIntervalEnd, ui->tableWidgetPhotosSearch,
+    _searchPage->InitSearchPageInterface(ui->dateEditPhotoIntervalBegin, ui->dateEditPhotoIntervalEnd, ui->tableWidgetSearchResult,
                                          cbxs, ui->checkBoxFilterByDate, ui->dateEditOnly);
     _searchPage->CreateLoader();
 
@@ -394,7 +394,7 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
 
 void MainWindow::on_checkBoxOrderByName_clicked()
 {
-    ui->tableWidgetPhotosSearch->sortItems(1);
+    ui->tableWidgetSearchResult->sortItems(1);
 }
 
 void MainWindow::on_dateEditOnly_dateChanged(const QDate &date)
@@ -480,3 +480,8 @@ void MainWindow::refreshProjectsSlot()
     _searchPage->RefreshProjects();
 }
 
+
+void MainWindow::on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index)
+{
+    _searchPage->ShowItemPreview(index.row());
+}

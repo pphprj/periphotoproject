@@ -1,6 +1,8 @@
 #include "previewworker.h"
 
 #include <QFileInfo>
+#include <QImageReader>
+#include <QRect>
 
 PreviewWorker::PreviewWorker(QObject *parent) : QObject(parent)
 {
@@ -36,9 +38,15 @@ void PreviewWorker::process()
     }
     else
     {
+       // QImageReader imr(_fileName);
+        //imr.setClipRect(QRect(0, 0, 400, 300));
+       // imr.setScaledSize(QSize(400, 300));
         pm.load(_fileName);
+        //QImage img = imr.read();
+        //pm = QPixmap::fromImage(img);
     }
     _pixmap = pm.scaled(400, 300, Qt::KeepAspectRatio).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    //_pixmap = pm.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     emit resultsReady(_pixmap, _fileName);
     emit finished();

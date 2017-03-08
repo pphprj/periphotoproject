@@ -86,6 +86,8 @@ private slots:
 
     void refreshProjectsSlot();
 
+    void on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index);
+
 private:
     void InitDatabase();
     void InitInterface();

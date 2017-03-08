@@ -382,7 +382,7 @@ documentation</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QTableWidget" name="tableWidgetPhotosSearch"/>
+              <widget class="QTableWidget" name="tableWidgetSearchResult"/>
              </item>
             </layout>
            </widget>
