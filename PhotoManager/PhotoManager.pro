@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     page.cpp \
     additionpage.cpp \
     editdbpage.cpp \
-    searchpage.cpp
+    searchpage.cpp \
+    searchpagemodel.cpp
 
 HEADERS  += mainwindow.h \
     databasemanager.h \
@@ -73,7 +74,8 @@ HEADERS  += mainwindow.h \
     page.h \
     additionpage.h \
     editdbpage.h \
-    searchpage.h
+    searchpage.h \
+    searchpagemodel.h
 
 FORMS    += mainwindow.ui \
     attributeseditdialog.ui \

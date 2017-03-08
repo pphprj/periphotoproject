@@ -1,10 +1,11 @@
 #ifndef SEARCHPAGE_H
 #define SEARCHPAGE_H
 
-#include <QTableWidget>
+#include <QTableView>
 
 #include "page.h"
 #include "photosearcher.h"
+#include "searchpagemodel.h"
 
 
 class SearchPage : public Page
@@ -17,7 +18,7 @@ public:
     virtual void CreateLoader();
     virtual void ClearInterface();
 
-    void InitSearchPageInterface(QDateEdit* beginInterval, QDateEdit* endInterval, QTableWidget* tableResults,
+    void InitSearchPageInterface(QDateEdit* beginInterval, QDateEdit* endInterval, QTableView* tableResults,
                                  const QVector<QCheckBox*>& filterCategories, QCheckBox* filterByDate, QDateEdit* filterDate);
 
     void SearchPhotos();
@@ -35,21 +36,21 @@ public:
 public slots:
     void showContextMenu(QPoint pos);
 
-    void saveSelected(QTableWidgetItem* item);
-    void printSelected(QTableWidgetItem* item);
-    void removeSelected(QTableWidgetItem* item);
-    void editSelected(QTableWidgetItem* item);
+    void saveSelected(const QModelIndex& item);
+    void printSelected(const QModelIndex& item);
+    void removeSelected(const QModelIndex& item);
+    void editSelected(const QModelIndex& item);
 
     void sectionClickedSlot(int column);
     void checkBoxClickedSlot();
 
 private:
-    void RemoveItem(QTableWidgetItem* item);
+    void RemoveItem(const QModelIndex& item);
 
 private:
     QDateEdit* _beginInterval;
     QDateEdit* _endInterval;
-    QTableWidget* _tableResults;
+    QTableView* _tableResults;
     QVector<QCheckBox*> _filterCategories;
     QCheckBox* _filterByDate;
     QDateEdit* _filterDate;

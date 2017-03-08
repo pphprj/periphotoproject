@@ -1,6 +1,8 @@
 #include "resultcontextmenu.h"
 
-ResultContextMenu::ResultContextMenu(QPoint pos, QTableWidget *table, bool showRemove, QObject *parent) :
+#include <QStandardItemModel>
+
+ResultContextMenu::ResultContextMenu(QPoint pos, QTableView *table, bool showRemove, QObject *parent) :
     QObject(parent)
 {
     _table = table;
@@ -16,10 +18,10 @@ ResultContextMenu::ResultContextMenu(QPoint pos, QTableWidget *table, bool showR
         _remove = _contextMenu->addAction(tr("Remove"));
     }
 
-    connect(this, SIGNAL(save(QTableWidgetItem*)), parent, SLOT(saveSelected(QTableWidgetItem*)));
-    connect(this, SIGNAL(print(QTableWidgetItem*)), parent, SLOT(printSelected(QTableWidgetItem*)));
-    connect(this, SIGNAL(edit(QTableWidgetItem*)), parent, SLOT(editSelected(QTableWidgetItem*)));
-    connect(this, SIGNAL(remove(QTableWidgetItem*)), parent, SLOT(removeSelected(QTableWidgetItem*)));
+    connect(this, SIGNAL(save(const QModelIndex&)), parent, SLOT(saveSelected(const QModelIndex&)));
+    connect(this, SIGNAL(print(const QModelIndex&)), parent, SLOT(printSelected(const QModelIndex&)));
+    connect(this, SIGNAL(edit(const QModelIndex&)), parent, SLOT(editSelected(const QModelIndex&)));
+    connect(this, SIGNAL(remove(const QModelIndex&)), parent, SLOT(removeSelected(const QModelIndex&)));
 }
 
 
@@ -30,8 +32,9 @@ ResultContextMenu::~ResultContextMenu()
 
 void ResultContextMenu::Execute()
 {
-    QTableWidgetItem* item = _table->itemAt(_pos);
-    if (item == nullptr) return;
+    //QStandardItemModel* model = qobject_cast<QStandardItemModel*>(_table->model());
+    QModelIndex item = _table->indexAt(_pos);
+    if (!item.isValid()) return;
 
     QAction* selectedAction = _contextMenu->exec(_table->mapToGlobal(_pos));
 

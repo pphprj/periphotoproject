@@ -29,11 +29,16 @@ void SearchPage::CreateLoader()
 
 void SearchPage::ClearInterface()
 {
-    _tableResults->clear();
+    //_tableResults->clear();
+    SearchPageModel* model = qobject_cast<SearchPageModel*>(_tableResults->model());
+    if (model != nullptr)
+    {
+        model->clear();
+    }
     _searchResult.clear();
 }
 
-void SearchPage::InitSearchPageInterface(QDateEdit *beginInterval, QDateEdit *endInterval, QTableWidget *tableResults,
+void SearchPage::InitSearchPageInterface(QDateEdit *beginInterval, QDateEdit *endInterval, QTableView *tableResults,
                                          const QVector<QCheckBox *> &filterCategories, QCheckBox* filterByDate, QDateEdit* filterDate)
 {
     _beginInterval = beginInterval;
@@ -73,7 +78,7 @@ void SearchPage::SearchPhotos()
     if (!result)
         return;
 
-    _tableResults->setRowCount(_searchResult.length());
+    //_tableResults->setRowCount(_searchResult.length());
     QStringList headers;
     headers << tr("Preview")
             << tr("Photo date")
@@ -84,18 +89,20 @@ void SearchPage::SearchPhotos()
             << tr("Features")
             << tr("Description");
 
-    _tableResults->setHorizontalHeaderLabels(headers);
+    //_tableResults->setHorizontalHeaderLabels(headers);
+    SearchPageModel* model = qobject_cast<SearchPageModel*>(_tableResults->model());
+    model->setHorizontalHeaderLabels(headers);
 
     for (int i = 0; i < _searchResult.length(); i++)
     {
        SearchResult fnp = _searchResult[i];
 
-       QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
+       QStandardItem* itemProjecNo = new QStandardItem(fnp.projectNo);
 
        QString text = fnp.projectName.isEmpty() ? fnp.filePath : fnp.projectName;
-       QTableWidgetItem* itemName = new QTableWidgetItem(text);
+       QStandardItem* itemName = new QStandardItem(text);
 
-       QTableWidgetItem* itemImage = new QTableWidgetItem();
+       QStandardItem* itemImage = new QStandardItem();
        if (!fnp.previewPath.isEmpty())
        {
            itemImage->setSizeHint(QSize(100, 100));
@@ -103,21 +110,21 @@ void SearchPage::SearchPhotos()
            itemImage->setIcon(QIcon(pm));
        }
 
-       QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString("yyyy-MM-dd"));
+       QStandardItem* itemDate = new QStandardItem(fnp.photoDate.toString("yyyy-MM-dd"));
 
        QVector<FormworkSystem> selectedFormworks;
        _searcher->SelectedFormworkSystems(selectedFormworks, fnp.photoId);
        QString formworks = TableAbstractElemManager::CreateNamesList(selectedFormworks);
-       QTableWidgetItem* itemFormworks = new QTableWidgetItem(formworks);
+       QStandardItem* itemFormworks = new QStandardItem(formworks);
 
 
        QVector<Feature> selectedFeatures;
        _searcher->SelectedFeatures(selectedFeatures, fnp.photoId);
        QString features = TableAbstractElemManager::CreateNamesList(selectedFeatures);
-       QTableWidgetItem* itemFeatures = new QTableWidgetItem(features);
+       QStandardItem* itemFeatures = new QStandardItem(features);
 
-       QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
-       QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
+       QStandardItem* itemCompany = new QStandardItem(fnp.companyName);
+       QStandardItem* itemDescription = new QStandardItem(fnp.description);
 
        itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
        itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
@@ -127,14 +134,18 @@ void SearchPage::SearchPhotos()
        itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
        itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
 
-       _tableResults->setItem(i, 0, itemImage);
+       QList<QStandardItem*> items;
+       items << itemImage << itemDate << itemProjecNo << itemName << itemCompany << itemFormworks << itemFeatures << itemDescription;
+       model->appendRow(items);
+
+       /*_tableResults->setItem(i, 0, itemImage);
        _tableResults->setItem(i, 1, itemDate);
        _tableResults->setItem(i, 2, itemProjecNo);
        _tableResults->setItem(i, 3, itemName);
        _tableResults->setItem(i, 4, itemCompany);
        _tableResults->setItem(i, 5, itemFormworks);
        _tableResults->setItem(i, 6, itemFeatures);
-       _tableResults->setItem(i, 7, itemDescription);
+       _tableResults->setItem(i, 7, itemDescription);*/
 
     }
     QHeaderView* header = _tableResults->verticalHeader();
@@ -148,7 +159,9 @@ void SearchPage::SavePhotos()
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     QString saveDirectory = QFileDialog::getExistingDirectory(nullptr, tr("Save images"), destination, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     bool result = true;
-    QList<QTableWidgetItem*> selected = _tableResults->selectedItems();
+    QItemSelectionModel* selectModel = _tableResults->selectionModel();
+    QModelIndexList selected = selectModel->selectedIndexes();
+    //QList<QTableWidgetItem*> selected = _tableResults->selectedItems();
 
     if (selected.empty())
     {
@@ -161,8 +174,8 @@ void SearchPage::SavePhotos()
     {
         for (int i = 0; i < selected.length(); i++)
         {
-            QTableWidgetItem* item = selected[i];
-            SearchResult res = _searchResult[item->row()];
+            QModelIndex item = selected[i];
+            SearchResult res = _searchResult[item.row()];
             result &= _fileManager->SaveFileToDirectory(res.filePath, saveDirectory);
         }
     }
@@ -181,7 +194,8 @@ void SearchPage::PrintPhotos()
 
         if(printer->ShowDialog())
         {
-            QList<QTableWidgetItem*> selected = _tableResults->selectedItems();
+            QItemSelectionModel* selectModel = _tableResults->selectionModel();
+            QModelIndexList selected = selectModel->selectedIndexes();
 
             if (selected.empty())
             {
@@ -194,8 +208,8 @@ void SearchPage::PrintPhotos()
             {
                 for (int i = 0; i < selected.length(); i++)
                 {
-                    QTableWidgetItem* item = selected[i];
-                    SearchResult res = _searchResult[item->row()];
+                    QModelIndex item = selected[i];
+                    SearchResult res = _searchResult[item.row()];
                     printer->PrintImage(res.filePath);
                 }
             }
@@ -217,19 +231,21 @@ void SearchPage::DeletePhotos()
         return;
     }
 
-    QList<QTableWidgetItem*> selected = _tableResults->selectedItems();
+    QItemSelectionModel* selectModel = _tableResults->selectionModel();
+    SearchPageModel* model = qobject_cast<SearchPageModel*>(_tableResults->model());
+    QModelIndexList selected = selectModel->selectedIndexes();
 
     if (selected.empty())
     {
-        for (int i = 0; i < _tableResults->rowCount(); i++)
+        for (int i = 0; i < model->rowCount(); i++)
         {
-            QTableWidgetItem* item = _tableResults->item(i, 0);
+            QModelIndex item = model->index(i, 0);
             RemoveItem(item);
         }
     }
     else
     {
-        foreach(QTableWidgetItem* item, selected)
+        foreach(QModelIndex item, selected)
         {
             RemoveItem(item);
         }
@@ -241,14 +257,14 @@ void SearchPage::RefreshProjects()
     _searcher->RefreshProjectNames();
 }
 
-void SearchPage::RemoveItem(QTableWidgetItem *item)
+void SearchPage::RemoveItem(const QModelIndex& item)
 {
-    if (item == nullptr)
+    if (!item.isValid())
     {
         return;
     }
 
-    int index = item->row();
+    int index = item.row();
     QString filePath = _searchResult[index].filePath;
     _fileManager->DeleteFileFromDirectory(filePath);
     QString previewPath = _searchResult[index].previewPath;
@@ -257,7 +273,9 @@ void SearchPage::RemoveItem(QTableWidgetItem *item)
     _dbm->DeletePhoto(_searchResult[index].photoId);
     _dbm->DeletePreview(_searchResult[index].photoId);
 
-    _tableResults->removeRow(index);
+    //_tableResults->removeRow(index);
+    SearchPageModel* model = qobject_cast<SearchPageModel*>(_tableResults->model());
+    model->removeRow(index);
 
     _searchResult.remove(index);
 }
@@ -323,14 +341,14 @@ void SearchPage::showContextMenu(QPoint pos)
     contexMenu.Execute();
 }
 
-void SearchPage::saveSelected(QTableWidgetItem* item)
+void SearchPage::saveSelected(const QModelIndex& item)
 {
-    if (item == nullptr)
+    if (!item.isValid())
     {
         return;
     }
 
-    int index = item->row();
+    int index = item.row();
     QString filePath = _searchResult[index].filePath;
     QString destination = QDir::homePath() + "\\" + QStandardPaths::displayName(QStandardPaths::PicturesLocation) + "\\";
     QString destinationFile = QFileDialog::getSaveFileName(nullptr, tr("Save file"), destination, tr("Images (*.jpg *.jpeg);;Documents (*.pdf)"));
@@ -344,16 +362,16 @@ void SearchPage::saveSelected(QTableWidgetItem* item)
     }
 }
 
-void SearchPage::printSelected(QTableWidgetItem *item)
+void SearchPage::printSelected(const QModelIndex& item)
 {
     try
     {
-        if (item == nullptr)
+        if (!item.isValid())
         {
             return;
         }
 
-        int index = item->row();
+        int index = item.row();
         QString filePath = _searchResult[index].filePath;
         ImagePrinter* printer = new ImagePrinter();
 
@@ -370,10 +388,10 @@ void SearchPage::printSelected(QTableWidgetItem *item)
     }
 }
 
-void SearchPage::editSelected(QTableWidgetItem *item)
+void SearchPage::editSelected(const QModelIndex& item)
 {
     AttributesEditDialog* dlg = new AttributesEditDialog();
-    int index = _tableResults->row(item);
+    int index = item.row();
     dlg->LoadSelected(_searcher, _searchResult[index].photoId);
     if (dlg->exec() == QDialog::Accepted)
     {
@@ -382,7 +400,7 @@ void SearchPage::editSelected(QTableWidgetItem *item)
     delete dlg;
 }
 
-void SearchPage::removeSelected(QTableWidgetItem *item)
+void SearchPage::removeSelected(const QModelIndex& item)
 {
     ConfirmDeleteDialog confirm(_cfg->GetDeletePassword());
     if (confirm.exec())
@@ -393,6 +411,8 @@ void SearchPage::removeSelected(QTableWidgetItem *item)
 
 void SearchPage::sectionClickedSlot(int column)
 {
+    SearchPageModel* model = qobject_cast<SearchPageModel*>(_tableResults->model());
+    model->setSearchResults(_searchResult);
     Qt::SortOrder sortOrder = _tableResults->horizontalHeader()->sortIndicatorOrder();
     _tableResults->sortByColumn(column, sortOrder);
 }

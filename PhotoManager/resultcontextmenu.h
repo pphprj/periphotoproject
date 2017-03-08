@@ -2,7 +2,7 @@
 #define RESULTCONTEXTMENU_H
 
 #include <QObject>
-#include <QTableWidget>
+#include <QTableView>
 #include <QMenu>
 #include <QAction>
 
@@ -10,19 +10,19 @@ class ResultContextMenu : public QObject
 {
     Q_OBJECT
 public:
-    explicit ResultContextMenu(QPoint pos, QTableWidget* table, bool showRemove, QObject *parent = 0);
+    explicit ResultContextMenu(QPoint pos, QTableView* table, bool showRemove, QObject *parent = 0);
     ~ResultContextMenu();
 
     void Execute();
 
 signals:
-    void save(QTableWidgetItem* item);
-    void print(QTableWidgetItem* item);
-    void edit(QTableWidgetItem* item);
-    void remove(QTableWidgetItem* remove);
+    void save(const QModelIndex& item);
+    void print(const QModelIndex& item);
+    void edit(const QModelIndex& item);
+    void remove(const QModelIndex& remove);
 
 private:
-    QTableWidget* _table;
+    QTableView* _table;
     QPoint _pos;
     QMenu* _contextMenu;
     QAction* _save;

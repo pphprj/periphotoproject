@@ -82,9 +82,12 @@ void MainWindow::InitInterface()
         ui->pushButtonDeleteSelected->setVisible(false);
     }
 
-    ui->tableWidgetSearchResult->setIconSize(QSize(100, 100));
-    ui->tableWidgetSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetSearchResult->setColumnCount(8);
+    ui->tableViewSearchResult->setIconSize(QSize(100, 100));
+    ui->tableViewSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    SearchPageModel* model = new SearchPageModel();
+    ui->tableViewSearchResult->setModel(model);
+    model->setColumnCount(8);
     QStringList headers;
     headers << tr("Preview")
             << tr("Photo date")
@@ -94,8 +97,9 @@ void MainWindow::InitInterface()
             << tr("Formwork systems")
             << tr("Features")
             << tr("Description");
-    ui->tableWidgetSearchResult->setHorizontalHeaderLabels(headers);
-    ui->tableWidgetSearchResult->resizeColumnsToContents();
+
+    model->setHorizontalHeaderLabels(headers);
+    ui->tableViewSearchResult->resizeColumnsToContents();
 
 
     _addPage = new AdditionPage(_dbm, _fileManager, _cfg, this);
@@ -121,7 +125,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxInProgressFilters);
     cbxs.push_back(ui->checkBoxCurrentStateFilters);
     cbxs.push_back(ui->checkBoxMarketingFilters);
-    _searchPage->InitSearchPageInterface(ui->dateEditPhotoIntervalBegin, ui->dateEditPhotoIntervalEnd, ui->tableWidgetSearchResult,
+    _searchPage->InitSearchPageInterface(ui->dateEditPhotoIntervalBegin, ui->dateEditPhotoIntervalEnd, ui->tableViewSearchResult,
                                          cbxs, ui->checkBoxFilterByDate, ui->dateEditOnly);
     _searchPage->CreateLoader();
 
@@ -394,7 +398,7 @@ void MainWindow::on_pushButtonPrintSelected_clicked()
 
 void MainWindow::on_checkBoxOrderByName_clicked()
 {
-    ui->tableWidgetSearchResult->sortItems(1);
+    ui->tableViewSearchResult->sortByColumn(3);
 }
 
 void MainWindow::on_dateEditOnly_dateChanged(const QDate &date)
@@ -407,11 +411,6 @@ void MainWindow::on_dateEditOnly_dateChanged(const QDate &date)
 void MainWindow::on_checkBoxFilterByDate_clicked()
 {
    _searchPage->OrderByDate();
-}
-
-void MainWindow::on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index)
-{
-    _searchPage->ShowItemPreview(index.row());
 }
 
 void MainWindow::on_actionE_xit_triggered()
@@ -480,8 +479,7 @@ void MainWindow::refreshProjectsSlot()
     _searchPage->RefreshProjects();
 }
 
-
-void MainWindow::on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index)
+void MainWindow::on_tableViewSearchResult_doubleClicked(const QModelIndex &index)
 {
-    _searchPage->ShowItemPreview(index.row());
+     _searchPage->ShowItemPreview(index.row());
 }

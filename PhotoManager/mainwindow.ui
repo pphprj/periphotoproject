@@ -38,7 +38,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabAdd">
          <attribute name="title">
@@ -382,7 +382,7 @@ documentation</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QTableWidget" name="tableWidgetSearchResult"/>
+              <widget class="QTableView" name="tableViewSearchResult"/>
              </item>
             </layout>
            </widget>

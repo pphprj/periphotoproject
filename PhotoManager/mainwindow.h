@@ -72,8 +72,6 @@ private slots:
 
     void on_checkBoxFilterByDate_clicked();
 
-    void on_tableWidgetPhotosSearch_doubleClicked(const QModelIndex &index);
-
     void on_actionE_xit_triggered();
 
     void on_action_About_triggered();
@@ -86,7 +84,7 @@ private slots:
 
     void refreshProjectsSlot();
 
-    void on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index);
+    void on_tableViewSearchResult_doubleClicked(const QModelIndex &index);
 
 private:
     void InitDatabase();
