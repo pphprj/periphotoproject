@@ -24,7 +24,7 @@ public:
     virtual ~Page();
 
     virtual void InitInterface(QLineEdit* projectNo, QLineEdit* projectName, QDateEdit* projectDate,
-                               QLineEdit* companyName, QPlainTextEdit* description,
+                               QLineEdit* companyName, QLineEdit* address, QPlainTextEdit* description,
                        QComboBox* formorkSystems, QComboBox* features, const QVector<QCheckBox*>& categories);
 
     virtual void FillInterface();
@@ -56,6 +56,7 @@ protected:
     QLineEdit* _projectName;
     QDateEdit* _projectDate;
     QLineEdit* _companyName;
+    QLineEdit* _address;
     QPlainTextEdit* _description;
     QComboBox* _formorkSystems;
     QComboBox* _features;

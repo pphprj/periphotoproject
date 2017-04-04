@@ -35,7 +35,7 @@ bool PhotoLoader::RefreshProjectNames()
     return result;
 }
 
-bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate, QString& companyName, QString& description,
+bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDate& projectDate, QString& companyName, QString& address, QString& description,
                                    QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QString& selectedCategories,
                                    QVector<FileInfoStruct>& files, QVector<QFileInfo>& previews)
 {
@@ -52,7 +52,7 @@ bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDa
 
     if (projectID == 0)
     {
-        if (_dbm->InsertProject(projectNo, projectName, projectDate, companyName, description))
+        if (_dbm->InsertProject(projectNo, projectName, projectDate, companyName, address, description))
         {
             projectID = _dbm->CheckProjectNo(projectNo);
         }
@@ -71,6 +71,13 @@ bool PhotoLoader::InsertToDatabase(QString& projectNo, QString& projectName, QDa
         if (companyNameFromDB.isEmpty())
         {
             _dbm->UpdateCompanyName(projectID, companyName);
+        }
+
+        QString addressFromDB;
+        _dbm->SelectAddress(projectID, addressFromDB);
+        if (addressFromDB.isEmpty())
+        {
+            _dbm->UpdateAddress(projectID, address);
         }
 
         QString descriptionFormDB;

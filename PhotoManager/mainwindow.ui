@@ -57,7 +57,57 @@
              <string>Project</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
-             <item row="3" column="1">
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelProjectName">
+               <property name="text">
+                <string>Project Name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="labelProjectFeatures">
+               <property name="text">
+                <string>Features</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="2">
+              <widget class="QComboBox" name="comboBoxSystems"/>
+             </item>
+             <item row="6" column="2">
+              <widget class="QComboBox" name="comboBoxFeatures"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="lineEditProjectNo"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLineEdit" name="lineEditProjectName"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelProjectNo">
+               <property name="text">
+                <string>Project No</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="labelDescriptiton">
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QPlainTextEdit" name="plainTextEditDescription">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>50</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
               <widget class="QLineEdit" name="lineEditCompanyName"/>
              </item>
              <item row="3" column="0">
@@ -67,14 +117,14 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="2" column="2">
               <widget class="QDateEdit" name="dateEditProjectDate">
                <property name="calendarPopup">
                 <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
+             <item row="5" column="0">
               <widget class="QLabel" name="labelSystems">
                <property name="text">
                 <string>Systems</string>
@@ -88,55 +138,15 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelProjectName">
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelAddress">
                <property name="text">
-                <string>Project Name</string>
+                <string>Address</string>
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="labelProjectFeatures">
-               <property name="text">
-                <string>Features</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QComboBox" name="comboBoxSystems"/>
-             </item>
-             <item row="5" column="1">
-              <widget class="QComboBox" name="comboBoxFeatures"/>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEditProjectNo"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEditProjectName"/>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelProjectNo">
-               <property name="text">
-                <string>Project No</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="0">
-              <widget class="QLabel" name="labelDescriptiton">
-               <property name="text">
-                <string>Description</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="1">
-              <widget class="QPlainTextEdit" name="plainTextEditDescription">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>50</height>
-                </size>
-               </property>
-              </widget>
+             <item row="4" column="2">
+              <widget class="QLineEdit" name="lineEditAddress"/>
              </item>
             </layout>
            </widget>
@@ -304,6 +314,22 @@ documentation</string>
                 <string>Marketing</string>
                </property>
               </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Preferred</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -517,6 +543,16 @@ documentation</string>
              </item>
              <item row="3" column="1">
               <widget class="QLineEdit" name="lineEditCompanyNameSearch"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelAddressSearch">
+               <property name="text">
+                <string>Address</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="lineEditAddressSearch"/>
              </item>
             </layout>
            </widget>

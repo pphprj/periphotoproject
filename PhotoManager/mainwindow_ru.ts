@@ -10,28 +10,28 @@
     <message>
         <location filename="aboutwindow.ui" line="14"/>
         <source>About</source>
-        <translation type="unfinished">О программе...</translation>
+        <translation>О программе...</translation>
     </message>
     <message>
         <location filename="aboutwindow.ui" line="22"/>
         <source>Photo Manager</source>
-        <translation type="unfinished">Каталогизатор проектов опалубочных систем</translation>
+        <translation>Каталогизатор проектов опалубочных систем</translation>
     </message>
     <message>
         <location filename="aboutwindow.ui" line="29"/>
-        <source>1.3.0 build 06-02-2017 20-28</source>
-        <oldsource>1.1.1 build 30-01-2017 21-36</oldsource>
-        <translation type="unfinished"></translation>
+        <source>1.4.0 build 04-04-2017 20-50</source>
+        <oldsource>1.3.0 build 06-02-2017 20-28</oldsource>
+        <translation></translation>
     </message>
     <message>
         <location filename="aboutwindow.ui" line="36"/>
         <source>Peri</source>
-        <translation type="unfinished">ООО &quot;Пери&quot;</translation>
+        <translation>ООО &quot;Пери&quot;</translation>
     </message>
     <message>
         <location filename="aboutwindow.ui" line="43"/>
         <source>Harlamov Roman</source>
-        <translation type="unfinished">Харламов Роман</translation>
+        <translation>Харламов Роман</translation>
     </message>
 </context>
 <context>
@@ -77,12 +77,12 @@
         <translation>Пожалуйста, выберите фото!</translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="177"/>
+        <location filename="additionpage.cpp" line="178"/>
         <source>Successfully</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="177"/>
+        <location filename="additionpage.cpp" line="178"/>
         <source>Photos were added to DB</source>
         <translation>Фото были добавлены в БД</translation>
     </message>
@@ -202,16 +202,16 @@ documentation</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.ui" line="153"/>
-        <location filename="mainwindow.ui" line="280"/>
+        <location filename="mainwindow.ui" line="163"/>
+        <location filename="mainwindow.ui" line="290"/>
         <source>Categories</source>
         <translation>Категории</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="101"/>
-        <location filename="mainwindow.ui" line="446"/>
-        <location filename="mainwindow.ui" line="679"/>
-        <location filename="mainwindow.cpp" line="95"/>
+        <location filename="mainwindow.ui" line="70"/>
+        <location filename="mainwindow.ui" line="472"/>
+        <location filename="mainwindow.ui" line="715"/>
+        <location filename="mainwindow.cpp" line="96"/>
         <source>Features</source>
         <translation>Особенности</translation>
     </message>
@@ -222,157 +222,164 @@ documentation</source>
         <translation>Каталогизатор проектов опалубочных систем</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="222"/>
+        <location filename="mainwindow.ui" line="232"/>
         <location filename="mainwindow.cpp" line="89"/>
         <source>Preview</source>
         <translation>Превью</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="94"/>
-        <location filename="mainwindow.ui" line="453"/>
+        <location filename="mainwindow.ui" line="63"/>
+        <location filename="mainwindow.ui" line="479"/>
         <source>Project Name</source>
         <translation>Название проекта</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="80"/>
-        <location filename="mainwindow.ui" line="402"/>
+        <location filename="mainwindow.ui" line="130"/>
+        <location filename="mainwindow.ui" line="428"/>
         <source>Systems</source>
         <translation>Опалубочные системы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="87"/>
-        <location filename="mainwindow.ui" line="432"/>
+        <location filename="mainwindow.ui" line="137"/>
+        <location filename="mainwindow.ui" line="458"/>
         <source>Project Date</source>
         <translation>Дата создания проекта</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="200"/>
-        <location filename="mainwindow.ui" line="381"/>
+        <location filename="mainwindow.ui" line="210"/>
+        <location filename="mainwindow.ui" line="407"/>
         <source>Photos</source>
         <translation>Фото</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="57"/>
-        <location filename="mainwindow.ui" line="393"/>
+        <location filename="mainwindow.ui" line="419"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="274"/>
+        <location filename="mainwindow.ui" line="284"/>
         <source>Search photos</source>
         <translation>Поиск фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="460"/>
+        <location filename="mainwindow.ui" line="486"/>
         <source>Interval begin</source>
         <translation>Начало интервала</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="467"/>
+        <location filename="mainwindow.ui" line="493"/>
         <source>Interval end</source>
         <translation>Конец интервала</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="547"/>
+        <location filename="mainwindow.ui" line="583"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="159"/>
-        <location filename="mainwindow.ui" line="289"/>
-        <location filename="mainwindow.ui" line="357"/>
+        <location filename="mainwindow.ui" line="169"/>
+        <location filename="mainwindow.ui" line="299"/>
+        <location filename="mainwindow.ui" line="383"/>
         <source>Chronology</source>
         <translation>Хронология</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="166"/>
+        <location filename="mainwindow.ui" line="176"/>
         <source>Business photo,
 documentation</source>
         <translation>Рабочее фото,
 		документация</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="527"/>
+        <location filename="mainwindow.ui" line="563"/>
         <source>Save selected photos</source>
         <translation>Сохранить выбранные фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="554"/>
+        <location filename="mainwindow.ui" line="590"/>
         <source>Print selected photos</source>
         <translation>Распечатать выбранные фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="296"/>
+        <location filename="mainwindow.ui" line="306"/>
         <source>Business photo, 
 documentation</source>
         <translation>Рабочее фото,
 		документация</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="66"/>
-        <location filename="mainwindow.ui" line="514"/>
+        <location filename="mainwindow.ui" line="116"/>
+        <location filename="mainwindow.ui" line="540"/>
         <location filename="mainwindow.cpp" line="93"/>
         <source>Company</source>
         <translation>Компания</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="314"/>
+        <location filename="mainwindow.ui" line="144"/>
+        <location filename="mainwindow.ui" line="550"/>
+        <location filename="mainwindow.cpp" line="94"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="340"/>
         <source>Filters</source>
         <translation>Фильтры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="320"/>
+        <location filename="mainwindow.ui" line="346"/>
         <source>Order by name</source>
         <translation>Упорядочить по имени</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="327"/>
+        <location filename="mainwindow.ui" line="353"/>
         <source>Filter by date</source>
         <translation>Фильтровать по дате</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="364"/>
+        <location filename="mainwindow.ui" line="390"/>
         <source>Business photo, documentation</source>
         <translation>Рабочее фото, документация</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="561"/>
+        <location filename="mainwindow.ui" line="597"/>
         <source>Delete selected photos</source>
         <translation>Удалить выбранные фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="569"/>
+        <location filename="mainwindow.ui" line="605"/>
         <source>Edit DB</source>
         <translation>Редактировать БД</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="583"/>
-        <location filename="mainwindow.cpp" line="94"/>
+        <location filename="mainwindow.ui" line="619"/>
+        <location filename="mainwindow.cpp" line="95"/>
         <source>Formwork systems</source>
         <translation>Опалубочные системы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="772"/>
+        <location filename="mainwindow.ui" line="808"/>
         <source>&amp;File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="778"/>
+        <location filename="mainwindow.ui" line="814"/>
         <source>&amp;Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="787"/>
+        <location filename="mainwindow.ui" line="823"/>
         <source>E&amp;xit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="792"/>
+        <location filename="mainwindow.ui" line="828"/>
         <source>&amp;About</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="266"/>
+        <location filename="mainwindow.ui" line="276"/>
         <source>Files were copied</source>
         <translation>Файлов скопировано</translation>
     </message>
@@ -381,12 +388,13 @@ documentation</source>
         <translation type="obsolete">Дата создания проекта</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="92"/>
         <source>Project name</source>
-        <translation type="obsolete">Название проекта</translation>
+        <translation>Название проекта</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="120"/>
-        <location filename="mainwindow.ui" line="418"/>
+        <location filename="mainwindow.ui" line="89"/>
+        <location filename="mainwindow.ui" line="444"/>
         <location filename="mainwindow.cpp" line="91"/>
         <source>Project No</source>
         <translation>Номер проекта</translation>
@@ -404,35 +412,35 @@ documentation</source>
         <translation type="obsolete">В процессе</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="174"/>
-        <location filename="mainwindow.ui" line="304"/>
-        <location filename="mainwindow.ui" line="371"/>
+        <location filename="mainwindow.ui" line="184"/>
+        <location filename="mainwindow.ui" line="314"/>
+        <location filename="mainwindow.ui" line="397"/>
         <source>Marketing</source>
         <translation>Маркетинг</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="232"/>
+        <location filename="mainwindow.ui" line="242"/>
         <source>Add to DB</source>
         <translation>Добавить в БД</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="601"/>
-        <location filename="mainwindow.ui" line="732"/>
+        <location filename="mainwindow.ui" line="637"/>
+        <location filename="mainwindow.ui" line="768"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="252"/>
+        <location filename="mainwindow.ui" line="262"/>
         <source>Load photo</source>
         <translation>Загрузить фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="697"/>
+        <location filename="mainwindow.ui" line="733"/>
         <source>New feature</source>
         <translation>Новая особенность</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="620"/>
+        <location filename="mainwindow.ui" line="656"/>
         <source>New system</source>
         <translation>Новая опл.система</translation>
     </message>
@@ -446,22 +454,17 @@ documentation</source>
         <translation type="obsolete">Редактировать БД</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="92"/>
-        <source>Project name / File path</source>
-        <translation>Название проекта / Путь к файлу</translation>
-    </message>
-    <message>
         <location filename="mainwindow.cpp" line="90"/>
         <source>Photo date</source>
         <translation>Дата создания фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="151"/>
+        <location filename="mainwindow.cpp" line="154"/>
         <source>Open images</source>
         <translation>Открыть фото</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="151"/>
+        <location filename="mainwindow.cpp" line="154"/>
         <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation>Фото (*.jpg *.jpeg);;Документы (*.pdf)</translation>
     </message>
@@ -494,8 +497,8 @@ documentation</source>
         <translation type="obsolete">Опалубочная система</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="127"/>
-        <location filename="mainwindow.cpp" line="96"/>
+        <location filename="mainwindow.ui" line="96"/>
+        <location filename="mainwindow.cpp" line="97"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
@@ -540,12 +543,12 @@ documentation</source>
         <translation type="obsolete">Новый элемент</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="305"/>
+        <location filename="mainwindow.cpp" line="308"/>
         <source>Apply changes</source>
         <translation>Применить изменения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="305"/>
+        <location filename="mainwindow.cpp" line="308"/>
         <source>Would you have to apply changes?</source>
         <translation>Вы желаете внести изменения?</translation>
     </message>
@@ -584,69 +587,78 @@ documentation</source>
 <context>
     <name>SearchPage</name>
     <message>
-        <location filename="searchpage.cpp" line="78"/>
+        <location filename="searchpage.cpp" line="85"/>
         <source>Preview</source>
         <translation>Превью</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="80"/>
+        <location filename="searchpage.cpp" line="87"/>
         <source>Project No</source>
         <translation>Номер проекта</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="81"/>
         <source>Project name / File path</source>
-        <translation>Название проекта / Путь к файлу</translation>
+        <translation type="vanished">Название проекта / Путь к файлу</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="79"/>
+        <location filename="searchpage.cpp" line="86"/>
         <source>Photo date</source>
         <translation>Дата создания фото</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="82"/>
+        <location filename="searchpage.cpp" line="88"/>
+        <source>Project name</source>
+        <translation>Название проекта</translation>
+    </message>
+    <message>
+        <location filename="searchpage.cpp" line="89"/>
         <source>Company</source>
         <translation>Компания</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="83"/>
+        <location filename="searchpage.cpp" line="90"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="searchpage.cpp" line="91"/>
         <source>Formwork systems</source>
         <translation>Опалубочные системы</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="84"/>
+        <location filename="searchpage.cpp" line="92"/>
         <source>Features</source>
         <translation>Особенности</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="85"/>
+        <location filename="searchpage.cpp" line="93"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="149"/>
+        <location filename="searchpage.cpp" line="168"/>
         <source>Save images</source>
         <translation>Сохранить изображения</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="172"/>
-        <location filename="searchpage.cpp" line="342"/>
+        <location filename="searchpage.cpp" line="196"/>
+        <location filename="searchpage.cpp" line="401"/>
         <source>Successfully</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="172"/>
-        <location filename="searchpage.cpp" line="342"/>
+        <location filename="searchpage.cpp" line="196"/>
+        <location filename="searchpage.cpp" line="401"/>
         <source>Photos were copied to directory</source>
         <translation>Фото были скопированы в директорию</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="336"/>
+        <location filename="searchpage.cpp" line="395"/>
         <source>Save file</source>
         <translation>Сохранить файлы</translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="336"/>
+        <location filename="searchpage.cpp" line="395"/>
         <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation>Фото (*.jpg *.jpeg);;Документы (*.pdf)</translation>
     </message>

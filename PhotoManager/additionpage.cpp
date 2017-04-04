@@ -162,10 +162,11 @@ void AdditionPage::finishedCopy()
     QDate projectDate = _projectDate->date();
     QString selectedCategories = TableAbstractElemManager::CreateIDsList(GetSelectedCategories());
     QString companyName = _companyName->text();
+    QString address = _address->text();
     QString description = _description->document()->toPlainText();
 
     bool result = _loader->InsertToDatabase(projectNo, projectName, projectDate,
-                                            companyName, description,
+                                            companyName, address, description,
                                             _selectedSystems, _selectedFeatures, selectedCategories,
                                             files,
                                             previews);

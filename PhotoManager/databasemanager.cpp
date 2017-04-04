@@ -54,7 +54,8 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
     updateCats.push_back(Categorie(2, "Business photo, documentation", ""));
     result = InsertOrUpdateElems(updateCats);
 
-    result = UpdateTable("Projects", "CompanyName", "VARCHAR(50)");
+    UpdateTable("Projects", "CompanyName", "VARCHAR(50)");
+    UpdateTable("Projects", "Address", "VARCHAR(200)");
 
     return result;
 }
@@ -283,6 +284,22 @@ bool DatabaseManager::SelectCompanyName(int projectId, QString &companyName)
     return true;
 }
 
+bool DatabaseManager::SelectAddress(int projectId, QString &address)
+{
+
+    if (!_db.isOpen()) return false;
+
+    QSqlQuery query;
+    if (query.exec("SELECT Address FROM Projects WHERE ID = " + QString::number(projectId)))
+    {
+        while (query.next())
+        {
+            address = query.value("CompanyName").toString();
+        }
+    }
+    return true;
+}
+
 bool DatabaseManager::SelectDescription(int projectId, QString &description)
 {
     if (!_db.isOpen()) return false;
@@ -302,6 +319,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QString &projectName,
                                    const QDate &projectDate,
                                    const QString& company,
+                                   const QString& address,
                                    const QVector<FormworkSystem> &formworkSystems,
                                    const QVector<Feature> &features,
                                    const QVector<Categorie> &categories,
@@ -315,7 +333,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
 
     QSqlQuery query;
     QString sqlQuery = (QString)"SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features," +
-            " Projects.Name, Projects.ProjectNo, Projects.CompanyName, Projects.Description  ";
+            " Projects.Name, Projects.ProjectNo, Projects.CompanyName, Projects.Address, Projects.Description  ";
     sqlQuery += "FROM Photos ";
 
     sqlQuery += "INNER JOIN Projects ";
@@ -335,6 +353,12 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     {
         sqlQuery += " AND ";
         sqlQuery += QString("(CompanyName LIKE ") + "'%" + company + "%')";
+    }
+
+    if (!address.isEmpty())
+    {
+        sqlQuery += " AND ";
+        sqlQuery += QString("(Address LIKE ") + "'%" + address + "%')";
     }
 
     sqlQuery += " WHERE ";
@@ -464,6 +488,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.projectName = query.value("Name").toString();
             fnp.projectNo = query.value("ProjectNo").toString();
             fnp.companyName = query.value("CompanyName").toString();
+            fnp.address = query.value("Address").toString();
             fnp.description = query.value("Description").toString();
             photos.push_back(fnp);
         }
@@ -611,6 +636,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
                                     const QString &name,
                                     const QDate &creationDate,
                                     const QString &companyName,
+                                    const QString &address,
                                     const QString &description)
 {
     if (!_db.isOpen()) return false;
@@ -623,6 +649,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += (!name.isEmpty() ? ", Name" : "");
     queryString += (!creationDate.isNull() ? ", CreationTime" : "");
     queryString += (!companyName.isEmpty() ? ", CompanyName" : "");
+    queryString += (!address.isEmpty() ? ", Address" : "");
     queryString += (!description.isEmpty() ? ", Description" : "");
     queryString += ")";
 
@@ -634,6 +661,7 @@ bool DatabaseManager::InsertProject(const QString &projectNo,
     queryString += (!name.isEmpty() ? ",'" + name + "'": "");
     queryString += (!creationDate.isNull() ? ",'" + creationDate.toString(_dateTimeFormat) + "'" : "");
     queryString += (!companyName.isEmpty() ? ",'" + companyName + "'" : "");
+    queryString += (!address.isEmpty() ? ",'" + address + "'" : "");
     queryString += (!description.isEmpty() ? ",'" + description + "'" : "");
     queryString += ")";
 
@@ -756,6 +784,24 @@ bool DatabaseManager::UpdateCompanyName(int projectId, const QString &companyNam
 
     QString queryStr = (QString)"UPDATE Projects SET " +
             "CompanyName = " + "'" + companyName + "'" + " " +
+            "WHERE ID = " + QString::number(projectId);
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return result;
+}
+
+bool DatabaseManager::UpdateAddress(int projectId, const QString &address)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"UPDATE Projects SET " +
+            "Address = " + "'" + address + "'" + " " +
             "WHERE ID = " + QString::number(projectId);
 
     QSqlQuery query;

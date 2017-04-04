@@ -64,11 +64,12 @@ void SearchPage::SearchPhotos()
     QString projectName = _projectName->text();
     QDate projectDate = _projectDate->date();
     QString company = _companyName->text();
+    QString address = _address->text();
 
     QDate intervalBegin = _beginInterval->date();
     QDate intervalEnd = _endInterval->date();
 
-    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate, company,
+    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate, company, address,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
                                             intervalBegin, intervalEnd,
                                             _searchResult);
@@ -84,8 +85,9 @@ void SearchPage::SearchPhotos()
     headers << tr("Preview")
             << tr("Photo date")
             << tr("Project No")
-            << tr("Project name / File path")
+            << tr("Project name")
             << tr("Company")
+            << tr("Address")
             << tr("Formwork systems")
             << tr("Features")
             << tr("Description")
@@ -102,7 +104,7 @@ void SearchPage::SearchPhotos()
 
        QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
 
-       QString text = fnp.projectName.isEmpty() ? fnp.filePath : fnp.projectName;
+       QString text = fnp.projectName;
        QTableWidgetItem* itemName = new QTableWidgetItem(text);
 
        QTableWidgetItem* itemImage = new QTableWidgetItem();
@@ -127,6 +129,7 @@ void SearchPage::SearchPhotos()
        QTableWidgetItem* itemFeatures = new QTableWidgetItem(features);
 
        QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
+       QTableWidgetItem* itemAddress = new QTableWidgetItem(fnp.address);
        QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
 
        QTableWidgetItem* itemHidden = new QTableWidgetItem(QString::number(i));
@@ -137,6 +140,7 @@ void SearchPage::SearchPhotos()
        itemFormworks->setFlags(itemFormworks->flags() ^ Qt::ItemIsEditable);
        itemFeatures->setFlags(itemFeatures->flags() ^ Qt::ItemIsEditable);
        itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
+       itemAddress->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
        itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
 
        _tableResults->setItem(i, 0, itemImage);
@@ -144,17 +148,18 @@ void SearchPage::SearchPhotos()
        _tableResults->setItem(i, 2, itemProjecNo);
        _tableResults->setItem(i, 3, itemName);
        _tableResults->setItem(i, 4, itemCompany);
-       _tableResults->setItem(i, 5, itemFormworks);
-       _tableResults->setItem(i, 6, itemFeatures);
-       _tableResults->setItem(i, 7, itemDescription);
-       _tableResults->setItem(i, 8, itemHidden);
+       _tableResults->setItem(i, 5, itemAddress);
+       _tableResults->setItem(i, 6, itemFormworks);
+       _tableResults->setItem(i, 7, itemFeatures);
+       _tableResults->setItem(i, 8, itemDescription);
+       _tableResults->setItem(i, 9, itemHidden);
 
     }
     QHeaderView* header = _tableResults->verticalHeader();
     header->setSectionResizeMode(QHeaderView::Fixed);
     header->setDefaultSectionSize(100);
     _tableResults->resizeColumnsToContents();
-    _tableResults->setColumnHidden(8, true);
+    _tableResults->setColumnHidden(9, true);
 }
 
 void SearchPage::SavePhotos()
@@ -258,6 +263,8 @@ void SearchPage::DeletePhotos()
             RemoveItem(item);
         }
     }
+
+    SearchPhotos();
 }
 
 void SearchPage::RefreshProjects()
@@ -442,6 +449,7 @@ void SearchPage::removeSelected(QTableWidgetItem *item)
     if (confirm.exec())
     {
         RemoveItem(item);
+        SearchPhotos();
     }
 }
 

@@ -22,6 +22,7 @@ struct SearchResult
     QString projectName;
     QString projectNo;
     QString companyName;
+    QString address;
     QString description;
     QDate photoDate;
 

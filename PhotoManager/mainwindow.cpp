@@ -84,20 +84,21 @@ void MainWindow::InitInterface()
 
     ui->tableWidgetSearchResult->setIconSize(QSize(100, 100));
     ui->tableWidgetSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetSearchResult->setColumnCount(9);
+    ui->tableWidgetSearchResult->setColumnCount(10);
     QStringList headers;
     headers << tr("Preview")
             << tr("Photo date")
             << tr("Project No")
-            << tr("Project name / File path")
+            << tr("Project name")
             << tr("Company")
+            << tr("Address")
             << tr("Formwork systems")
             << tr("Features")
             << tr("Description")
             << "";
     ui->tableWidgetSearchResult->setHorizontalHeaderLabels(headers);
     ui->tableWidgetSearchResult->resizeColumnsToContents();
-    ui->tableWidgetSearchResult->setColumnHidden(8, true);
+    ui->tableWidgetSearchResult->setColumnHidden(9, true);
 
 
     _addPage = new AdditionPage(_dbm, _fileManager, _cfg, this);
@@ -106,7 +107,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxCurrentState);
     cbxs.push_back(ui->checkBoxMarketing);
     _addPage->InitInterface(ui->lineEditProjectNo, ui->lineEditProjectName, ui->dateEditProjectDate,
-                            ui->lineEditCompanyName, ui->plainTextEditDescription,
+                            ui->lineEditCompanyName, ui->lineEditAddress, ui->plainTextEditDescription,
                             ui->comboBoxSystems, ui->comboBoxFeatures, cbxs);
     _addPage->InitAdditionPageInterface(ui->listWidgetPhotos, ui->progressBar);
     _addPage->CreateLoader();
@@ -117,7 +118,7 @@ void MainWindow::InitInterface()
     cbxs.push_back(ui->checkBoxCurrentStateSearch);
     cbxs.push_back(ui->checkBoxMarketingSearch);
     _searchPage->InitInterface(ui->lineEditProjectNoSearch, ui->lineEditProjectNameSearch, ui->dateEditProjectDateSearch,
-                               ui->lineEditCompanyNameSearch, nullptr,
+                               ui->lineEditCompanyNameSearch, ui->lineEditAddressSearch, nullptr,
                                ui->comboBoxSystemsSearch, ui->comboBoxFeaturesSearch, cbxs);
     cbxs.clear();
     cbxs.push_back(ui->checkBoxInProgressFilters);
