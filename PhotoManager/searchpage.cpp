@@ -82,7 +82,8 @@ void SearchPage::SearchPhotos()
 
     _tableResults->setRowCount(_searchResult.length());
     QStringList headers;
-    headers << tr("Preview")
+    headers << ""
+            << tr("Preview")
             << tr("Photo date")
             << tr("Project No")
             << tr("Project name")
@@ -90,8 +91,9 @@ void SearchPage::SearchPhotos()
             << tr("Address")
             << tr("Formwork systems")
             << tr("Features")
-            << tr("Description")
-            << "";
+            << tr("Description");
+
+    if (_cfg->ShowFilePathColumn()) headers << tr("File path");
 
     _tableResults->setHorizontalHeaderLabels(headers);
 
@@ -131,6 +133,7 @@ void SearchPage::SearchPhotos()
        QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
        QTableWidgetItem* itemAddress = new QTableWidgetItem(fnp.address);
        QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
+       QTableWidgetItem* itemFilePath = new QTableWidgetItem(fnp.filePath);
 
        QTableWidgetItem* itemHidden = new QTableWidgetItem(QString::number(i));
 
@@ -142,24 +145,26 @@ void SearchPage::SearchPhotos()
        itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
        itemAddress->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
        itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
+       itemFilePath->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
 
-       _tableResults->setItem(i, 0, itemImage);
-       _tableResults->setItem(i, 1, itemDate);
-       _tableResults->setItem(i, 2, itemProjecNo);
-       _tableResults->setItem(i, 3, itemName);
-       _tableResults->setItem(i, 4, itemCompany);
-       _tableResults->setItem(i, 5, itemAddress);
-       _tableResults->setItem(i, 6, itemFormworks);
-       _tableResults->setItem(i, 7, itemFeatures);
-       _tableResults->setItem(i, 8, itemDescription);
-       _tableResults->setItem(i, 9, itemHidden);
+       _tableResults->setItem(i, 0, itemHidden);
+       _tableResults->setItem(i, 1, itemImage);
+       _tableResults->setItem(i, 2, itemDate);
+       _tableResults->setItem(i, 3, itemProjecNo);
+       _tableResults->setItem(i, 4, itemName);
+       _tableResults->setItem(i, 5, itemCompany);
+       _tableResults->setItem(i, 6, itemAddress);
+       _tableResults->setItem(i, 7, itemFormworks);
+       _tableResults->setItem(i, 8, itemFeatures);
+       _tableResults->setItem(i, 9, itemDescription);
+       if (_cfg->ShowFilePathColumn()) _tableResults->setItem(i, 10, itemFilePath);
 
     }
     QHeaderView* header = _tableResults->verticalHeader();
     header->setSectionResizeMode(QHeaderView::Fixed);
     header->setDefaultSectionSize(100);
     _tableResults->resizeColumnsToContents();
-    _tableResults->setColumnHidden(9, true);
+    _tableResults->setColumnHidden(0, true);
 }
 
 void SearchPage::SavePhotos()
@@ -354,7 +359,7 @@ int SearchPage::GetSearchResultIndexByItem(QTableWidgetItem *item)
     if (item == nullptr)
         return -1;
 
-    QString index = _tableResults->item(item->row(), 8)->text();
+    QString index = _tableResults->item(item->row(), 0)->text();
     return index.toInt();
 }
 
@@ -363,7 +368,7 @@ QTableWidgetItem* SearchPage::GetItemByIndex(int index)
     QTableWidgetItem* result = nullptr;
     for (int i = 0; i < _tableResults->rowCount(); i++)
     {
-        result = _tableResults->item(i, 8);
+        result = _tableResults->item(i, 0);
         if (index == result->text().toInt())
         {
             break;

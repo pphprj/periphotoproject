@@ -19,6 +19,7 @@ public:
     int GetCompressionRate();
     bool ShowEditDBTab();
     bool ShowDeleteButton();
+    bool ShowFilePathColumn();
 
     void SetLastFolder(const QString& value);
 private:
@@ -31,6 +32,7 @@ private:
     int _compressionRate;
     bool _editDBTab;
     bool _deleteButton;
+    bool _filePathColumn;
     QString _deletePassword;
 };
 

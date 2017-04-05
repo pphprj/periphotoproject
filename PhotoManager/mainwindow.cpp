@@ -84,9 +84,11 @@ void MainWindow::InitInterface()
 
     ui->tableWidgetSearchResult->setIconSize(QSize(100, 100));
     ui->tableWidgetSearchResult->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableWidgetSearchResult->setColumnCount(10);
+    int columnCount = _cfg->ShowFilePathColumn() ? 11 : 10;
+    ui->tableWidgetSearchResult->setColumnCount(columnCount);
     QStringList headers;
-    headers << tr("Preview")
+    headers << ""
+            << tr("Preview")
             << tr("Photo date")
             << tr("Project No")
             << tr("Project name")
@@ -94,11 +96,13 @@ void MainWindow::InitInterface()
             << tr("Address")
             << tr("Formwork systems")
             << tr("Features")
-            << tr("Description")
-            << "";
+            << tr("Description");
+
+    if (_cfg->ShowFilePathColumn()) headers << tr("File path");
+
     ui->tableWidgetSearchResult->setHorizontalHeaderLabels(headers);
     ui->tableWidgetSearchResult->resizeColumnsToContents();
-    ui->tableWidgetSearchResult->setColumnHidden(9, true);
+    ui->tableWidgetSearchResult->setColumnHidden(0, true);
 
 
     _addPage = new AdditionPage(_dbm, _fileManager, _cfg, this);

@@ -36,6 +36,8 @@ Configurator::Configurator()
     qDebug() << "delete button " << _deleteButton;
     _deletePassword = settings.value("DeletePassword").toString();
     qDebug() << "delete password " << _deletePassword;
+    _filePathColumn = settings.value("FilePathColumn").toBool();
+    qDebug() << "filepath column" << _filePathColumn;
     settings.endGroup();
 }
 
@@ -102,6 +104,11 @@ bool Configurator::ShowEditDBTab()
 bool Configurator::ShowDeleteButton()
 {
     return _deleteButton;
+}
+
+bool Configurator::ShowFilePathColumn()
+{
+    return _filePathColumn;
 }
 
 QString Configurator::GetDeletePassword()

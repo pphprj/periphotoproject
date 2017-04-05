@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="aboutwindow.ui" line="29"/>
-        <source>1.4.0 build 04-04-2017 20-50</source>
-        <oldsource>1.3.0 build 06-02-2017 20-28</oldsource>
+        <source>1.4.1 build 05-04-2017 20-20</source>
+        <oldsource>1.4.0 build 04-04-2017 20-50</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -198,7 +198,7 @@ documentation</source>
         <location filename="mainwindow.ui" line="70"/>
         <location filename="mainwindow.ui" line="472"/>
         <location filename="mainwindow.ui" line="715"/>
-        <location filename="mainwindow.cpp" line="96"/>
+        <location filename="mainwindow.cpp" line="98"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -210,7 +210,7 @@ documentation</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="232"/>
-        <location filename="mainwindow.cpp" line="89"/>
+        <location filename="mainwindow.cpp" line="91"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,20 +296,20 @@ documentation</source>
     <message>
         <location filename="mainwindow.ui" line="116"/>
         <location filename="mainwindow.ui" line="540"/>
-        <location filename="mainwindow.cpp" line="93"/>
+        <location filename="mainwindow.cpp" line="95"/>
         <source>Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="96"/>
-        <location filename="mainwindow.cpp" line="97"/>
+        <location filename="mainwindow.cpp" line="99"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="144"/>
         <location filename="mainwindow.ui" line="550"/>
-        <location filename="mainwindow.cpp" line="94"/>
+        <location filename="mainwindow.cpp" line="96"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -345,7 +345,7 @@ documentation</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="619"/>
-        <location filename="mainwindow.cpp" line="95"/>
+        <location filename="mainwindow.cpp" line="97"/>
         <source>Formwork systems</source>
         <translation type="unfinished"></translation>
     </message>
@@ -377,7 +377,7 @@ documentation</source>
     <message>
         <location filename="mainwindow.ui" line="89"/>
         <location filename="mainwindow.ui" line="444"/>
-        <location filename="mainwindow.cpp" line="91"/>
+        <location filename="mainwindow.cpp" line="93"/>
         <source>Project No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,33 +420,38 @@ documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="154"/>
+        <location filename="mainwindow.cpp" line="158"/>
         <source>Open images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="154"/>
+        <location filename="mainwindow.cpp" line="158"/>
         <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="308"/>
+        <location filename="mainwindow.cpp" line="312"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="92"/>
+        <location filename="mainwindow.cpp" line="94"/>
         <source>Project name</source>
         <oldsource>Project name / File path</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="90"/>
+        <location filename="mainwindow.cpp" line="92"/>
         <source>Photo date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="308"/>
+        <location filename="mainwindow.cpp" line="101"/>
+        <source>File path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="312"/>
         <source>Would you have to apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -477,74 +482,79 @@ documentation</source>
 <context>
     <name>SearchPage</name>
     <message>
-        <location filename="searchpage.cpp" line="85"/>
+        <location filename="searchpage.cpp" line="86"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="87"/>
+        <location filename="searchpage.cpp" line="88"/>
         <source>Project No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="86"/>
+        <location filename="searchpage.cpp" line="87"/>
         <source>Photo date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="88"/>
+        <location filename="searchpage.cpp" line="89"/>
         <source>Project name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="89"/>
+        <location filename="searchpage.cpp" line="90"/>
         <source>Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="90"/>
+        <location filename="searchpage.cpp" line="91"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="91"/>
+        <location filename="searchpage.cpp" line="92"/>
         <source>Formwork systems</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="92"/>
+        <location filename="searchpage.cpp" line="93"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="93"/>
+        <location filename="searchpage.cpp" line="94"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="168"/>
+        <location filename="searchpage.cpp" line="96"/>
+        <source>File path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="searchpage.cpp" line="173"/>
         <source>Save images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="196"/>
-        <location filename="searchpage.cpp" line="401"/>
+        <location filename="searchpage.cpp" line="201"/>
+        <location filename="searchpage.cpp" line="406"/>
         <source>Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="196"/>
-        <location filename="searchpage.cpp" line="401"/>
+        <location filename="searchpage.cpp" line="201"/>
+        <location filename="searchpage.cpp" line="406"/>
         <source>Photos were copied to directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="395"/>
+        <location filename="searchpage.cpp" line="400"/>
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="395"/>
+        <location filename="searchpage.cpp" line="400"/>
         <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
