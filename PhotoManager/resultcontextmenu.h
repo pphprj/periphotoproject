@@ -20,6 +20,7 @@ signals:
     void print(QTableWidgetItem* item);
     void edit(QTableWidgetItem* item);
     void remove(QTableWidgetItem* remove);
+    void show(QTableWidgetItem* item);
 
 private:
     QTableWidget* _table;
@@ -29,6 +30,7 @@ private:
     QAction* _print;
     QAction* _edit;
     QAction* _remove;
+    QAction* _show;
 };
 
 #endif // RESULTCONTEXTMENU_H

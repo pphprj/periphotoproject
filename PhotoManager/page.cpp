@@ -35,6 +35,7 @@ void Page::InitInterface(QLineEdit *projectNo, QLineEdit *projectName, QDateEdit
     _description = description;
 
     connect(_projectNo, SIGNAL(textEdited(QString)), this, SLOT(projectNoLineEditTextEditedSlot(QString)));
+    connect(_projectNo, SIGNAL(returnPressed()), this, SLOT(projectNoLineEditReturnPressed()));
     connect(_projectName, SIGNAL(textEdited(QString)), this, SLOT(projectNameLineEditTextEditedSlot(QString)));
     connect(_companyName, SIGNAL(textEdited(QString)), this, SLOT(companyNameLineEditTextEditedSlot(QString)));
 }
@@ -128,6 +129,20 @@ void Page::projectNoLineEditTextEditedSlot(const QString &arg1)
     }
 
     InterfaceManager::SetCompleter(_projectNo, items);
+}
+
+void Page::projectNoLineEditReturnPressed()
+{
+    ProjectName projectName = _loader->GetProjectNameByNo(_projectNo->text());
+    _projectName->setText(projectName.GetName());
+    _companyName->setText(projectName.GetCompanyName());
+    _address->setText(projectName.GetAddress());
+
+    if (_description != nullptr)
+    {
+        _description->clear();
+        _description->appendPlainText(projectName.GetDesription());
+    }
 }
 
 void Page::projectNameLineEditTextEditedSlot(const QString &arg1)

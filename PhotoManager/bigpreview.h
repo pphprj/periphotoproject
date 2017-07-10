@@ -18,8 +18,10 @@ public:
 
 private:
     void mouseMoveEvent(QMouseEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
+    QPixmap* _pm;
     Ui::BigPreview *ui;
 };
 

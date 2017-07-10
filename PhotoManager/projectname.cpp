@@ -5,11 +5,12 @@ ProjectName::ProjectName() : TableAbstractElem()
 
 }
 
-ProjectName::ProjectName(int id, const QString& projectNo, const QString &name, const QString& company, const QString &descr):
+ProjectName::ProjectName(int id, const QString& projectNo, const QString &name, const QString& company, const QString& address, const QString &descr):
     TableAbstractElem(id, name, descr)
 {
     _projectNo = projectNo;
     _companyName = company;
+    _address = address;
 }
 
 ProjectName::~ProjectName()
@@ -40,4 +41,14 @@ QString ProjectName::GetCompanyName()
 void ProjectName::SetCompanyName(const QString &value)
 {
     _companyName = value;
+}
+
+QString ProjectName::GetAddress()
+{
+    return _address;
+}
+
+void ProjectName::SetAddress(const QString &value)
+{
+    _address = value;
 }

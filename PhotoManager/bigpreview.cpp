@@ -7,15 +7,17 @@ BigPreview::BigPreview(const QString& fileName, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QPixmap pm(fileName);
+    _pm = new QPixmap(fileName);
 
-    ui->label->setPixmap(pm.scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->label->setPixmap(_pm->scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    setMouseTracking(true);
+    ui->label->installEventFilter(this);
 }
 
 BigPreview::~BigPreview()
 {
+    delete _pm;
+    ui->label->clear();
     delete ui;
 }
 
@@ -25,4 +27,27 @@ void BigPreview::mouseMoveEvent(QMouseEvent *event)
     {
         this->close();
     }
+}
+
+bool BigPreview::eventFilter(QObject *watched, QEvent *event)
+{
+    if ((watched == ui->label) && (event->type() == QEvent::MouseButtonDblClick))
+    {
+        this->close();
+        return true;
+    }
+    else
+    {
+        if (event->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+            if (ke->key() == Qt::Key_Escape)
+            {
+                this->close();
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

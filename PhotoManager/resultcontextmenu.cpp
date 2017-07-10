@@ -15,11 +15,13 @@ ResultContextMenu::ResultContextMenu(QPoint pos, QTableWidget *table, bool showR
     {
         _remove = _contextMenu->addAction(tr("Remove"));
     }
+    _show = _contextMenu->addAction(tr("Show in folder"));
 
     connect(this, SIGNAL(save(QTableWidgetItem*)), parent, SLOT(saveSelected(QTableWidgetItem*)));
     connect(this, SIGNAL(print(QTableWidgetItem*)), parent, SLOT(printSelected(QTableWidgetItem*)));
     connect(this, SIGNAL(edit(QTableWidgetItem*)), parent, SLOT(editSelected(QTableWidgetItem*)));
     connect(this, SIGNAL(remove(QTableWidgetItem*)), parent, SLOT(removeSelected(QTableWidgetItem*)));
+    connect(this, SIGNAL(show(QTableWidgetItem*)), parent, SLOT(showSelected(QTableWidgetItem*)));
 }
 
 
@@ -55,6 +57,11 @@ void ResultContextMenu::Execute()
         if (selectedAction == _remove)
         {
             emit remove(item);
+        }
+
+        if (selectedAction == _show)
+        {
+            emit show(item);
         }
     }
 }

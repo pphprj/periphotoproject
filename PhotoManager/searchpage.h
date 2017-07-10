@@ -42,6 +42,7 @@ public slots:
     void printSelected(QTableWidgetItem* item);
     void removeSelected(QTableWidgetItem* item);
     void editSelected(QTableWidgetItem* item);
+    void showSelected(QTableWidgetItem* item);
 
     void sectionClickedSlot(int column);
     void checkBoxClickedSlot();

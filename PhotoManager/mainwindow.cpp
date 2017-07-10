@@ -335,12 +335,11 @@ void MainWindow::on_checkBoxEnablePreview_clicked()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == ui->listWidgetPhotos && event->type() == QEvent::KeyPress)
+    if ((watched == ui->listWidgetPhotos) && (event->type() == QEvent::KeyPress))
     {
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         if (ke->key() == Qt::Key_Delete)
         {
-            //DeleteFileFromPreview());
             _addPage->DeleteFileFromPreview(ui->listWidgetPhotos->currentRow());
             return true;
         }

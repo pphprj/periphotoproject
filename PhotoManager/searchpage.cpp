@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <QProcessEnvironment>
 
 #include "resultcontextmenu.h"
 #include "attributeseditdialog.h"
@@ -114,7 +115,8 @@ void SearchPage::SearchPhotos()
        {
            itemImage->setSizeHint(QSize(100, 100));
            QPixmap pm(fnp.previewPath);
-           itemImage->setIcon(QIcon(pm));
+          // itemImage->setIcon(QIcon(pm));
+           itemImage->setData(Qt::DecorationRole, pm);
        }
 
        QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString("yyyy-MM-dd"));
@@ -263,8 +265,9 @@ void SearchPage::DeletePhotos()
     }
     else
     {
-        foreach(QTableWidgetItem* item, selected)
+        for (int i = selected.count() - 1; i >= 0; i--)
         {
+            QTableWidgetItem* item = selected[i];
             RemoveItem(item);
         }
     }
@@ -351,6 +354,7 @@ void SearchPage::ShowItemPreview(QTableWidgetItem* item)
     {
         BigPreview* preview = new BigPreview(searchItem.filePath);
         preview->exec();
+        delete preview;
     }
 }
 
@@ -456,6 +460,36 @@ void SearchPage::removeSelected(QTableWidgetItem *item)
         RemoveItem(item);
         SearchPhotos();
     }
+}
+
+void SearchPage::showSelected(QTableWidgetItem *item)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    try
+    {
+        int index = GetSearchResultIndexByItem(item);
+        if (index == -1)
+        {
+            return;
+        }
+        qDebug() << "Show Index " << index;
+
+        const QString explorer = QLatin1String("explorer.exe");
+        QString param = QLatin1String("/select,");
+        param += QDir::toNativeSeparators(_searchResult[index].filePath);
+        QString command = explorer + " " + param;
+        QProcess::startDetached(command);
+    }
+    catch (QException& exp)
+    {
+        qDebug() << exp.what();
+    }
+
+
 }
 
 void SearchPage::sectionClickedSlot(int column)

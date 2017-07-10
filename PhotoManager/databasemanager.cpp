@@ -238,7 +238,7 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
     if (!_db.isOpen()) return false;
 
     QSqlQuery query;
-    if (query.exec("SELECT ID, ProjectNo, Name, CompanyName, Description FROM Projects"))
+    if (query.exec("SELECT ID, ProjectNo, Name, CompanyName, Address, Description FROM Projects"))
     {
         while (query.next())
         {
@@ -247,7 +247,8 @@ bool DatabaseManager::SelectProjectNames(QVector<ProjectName> &elems)
             QString name = query.value("Name").toString();
             QString description = query.value("Description").toString();
             QString company = query.value("CompanyName").toString();
-            elems.push_back(ProjectName(id, projectNo, name, company, description));
+            QString address = query.value("Address").toString();
+            elems.push_back(ProjectName(id, projectNo, name, company, address, description));
         }
     }
     return true;

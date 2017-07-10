@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="aboutwindow.ui" line="29"/>
-        <source>1.4.1 build 05-04-2017 20-20</source>
-        <oldsource>1.4.0 build 04-04-2017 20-50</oldsource>
+        <source>1.4.2 build 10-07-2017 21-04</source>
+        <oldsource>1.4.1 build 05-04-2017 20-20</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -478,83 +478,88 @@ documentation</source>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="resultcontextmenu.cpp" line="18"/>
+        <source>Show in folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SearchPage</name>
     <message>
-        <location filename="searchpage.cpp" line="86"/>
+        <location filename="searchpage.cpp" line="87"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="88"/>
+        <location filename="searchpage.cpp" line="89"/>
         <source>Project No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="87"/>
+        <location filename="searchpage.cpp" line="88"/>
         <source>Photo date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="89"/>
+        <location filename="searchpage.cpp" line="90"/>
         <source>Project name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="90"/>
+        <location filename="searchpage.cpp" line="91"/>
         <source>Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="91"/>
+        <location filename="searchpage.cpp" line="92"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="92"/>
+        <location filename="searchpage.cpp" line="93"/>
         <source>Formwork systems</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="93"/>
+        <location filename="searchpage.cpp" line="94"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="94"/>
+        <location filename="searchpage.cpp" line="95"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="96"/>
+        <location filename="searchpage.cpp" line="97"/>
         <source>File path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="173"/>
+        <location filename="searchpage.cpp" line="175"/>
         <source>Save images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="201"/>
-        <location filename="searchpage.cpp" line="406"/>
+        <location filename="searchpage.cpp" line="203"/>
+        <location filename="searchpage.cpp" line="410"/>
         <source>Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="201"/>
-        <location filename="searchpage.cpp" line="406"/>
+        <location filename="searchpage.cpp" line="203"/>
+        <location filename="searchpage.cpp" line="410"/>
         <source>Photos were copied to directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="400"/>
+        <location filename="searchpage.cpp" line="404"/>
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="searchpage.cpp" line="400"/>
+        <location filename="searchpage.cpp" line="404"/>
         <source>Images (*.jpg *.jpeg);;Documents (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>

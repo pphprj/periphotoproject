@@ -2663,3 +2663,223 @@ db connect result  true
 QMetaObject::connectSlotsByName: No matching signal for on_tableWidgetPhotosSearch_doubleClicked(QModelIndex)
 Init search page
 QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+30 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x750+8+30 (frame: 8, 30, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x575, maximum size: 16777215x16777215).
+prject dir  "C:/Романенко Артем"
+remote dir  "//HROMANNOTE/Test"
+last folder  "C:/Users/Public/Pictures/Sample Pictures"
+compression rate  80
+edit DB tab  false
+delete button  false
+delete password  "ZjkzNjg4ZTExNDc1Yjg5OWM2MTczZjM5OTI3ODg4ZTI="
+filepath column false
+QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+" "
+" "
+"ALTER TABLE Projects ADD CompanyName VARCHAR(50)"
+"duplicate column name: CompanyName Unable to execute statement"
+"ALTER TABLE Projects ADD Address VARCHAR(200)"
+"duplicate column name: Address Unable to execute statement"
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_tableWidgetPhotosSearch_doubleClicked(QModelIndex)
+Init search page
+QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+30 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x750+8+30 (frame: 8, 30, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x575, maximum size: 16777215x16777215).
+"SELECT Photos.ID, FilePath, ProjectID, Time, Category, FormworkSystems, Features, Projects.Name, Projects.ProjectNo, Projects.CompanyName, Projects.Address, Projects.Description  FROM Photos INNER JOIN Projects ON (ProjectNo LIKE '%%') WHERE  Projects.ID = Photos.ProjectID "
+" "
+"SELECT FilePath FROM Previews WHERE PhotoID = %1"
+" "
+Search result  38
+//////// PhotoID= 65 PhotoDate= "2009-03-12" ProjectName= "" ProjectNo= "12345" FilePath= "C:/Романенко Артем/12345/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/12345/2009-03-12/preview//Penguins.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 65"
+" "
+"SELECT Features FROM Photos WHERE ID = 65"
+" "
+//////// PhotoID= 66 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Desert.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Desert.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 66"
+" "
+"SELECT Features FROM Photos WHERE ID = 66"
+" "
+//////// PhotoID= 67 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Jellyfish.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Jellyfish.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 67"
+" "
+"SELECT Features FROM Photos WHERE ID = 67"
+" "
+//////// PhotoID= 68 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Koala.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Koala.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 68"
+" "
+"SELECT Features FROM Photos WHERE ID = 68"
+" "
+//////// PhotoID= 69 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Hydrangeas.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Hydrangeas.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 69"
+" "
+"SELECT Features FROM Photos WHERE ID = 69"
+" "
+//////// PhotoID= 70 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Lighthouse.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Lighthouse.png" Cats= "1" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 70"
+" "
+"SELECT Features FROM Photos WHERE ID = 70"
+" "
+//////// PhotoID= 71 PhotoDate= "2009-03-12" ProjectName= "day after" ProjectNo= "24-02-2017" FilePath= "C:/Романенко Артем/24-02-2017 day after/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/24-02-2017 day after/2009-07-14/preview//Penguins.png" Cats= "1" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 71"
+" "
+"SELECT Features FROM Photos WHERE ID = 71"
+" "
+//////// PhotoID= 72 PhotoDate= "2009-03-12" ProjectName= "26febr" ProjectNo= "26-02-2017" FilePath= "C:/Романенко Артем/26-02-2017 26febr/2009-03-12/Desert.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017 26febr/2009-07-14/preview//Desert.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 72"
+" "
+"SELECT Features FROM Photos WHERE ID = 72"
+" "
+//////// PhotoID= 73 PhotoDate= "2009-03-12" ProjectName= "26febr" ProjectNo= "26-02-2017" FilePath= "C:/Романенко Артем/26-02-2017 26febr/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017 26febr/2009-07-14/preview//Penguins.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 73"
+" "
+"SELECT Features FROM Photos WHERE ID = 73"
+" "
+//////// PhotoID= 74 PhotoDate= "2009-03-12" ProjectName= "26febr" ProjectNo= "26-02-2017" FilePath= "C:/Романенко Артем/26-02-2017 26febr/2009-03-12/Tulips.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017 26febr/2009-07-14/preview//Tulips.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 74"
+" "
+"SELECT Features FROM Photos WHERE ID = 74"
+" "
+//////// PhotoID= 75 PhotoDate= "2009-03-12" ProjectName= "262" ProjectNo= "26-02-2017-2" FilePath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/Chrysanthemum.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/preview//Chrysanthemum.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 75"
+" "
+"SELECT Features FROM Photos WHERE ID = 75"
+" "
+//////// PhotoID= 76 PhotoDate= "2009-03-12" ProjectName= "262" ProjectNo= "26-02-2017-2" FilePath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/Hydrangeas.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/preview//Hydrangeas.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 76"
+" "
+"SELECT Features FROM Photos WHERE ID = 76"
+" "
+//////// PhotoID= 77 PhotoDate= "2009-03-12" ProjectName= "262" ProjectNo= "26-02-2017-2" FilePath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/Lighthouse.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/preview//Lighthouse.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 77"
+" "
+"SELECT Features FROM Photos WHERE ID = 77"
+" "
+//////// PhotoID= 78 PhotoDate= "2009-03-12" ProjectName= "262" ProjectNo= "26-02-2017-2" FilePath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-2 262/2009-03-12/preview//Penguins.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 78"
+" "
+"SELECT Features FROM Photos WHERE ID = 78"
+" "
+//////// PhotoID= 79 PhotoDate= "2009-03-12" ProjectName= "263" ProjectNo= "26-02-2017-3" FilePath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/Desert.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/preview//Desert.png" Cats= "1;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 79"
+" "
+"SELECT Features FROM Photos WHERE ID = 79"
+" "
+//////// PhotoID= 80 PhotoDate= "2009-03-12" ProjectName= "263" ProjectNo= "26-02-2017-3" FilePath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/Hydrangeas.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/preview//Hydrangeas.png" Cats= "1;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 80"
+" "
+"SELECT Features FROM Photos WHERE ID = 80"
+" "
+//////// PhotoID= 81 PhotoDate= "2009-03-12" ProjectName= "263" ProjectNo= "26-02-2017-3" FilePath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-3 263/2009-03-12/preview//Penguins.png" Cats= "1;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 81"
+" "
+"SELECT Features FROM Photos WHERE ID = 81"
+" "
+//////// PhotoID= 82 PhotoDate= "2009-03-12" ProjectName= "264" ProjectNo= "26-02-2017-4" FilePath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/Hydrangeas.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/preview//Hydrangeas.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 82"
+" "
+"SELECT Features FROM Photos WHERE ID = 82"
+" "
+//////// PhotoID= 83 PhotoDate= "2009-03-12" ProjectName= "264" ProjectNo= "26-02-2017-4" FilePath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/Jellyfish.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/preview//Jellyfish.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 83"
+" "
+"SELECT Features FROM Photos WHERE ID = 83"
+" "
+//////// PhotoID= 84 PhotoDate= "2009-03-12" ProjectName= "264" ProjectNo= "26-02-2017-4" FilePath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/Koala.jpg" PreviewPath= "C:/Романенко Артем/26-02-2017-4 264/2009-03-12/preview//Koala.png" Cats= "2;3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 84"
+" "
+"SELECT Features FROM Photos WHERE ID = 84"
+" "
+//////// PhotoID= 85 PhotoDate= "2009-03-12" ProjectName= "020202" ProjectNo= "05-09-2016" FilePath= "C:/Романенко Артем/05-09-2016 020202/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/05-09-2016 020202/2009-03-12/preview//Penguins.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 85"
+" "
+"SELECT Features FROM Photos WHERE ID = 85"
+" "
+//////// PhotoID= 86 PhotoDate= "2009-03-12" ProjectName= "020202" ProjectNo= "02-02-02" FilePath= "C:/Романенко Артем/02-02-02 020202/2009-03-12/Tulips.jpg" PreviewPath= "C:/Романенко Артем/02-02-02 020202/2009-03-12/preview//Tulips.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 86"
+" "
+"SELECT Features FROM Photos WHERE ID = 86"
+" "
+//////// PhotoID= 87 PhotoDate= "2009-03-12" ProjectName= "testcompany name" ProjectNo= "28-02-2017" FilePath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/Hydrangeas.jpg" PreviewPath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/preview//Hydrangeas.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 87"
+" "
+"SELECT Features FROM Photos WHERE ID = 87"
+" "
+//////// PhotoID= 88 PhotoDate= "2009-03-12" ProjectName= "testcompany name 2" ProjectNo= "28-02-20172" FilePath= "C:/Романенко Артем/28-02-20172 testcompany name 2/2009-03-12/Tulips.jpg" PreviewPath= "C:/Романенко Артем/28-02-20172 testcompany name 2/2009-03-12/preview//Tulips.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 88"
+" "
+"SELECT Features FROM Photos WHERE ID = 88"
+" "
+//////// PhotoID= 89 PhotoDate= "2009-03-12" ProjectName= "testcompany name" ProjectNo= "28-02-2017" FilePath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/Tulips.jpg" PreviewPath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/preview//Tulips.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 89"
+" "
+"SELECT Features FROM Photos WHERE ID = 89"
+" "
+//////// PhotoID= 90 PhotoDate= "2009-03-12" ProjectName= "testcompany name" ProjectNo= "28-02-2017" FilePath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/Jellyfish.jpg" PreviewPath= "C:/Романенко Артем/28-02-2017 testcompany name/2009-03-12/preview//Jellyfish.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 90"
+" "
+"SELECT Features FROM Photos WHERE ID = 90"
+" "
+//////// PhotoID= 91 PhotoDate= "2009-03-12" ProjectName= "testcompany name3" ProjectNo= "28-02-20173" FilePath= "C:/Романенко Артем/28-02-20173 testcompany name3/2009-03-12/Tulips.jpg" PreviewPath= "C:/Романенко Артем/28-02-20173 testcompany name3/2009-03-12/preview//Tulips.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 91"
+" "
+"SELECT Features FROM Photos WHERE ID = 91"
+" "
+//////// PhotoID= 92 PhotoDate= "2009-03-12" ProjectName= "Today" ProjectNo= "24-12-2016" FilePath= "C:/Романенко Артем/24-12-2016 Today/2009-03-12/Penguins.jpg" PreviewPath= "C:/Романенко Артем/24-12-2016 Today/2009-03-12/preview//Penguins.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 92"
+" "
+"SELECT Features FROM Photos WHERE ID = 92"
+" "
+//////// PhotoID= 93 PhotoDate= "2017-03-02" ProjectName= "test big image" ProjectNo= "02-03-2017" FilePath= "C:/Романенко Артем/02-03-2017 test big image/2017-03-02/world.topo.bathy.200407.3x21600x10800.jpg" PreviewPath= "C:/Романенко Артем/02-03-2017 test big image/2017-03-02/preview//world.png" Cats= "3" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 93"
+" "
+"SELECT Features FROM Photos WHERE ID = 93"
+" "
+//////// PhotoID= 94 PhotoDate= "2017-03-02" ProjectName= "panorama" ProjectNo= "05-03-2017" FilePath= "C:/Романенко Артем/05-03-2017 panorama/2017-03-02/world.topo.bathy.200407.3x21600x10800.jpg" PreviewPath= "C:/Романенко Артем/05-03-2017 panorama/2017-03-02/preview//world.png" Cats= "2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 94"
+" "
+"SELECT Features FROM Photos WHERE ID = 94"
+" "
+//////// PhotoID= 97 PhotoDate= "2009-03-12" ProjectName= "test address 3" ProjectNo= "05-04-2017 2" FilePath= "//HROMANNOTE/Test/05-04-2017 2 test address 3/2009-03-12/Chrysanthemum.jpg" PreviewPath= "//HROMANNOTE/Test/05-04-2017 2 test address 3/2009-03-12/preview//Chrysanthemum.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 97"
+" "
+"SELECT Features FROM Photos WHERE ID = 97"
+" "
+//////// PhotoID= 98 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0104.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0104.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 98"
+" "
+"SELECT Features FROM Photos WHERE ID = 98"
+" "
+//////// PhotoID= 99 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0105.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0105.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 99"
+" "
+"SELECT Features FROM Photos WHERE ID = 99"
+" "
+//////// PhotoID= 100 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0107.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0107.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 100"
+" "
+"SELECT Features FROM Photos WHERE ID = 100"
+" "
+//////// PhotoID= 101 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0110.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0110.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 101"
+" "
+"SELECT Features FROM Photos WHERE ID = 101"
+" "
+//////// PhotoID= 102 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0111.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0111.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 102"
+" "
+"SELECT Features FROM Photos WHERE ID = 102"
+" "
+//////// PhotoID= 103 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0112.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0112.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 103"
+" "
+"SELECT Features FROM Photos WHERE ID = 103"
+" "
+//////// PhotoID= 104 PhotoDate= "2017-04-17" ProjectName= "Czech" ProjectNo= "09-07-2017" FilePath= "/09-07-2017 Czech/2017-04-17/IMG_0118.JPG" PreviewPath= "/09-07-2017 Czech/2017-04-17/preview//IMG_0118.png" Cats= "1;2" ////////
+"SELECT FormworkSystems FROM Photos WHERE ID = 104"
+" "
+"SELECT Features FROM Photos WHERE ID = 104"
+" "
+Show Index  0
+Show Index  27
+Show Index  26
+Show Index  37
+Show Index  36
