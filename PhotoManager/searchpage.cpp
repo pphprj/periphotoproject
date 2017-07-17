@@ -480,8 +480,14 @@ void SearchPage::showSelected(QTableWidgetItem *item)
 
         const QString explorer = QLatin1String("explorer.exe");
         QString param = QLatin1String("/select,");
-        param += QDir::toNativeSeparators(_searchResult[index].filePath);
+        QString filePath = _searchResult[index].filePath.replace("//", "/");
+        if (filePath[0] == '/')
+        {
+            filePath = "/" + filePath;
+        }
+        param += QDir::toNativeSeparators(filePath);
         QString command = explorer + " " + param;
+        qDebug() << "Show command " << command;
         QProcess::startDetached(command);
     }
     catch (QException& exp)

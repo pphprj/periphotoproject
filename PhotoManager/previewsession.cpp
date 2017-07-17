@@ -40,7 +40,8 @@ void PreviewSession::addThread(const QString &fileName)
 void PreviewSession::finishedProcessPreview(QPixmap scaled, QString fileName)
 {
     QMutexLocker lock(&_previewMutex);
-    _previewList->addItem(new QListWidgetItem(QIcon(scaled), fileName));
+    QListWidgetItem* item = new QListWidgetItem(QIcon(scaled), fileName);
+    _previewList->addItem(item);
     _previewList->sortItems();
 }
 
