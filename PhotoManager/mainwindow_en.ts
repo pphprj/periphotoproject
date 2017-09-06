@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="aboutwindow.ui" line="29"/>
-        <source>1.4.2 build 10-07-2017 21-04</source>
-        <oldsource>1.4.1 build 05-04-2017 20-20</oldsource>
+        <source>1.4.3 build 06-09-2017 21-34</source>
+        <oldsource>1.4.2 build 10-07-2017 21-04</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -39,6 +39,7 @@
         <location filename="additionpage.cpp" line="102"/>
         <location filename="additionpage.cpp" line="109"/>
         <location filename="additionpage.cpp" line="115"/>
+        <location filename="additionpage.cpp" line="149"/>
         <source>Error!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -73,12 +74,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="178"/>
+        <location filename="additionpage.cpp" line="149"/>
+        <source>Photos were not copied! May be you don&apos;t have access rights!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="additionpage.cpp" line="184"/>
         <source>Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="178"/>
+        <location filename="additionpage.cpp" line="184"/>
         <source>Photos were added to DB</source>
         <translation type="unfinished"></translation>
     </message>

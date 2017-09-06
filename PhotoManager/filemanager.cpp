@@ -32,7 +32,9 @@ void FileManager::CreateRootDirectory()
 
 bool FileManager::CreateProjectDirectory(const QString &projectNo, const QString& projectName)
 {
-    _projectDirectory = _rootDirectory + "\\" + projectNo;
+    _projectDirectory = _rootDirectory;
+    if (_projectDirectory.lastIndexOf("//") == -1) _projectDirectory += "//";
+    _projectDirectory += projectNo;
 
     if (!projectName.isEmpty())
         _projectDirectory += " " + projectName;

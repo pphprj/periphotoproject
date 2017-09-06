@@ -163,7 +163,7 @@ public:
 
     static void ClearComboboxChecked(QComboBox* comboBox);
 
-    static void SetCompleter(QLineEdit* lineEdit, const QStringList& items);
+    static void SetCompleter(QLineEdit* lineEdit, const QStringList& items, QObject* toConnect);
 
     static void EnableDateEditField(QDateEdit* dateEdit, bool isEnabled);
 

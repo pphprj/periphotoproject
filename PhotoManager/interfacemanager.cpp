@@ -31,11 +31,17 @@ void InterfaceManager::ClearComboboxChecked(QComboBox *comboBox)
 }
 
 
-void InterfaceManager::SetCompleter(QLineEdit *lineEdit, const QStringList& items)
+void InterfaceManager::SetCompleter(QLineEdit *lineEdit, const QStringList& items, QObject* toConnect)
 {
     QCompleter* completer = new QCompleter(items);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+
+    if (toConnect != nullptr)
+    {
+        connect(completer, SIGNAL(activated(QString)), toConnect, SLOT(completerSelected(QString)));
+    }
+
     lineEdit->setCompleter(completer);
 }
 

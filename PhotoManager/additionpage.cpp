@@ -144,6 +144,12 @@ void AdditionPage::finishedCopy()
     qDebug() << "finishedCopy start";
     QVector<FileInfoStruct> files = _copierThread->getCopiedFiles();
 
+    if (files.isEmpty())
+    {
+        QMessageBox::critical(nullptr, tr("Error!"), tr("Photos were not copied! May be you don't have access rights!"));
+        return;
+    }
+
 
     QVector<QFileInfo> previews;
     for (int i = 0; i < _files.count(); i++)

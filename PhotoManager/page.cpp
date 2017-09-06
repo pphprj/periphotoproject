@@ -128,12 +128,12 @@ void Page::projectNoLineEditTextEditedSlot(const QString &arg1)
         }
     }
 
-    InterfaceManager::SetCompleter(_projectNo, items);
+    InterfaceManager::SetCompleter(_projectNo, items, this);
 }
 
-void Page::projectNoLineEditReturnPressed()
+void Page::completerSelected(const QString& text)
 {
-    ProjectName projectName = _loader->GetProjectNameByNo(_projectNo->text());
+    ProjectName projectName = _loader->GetProjectNameByNo(text);
     _projectName->setText(projectName.GetName());
     _companyName->setText(projectName.GetCompanyName());
     _address->setText(projectName.GetAddress());
@@ -143,6 +143,11 @@ void Page::projectNoLineEditReturnPressed()
         _description->clear();
         _description->appendPlainText(projectName.GetDesription());
     }
+}
+
+void Page::projectNoLineEditReturnPressed()
+{
+   completerSelected(_projectNo->text());
 }
 
 void Page::projectNameLineEditTextEditedSlot(const QString &arg1)
@@ -157,7 +162,7 @@ void Page::projectNameLineEditTextEditedSlot(const QString &arg1)
         }
     }
 
-    InterfaceManager::SetCompleter(_projectName, items);
+    InterfaceManager::SetCompleter(_projectName, items, nullptr);
 }
 
 void Page::companyNameLineEditTextEditedSlot(const QString &arg1)
@@ -175,7 +180,7 @@ void Page::companyNameLineEditTextEditedSlot(const QString &arg1)
         }
     }
 
-    InterfaceManager::SetCompleter(_companyName, items);
+    InterfaceManager::SetCompleter(_companyName, items, nullptr);
 }
 
 void Page::formworkSystemItemActivatedSlot(int index)

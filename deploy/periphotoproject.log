@@ -2883,3 +2883,23 @@ Show Index  27
 Show Index  26
 Show Index  37
 Show Index  36
+prject dir  "C:/Романенко Артем"
+remote dir  "//HROMANNOTE/Test"
+last folder  "C:/Users/Public/Pictures/Sample Pictures"
+compression rate  80
+edit DB tab  false
+delete button  false
+delete password  "ZjkzNjg4ZTExNDc1Yjg5OWM2MTczZjM5OTI3ODg4ZTI="
+filepath column false
+QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+" "
+" "
+"ALTER TABLE Projects ADD CompanyName VARCHAR(50)"
+"duplicate column name: CompanyName Unable to execute statement"
+"ALTER TABLE Projects ADD Address VARCHAR(200)"
+"duplicate column name: Address Unable to execute statement"
+db connect result  true
+QMetaObject::connectSlotsByName: No matching signal for on_tableWidgetPhotosSearch_doubleClicked(QModelIndex)
+Init search page
+QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+30 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x750+8+30 (frame: 8, 30, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x575, maximum size: 16777215x16777215).

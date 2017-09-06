@@ -21,7 +21,11 @@ void FilecopierThread::run()
     int delta = 100 / _files.length();
     for (int i = 0; i < _files.length(); i++)
     {
-        _copiedFiles.push_back(_fileManager->AddFileToDirectory(_files.at(i), _compression));
+        FileInfoStruct copied = _fileManager->AddFileToDirectory(_files.at(i), _compression);
+        if (copied.fileInfo.exists())
+        {
+            _copiedFiles.push_back(copied);
+        }
         qDebug() << "File # " << i + 1;
         emit progress((i + 1) * delta);
     }

@@ -52,6 +52,8 @@ public slots:
     void formworkSystemItemActivatedSlot(int index);
     void featuresItemActivatedSlot(int index);
 
+    void completerSelected(const QString& text);
+
 protected:
     QLineEdit* _projectNo;
     QLineEdit* _projectName;

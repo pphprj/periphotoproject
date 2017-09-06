@@ -42,7 +42,6 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
     else
     {
         _db = QSqlDatabase::addDatabase("QSQLITE");
-        //connection = "c:\\Work\\Peri\\periphotoproject\\build-PhotoManager-Desktop_Qt_5_7_0_MSVC2013_32bit-Debug\\PeriProjects.db";
         connection = "PeriProjects.db";
         _db.setDatabaseName(connection);
         result = _db.open();
@@ -266,6 +265,9 @@ bool DatabaseManager::SelectProjectName(int projectId, QString &projectName)
             projectName = query.value("Name").toString();
         }
     }
+
+    qDebug() << query.lastError().text();
+
     return true;
 }
 
@@ -282,6 +284,9 @@ bool DatabaseManager::SelectCompanyName(int projectId, QString &companyName)
             companyName = query.value("CompanyName").toString();
         }
     }
+
+    qDebug() << query.lastError().text();
+
     return true;
 }
 
@@ -295,9 +300,12 @@ bool DatabaseManager::SelectAddress(int projectId, QString &address)
     {
         while (query.next())
         {
-            address = query.value("CompanyName").toString();
+            address = query.value("Address").toString();
         }
     }
+
+    qDebug() << query.lastError().text();
+
     return true;
 }
 
@@ -313,6 +321,9 @@ bool DatabaseManager::SelectDescription(int projectId, QString &description)
             description = query.value("Description").toString();
         }
     }
+
+    qDebug() << query.lastError().text();
+
     return true;
 }
 
