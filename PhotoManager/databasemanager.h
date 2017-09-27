@@ -55,6 +55,7 @@ public:
     bool UpdateAddress(int projectId, const QString& address);
     bool UpdateDescription(int projectId, const QString& description);
     bool UpdateTable(const QString& table, const QString& columnName, const QString& columnType);
+    bool ModifyTable(const QString& table, const QString& columnName, const QString& columnType);
 
     bool InsertTestValuesToCategoriesTable();
     bool InsertTestValuesToFormworkSystemsTable();

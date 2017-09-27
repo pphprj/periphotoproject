@@ -55,6 +55,7 @@ bool DatabaseManager::Connect(const QString& host, const QString& username, cons
 
     UpdateTable("Projects", "CompanyName", "VARCHAR(50)");
     UpdateTable("Projects", "Address", "VARCHAR(200)");
+    ModifyTable("Photos", "FilePath", "VARCHAR(MAX)");
 
     return result;
 }
@@ -850,6 +851,23 @@ bool DatabaseManager::UpdateTable(const QString &table, const QString &columnNam
 
     QString queryStr = (QString)"ALTER TABLE " + table +
             " ADD " + columnName + " " + columnType;
+
+    QSqlQuery query;
+    bool result = true;
+    result &= query.exec(queryStr);
+
+    qDebug() << queryStr;
+    qDebug() << query.lastError().text();
+
+    return true;
+}
+
+bool DatabaseManager::ModifyTable(const QString &table, const QString &columnName, const QString &columnType)
+{
+    if (!_db.isOpen()) return false;
+
+    QString queryStr = (QString)"ALTER TABLE " + table +
+            " ALTER COLUMN " + columnName + " " + columnType;
 
     QSqlQuery query;
     bool result = true;
