@@ -19,8 +19,8 @@
     </message>
     <message>
         <location filename="aboutwindow.ui" line="29"/>
-        <source>1.4.3 build 06-09-2017 21-34</source>
-        <oldsource>1.4.2 build 10-07-2017 21-04</oldsource>
+        <source>1.4.4 build 27-09-2017 21-40</source>
+        <oldsource>1.4.3 build 06-09-2017 21-34</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -43,7 +43,8 @@
         <location filename="additionpage.cpp" line="102"/>
         <location filename="additionpage.cpp" line="109"/>
         <location filename="additionpage.cpp" line="115"/>
-        <location filename="additionpage.cpp" line="149"/>
+        <location filename="additionpage.cpp" line="150"/>
+        <location filename="additionpage.cpp" line="190"/>
         <source>Error!</source>
         <translation>Ошибка!</translation>
     </message>
@@ -78,19 +79,24 @@
         <translation>Пожалуйста, выберите фото!</translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="149"/>
+        <location filename="additionpage.cpp" line="150"/>
         <source>Photos were not copied! May be you don&apos;t have access rights!</source>
         <translation>Фото не были скопированы! Возможно, нет прав на папку!</translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="184"/>
+        <location filename="additionpage.cpp" line="185"/>
         <source>Successfully</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="additionpage.cpp" line="184"/>
+        <location filename="additionpage.cpp" line="185"/>
         <source>Photos were added to DB</source>
         <translation>Фото были добавлены в БД</translation>
+    </message>
+    <message>
+        <location filename="additionpage.cpp" line="190"/>
+        <source>Photos were not added to DB!</source>
+        <translation>Фотографии не были добавлены в БД!</translation>
     </message>
 </context>
 <context>

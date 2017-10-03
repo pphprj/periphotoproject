@@ -6,6 +6,7 @@ DatabaseManager::DatabaseManager()
 {
     _db = QSqlDatabase::addDatabase("QODBC");
     _dateTimeFormat = "dd-MM-yyyy";
+    //_dateTimeFormat = "yyyy-MM-dd";
 }
 
 DatabaseManager::~DatabaseManager()
@@ -588,33 +589,45 @@ bool DatabaseManager::InsertValuesToPhotos(int projectID,
     queryString += ")";
 
     QSqlQuery query;
-    bool result = true;
     for (int i = 0; i < photos.length(); i++)
     {
+        bool result = false;
+
         FileInfoStruct file = photos[i];
         if (!file.fileInfo.filePath().isEmpty())
         {
-            if (!file.duplicated)
+            if (file.duplicated)
             {
+                //try to update
+                int photoId = CheckPhoto(file.fileInfo.filePath());
+                if (photoId > 0)
+                {
+                    result = UpdatePhotoAttributes(formworkSystems, features, categories, photoId);
+                }
+            }
+
+            if (!result)
+            {
+                //if update was failed or file was no added
                 QString fileDate = file.lastModified.date().toString(_dateTimeFormat);
                 QString temp = queryString.arg(fileDate, file.fileInfo.filePath());
                 query.prepare(temp);
                 qDebug() << temp;
                 result = query.exec();
             }
-            else
-            {
-                int photoId = CheckPhoto(file.fileInfo.filePath());
-                if (photoId != -1)
-                {
-                    UpdatePhotoAttributes(formworkSystems, features, categories, photoId);
-                }
-            }
+
             if (result)
             {
                 InsertPreview(query.lastInsertId().toInt(), previews[i]);
             }
+
             qDebug() << "insert result " << result << query.lastError().text();
+
+            if (!result)
+            {
+                //quit if addition was not able
+                return result;
+            }
         }
     }
 

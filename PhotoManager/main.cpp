@@ -6,8 +6,9 @@ void debugMessageOutput(QtMsgType type, const QMessageLogContext &context, const
     QFile outFile("periphotoproject.log");
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
 
+    QDateTime nowTime = QDateTime::currentDateTime();
     QTextStream textStream(&outFile);
-    textStream << msg << endl;
+    textStream << nowTime.toString() << " " << msg << endl;
 }
 
 int main(int argc, char *argv[])

@@ -146,6 +146,7 @@ void AdditionPage::finishedCopy()
 
     if (files.isEmpty())
     {
+        qDebug() << "files were not copied";
         QMessageBox::critical(nullptr, tr("Error!"), tr("Photos were not copied! May be you don't have access rights!"));
         return;
     }
@@ -184,5 +185,10 @@ void AdditionPage::finishedCopy()
         QMessageBox::information(nullptr, tr("Successfully"), tr("Photos were added to DB"));
         ClearInterface();
     }
+    else
+    {
+         QMessageBox::critical(nullptr, tr("Error!"), tr("Photos were not added to DB!"));
+    }
+
     qDebug() << "finishedCopy end" << result;
 }
