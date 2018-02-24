@@ -488,8 +488,12 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     }
 
 
+    qDebug() << "begin select " << QTime::currentTime().toString();
     if (query.exec(sqlQuery))
     {
+        qDebug() << "end select " << QTime::currentTime().toString();
+
+        int rowIndex = 0;
         while (query.next())
         {
             SearchResult fnp;
@@ -504,15 +508,22 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.companyName = query.value("CompanyName").toString();
             fnp.address = query.value("Address").toString();
             fnp.description = query.value("Description").toString();
+            fnp.formworksSystems = query.value("FormworkSystems").toString();
+            fnp.features = query.value("Features").toString();
+            emit AddSearchResultToTable(rowIndex, fnp);
             photos.push_back(fnp);
+            rowIndex += 1;
         }
         result = true;
     }
 
     qDebug() << sqlQuery;
     qDebug() << query.lastError().text();
+    qDebug() << "end geting results " << QTime::currentTime().toString();
 
     SelectPreviews(photos);
+
+    qDebug() << "end selecting previews " << QTime::currentTime().toString();
 
     return result;
 }

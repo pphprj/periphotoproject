@@ -16,6 +16,7 @@
 SearchPage::SearchPage(DatabaseManager *databaseManager, FileManager *fileManager, Configurator *cfg, QObject *parent)
     : Page(databaseManager, fileManager, cfg, parent)
 {
+    connect(databaseManager, SIGNAL(AddSearchResultToTable(int,SearchResult)), this, SLOT(addSearchResultToTable(int,SearchResult)));
 }
 
 SearchPage::~SearchPage()
@@ -70,6 +71,8 @@ void SearchPage::SearchPhotos()
     QDate intervalBegin = _beginInterval->date();
     QDate intervalEnd = _endInterval->date();
 
+    fillSearchResultTable(0);
+
     bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate, company, address,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
                                             intervalBegin, intervalEnd,
@@ -81,87 +84,19 @@ void SearchPage::SearchPhotos()
         return;
     }
 
-    _tableResults->setRowCount(_searchResult.length());
-    QStringList headers;
-    headers << ""
-            << tr("Preview")
-            << tr("Photo date")
-            << tr("Project No")
-            << tr("Project name")
-            << tr("Company")
-            << tr("Address")
-            << tr("Formwork systems")
-            << tr("Features")
-            << tr("Description");
 
-    if (_cfg->ShowFilePathColumn()) headers << tr("File path");
-
-    _tableResults->setHorizontalHeaderLabels(headers);
 
     qDebug() << "Search result " << _searchResult.length();
 
-    for (int i = 0; i < _searchResult.length(); i++)
-    {
-       SearchResult fnp = _searchResult[i];
-       qDebug() << fnp;
+    qDebug() << "begin showing results " << QTime::currentTime().toString();
 
-       QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
+   // for (int i = 0; i < _searchResult.length(); i++)
+  //  {
+   //     addSearchResultToTable(i, _searchResult[i]);
+   // }
 
-       QString text = fnp.projectName;
-       QTableWidgetItem* itemName = new QTableWidgetItem(text);
+    qDebug() << "end showing results " << QTime::currentTime().toString();
 
-       QTableWidgetItem* itemImage = new QTableWidgetItem();
-       if (!fnp.previewPath.isEmpty())
-       {
-           itemImage->setSizeHint(QSize(100, 100));
-           QPixmap pm(fnp.previewPath);
-          // itemImage->setIcon(QIcon(pm));
-           itemImage->setData(Qt::DecorationRole, pm);
-       }
-
-       QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString("yyyy-MM-dd"));
-
-       QVector<FormworkSystem> selectedFormworks;
-       _searcher->SelectedFormworkSystems(selectedFormworks, fnp.photoId);
-       QString formworks = TableAbstractElemManager::CreateNamesList(selectedFormworks);
-       QTableWidgetItem* itemFormworks = new QTableWidgetItem(formworks);
-
-
-       QVector<Feature> selectedFeatures;
-       _searcher->SelectedFeatures(selectedFeatures, fnp.photoId);
-       QString features = TableAbstractElemManager::CreateNamesList(selectedFeatures);
-       QTableWidgetItem* itemFeatures = new QTableWidgetItem(features);
-
-       QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
-       QTableWidgetItem* itemAddress = new QTableWidgetItem(fnp.address);
-       QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
-       QTableWidgetItem* itemFilePath = new QTableWidgetItem(fnp.filePath);
-
-       QTableWidgetItem* itemHidden = new QTableWidgetItem(QString::number(i));
-
-       itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
-       itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
-       itemName->setFlags(itemName->flags() ^ Qt::ItemIsEditable);
-       itemFormworks->setFlags(itemFormworks->flags() ^ Qt::ItemIsEditable);
-       itemFeatures->setFlags(itemFeatures->flags() ^ Qt::ItemIsEditable);
-       itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
-       itemAddress->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
-       itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
-       itemFilePath->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
-
-       _tableResults->setItem(i, 0, itemHidden);
-       _tableResults->setItem(i, 1, itemImage);
-       _tableResults->setItem(i, 2, itemDate);
-       _tableResults->setItem(i, 3, itemProjecNo);
-       _tableResults->setItem(i, 4, itemName);
-       _tableResults->setItem(i, 5, itemCompany);
-       _tableResults->setItem(i, 6, itemAddress);
-       _tableResults->setItem(i, 7, itemFormworks);
-       _tableResults->setItem(i, 8, itemFeatures);
-       _tableResults->setItem(i, 9, itemDescription);
-       if (_cfg->ShowFilePathColumn()) _tableResults->setItem(i, 10, itemFilePath);
-
-    }
     QHeaderView* header = _tableResults->verticalHeader();
     header->setSectionResizeMode(QHeaderView::Fixed);
     header->setDefaultSectionSize(100);
@@ -480,7 +415,13 @@ void SearchPage::showSelected(QTableWidgetItem *item)
 
         const QString explorer = QLatin1String("explorer.exe");
         QString param = QLatin1String("/select,");
-        QString filePath = _searchResult[index].filePath.replace("//", "/");
+        QString filePath = _searchResult[index].filePath;
+        //delete all duplicates //
+        while (filePath.indexOf("//") != -1)
+        {
+            filePath.replace("//", "/");
+        }
+
         if (filePath[0] == '/')
         {
             filePath = "/" + filePath;
@@ -530,4 +471,90 @@ void SearchPage::checkBoxClickedSlot()
             _tableResults->setRowHidden(item->row(), false);
         }
     }
+}
+
+void SearchPage::addSearchResultToTable(int rowIndex, SearchResult fnp)
+{
+   // qDebug() << fnp;
+    _tableResults->insertRow(rowIndex);
+
+    QTableWidgetItem* itemProjecNo = new QTableWidgetItem(fnp.projectNo);
+
+    QString text = fnp.projectName;
+    QTableWidgetItem* itemName = new QTableWidgetItem(text);
+
+    QTableWidgetItem* itemImage = new QTableWidgetItem();
+    if (!fnp.previewPath.isEmpty())
+    {
+        itemImage->setSizeHint(QSize(100, 100));
+        QPixmap pm(fnp.previewPath);
+        itemImage->setData(Qt::DecorationRole, pm);
+    }
+
+    QTableWidgetItem* itemDate = new QTableWidgetItem(fnp.photoDate.toString("yyyy-MM-dd"));
+
+    QVector<FormworkSystem> selectedFormworks;
+    _searcher->SelectedFormworkSystems(selectedFormworks, fnp.formworksSystems);
+    QString formworks = TableAbstractElemManager::CreateNamesList(selectedFormworks);
+    QTableWidgetItem* itemFormworks = new QTableWidgetItem(formworks);
+
+
+    QVector<Feature> selectedFeatures;
+    _searcher->SelectedFeatures(selectedFeatures, fnp.features);
+    QString features = TableAbstractElemManager::CreateNamesList(selectedFeatures);
+    QTableWidgetItem* itemFeatures = new QTableWidgetItem(features);
+
+    QTableWidgetItem* itemCompany = new QTableWidgetItem(fnp.companyName);
+    QTableWidgetItem* itemAddress = new QTableWidgetItem(fnp.address);
+    QTableWidgetItem* itemDescription = new QTableWidgetItem(fnp.description);
+    QTableWidgetItem* itemFilePath = new QTableWidgetItem(fnp.filePath);
+
+    QTableWidgetItem* itemHidden = new QTableWidgetItem(QString::number(rowIndex));
+
+    itemDate->setFlags(itemDate->flags() ^ Qt::ItemIsEditable);
+    itemImage->setFlags(itemImage->flags() ^ Qt::ItemIsEditable);
+    itemName->setFlags(itemName->flags() ^ Qt::ItemIsEditable);
+    itemFormworks->setFlags(itemFormworks->flags() ^ Qt::ItemIsEditable);
+    itemFeatures->setFlags(itemFeatures->flags() ^ Qt::ItemIsEditable);
+    itemCompany->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
+    itemAddress->setFlags(itemCompany->flags() ^ Qt::ItemIsEditable);
+    itemDescription->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
+    itemFilePath->setFlags(itemDescription->flags() ^ Qt::ItemIsEditable);
+
+    _tableResults->setItem(rowIndex, 0, itemHidden);
+    _tableResults->setItem(rowIndex, 1, itemImage);
+    _tableResults->setItem(rowIndex, 2, itemDate);
+    _tableResults->setItem(rowIndex, 3, itemProjecNo);
+    _tableResults->setItem(rowIndex, 4, itemName);
+    _tableResults->setItem(rowIndex, 5, itemCompany);
+    _tableResults->setItem(rowIndex, 6, itemAddress);
+    _tableResults->setItem(rowIndex, 7, itemFormworks);
+    _tableResults->setItem(rowIndex, 8, itemFeatures);
+    _tableResults->setItem(rowIndex, 9, itemDescription);
+
+    if (_cfg->ShowFilePathColumn()) _tableResults->setItem(rowIndex, 10, itemFilePath);
+}
+
+void SearchPage::fillSearchResultTable(int searchResultCount)
+{
+    if (searchResultCount == -1)
+    {
+        return;
+    }
+    _tableResults->setRowCount(searchResultCount);
+    QStringList headers;
+    headers << ""
+            << tr("Preview")
+            << tr("Photo date")
+            << tr("Project No")
+            << tr("Project name")
+            << tr("Company")
+            << tr("Address")
+            << tr("Formwork systems")
+            << tr("Features")
+            << tr("Description");
+
+    if (_cfg->ShowFilePathColumn()) headers << tr("File path");
+
+    _tableResults->setHorizontalHeaderLabels(headers);
 }

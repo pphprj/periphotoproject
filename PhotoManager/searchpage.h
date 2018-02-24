@@ -35,6 +35,8 @@ public:
     int GetSearchResultIndexByItem(QTableWidgetItem* item);
     QTableWidgetItem* GetItemByIndex(int index);
 
+
+
 public slots:
     void showContextMenu(QPoint pos);
 
@@ -46,6 +48,9 @@ public slots:
 
     void sectionClickedSlot(int column);
     void checkBoxClickedSlot();
+
+    void addSearchResultToTable(int rowIndex, SearchResult fnp);
+    void fillSearchResultTable(int searchResultCount);
 private:
     void RemoveItem(QTableWidgetItem* item);
 

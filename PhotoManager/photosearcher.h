@@ -14,8 +14,10 @@ public:
                           QDate& intervalBegin, QDate& intervalEnd,
                           QVector<SearchResult>& photos);
 
+    bool SelectedFormworkSystems(QVector<FormworkSystem>& selectedFormworks, const QString& formworksSystems);
     bool SelectedFormworkSystems(QVector<FormworkSystem>& selectedFormworks, int photoId);
-    bool SelectedFeatures(QVector<Feature>& selectedFeatures, int photoId);
+    bool SelectedFeatures(QVector<Feature>& selectedFeatures, const QString& features);
+    bool SelectedFeatures(QVector<Feature> &selectedFeatures, int photoId);
     bool SelectedCategories(QVector<Categorie>& selectedCategories, int photoId);
 
     bool UpdatePhotoAttributes(QVector<FormworkSystem>& selectedFormworks, QVector<Feature>& selectedFeatures, QVector<Categorie>& selectedCategories, int photoId);

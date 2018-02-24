@@ -32,7 +32,6 @@ public slots:
 protected:
     DatabaseManager* _dbm;
 
-private:
     QVector<FormworkSystem> _formworkSystems;
     QVector<Feature> _features;
     QVector<Categorie> _categories;

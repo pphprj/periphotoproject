@@ -19,6 +19,8 @@ struct SearchResult
 
     int photoId;
     QString categories;
+    QString formworksSystems;
+    QString features;
     QString projectName;
     QString projectNo;
     QString companyName;

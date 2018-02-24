@@ -34,10 +34,81 @@ bool PhotoSearcher::SearchPhotos(QString &projectNo,
     return result;
 }
 
+bool PhotoSearcher::SelectedFormworkSystems(QVector<FormworkSystem> &selectedFormworks, const QString& formworksSystems)
+{
+    QString elemId = "";
+    for (int i = 0; i < formworksSystems.length(); i++)
+    {
+        if (formworksSystems[i] != ';')
+        {
+            elemId += formworksSystems[i];
+        }
+        else
+        {
+            int photoId = elemId.toInt();
+            for (int i = 0; i < _formworkSystems.length(); i++)
+            {
+                if (_formworkSystems[i].GetID() == photoId)
+                {
+                    selectedFormworks.push_back(_formworkSystems[i]);
+                }
+            }
+            elemId = "";
+        }
+    }
+
+    //for last or only one
+    int photoId = elemId.toInt();
+    for (int i = 0; i < _formworkSystems.length(); i++)
+    {
+        if (_formworkSystems[i].GetID() == photoId)
+        {
+            selectedFormworks.push_back(_formworkSystems[i]);
+        }
+    }
+
+    return true;
+}
+
 bool PhotoSearcher::SelectedFormworkSystems(QVector<FormworkSystem> &selectedFormworks, int photoId)
 {
-    bool result = _dbm->SelectFormworkSystemsByPhotoId(selectedFormworks, photoId);
-    return result;
+    return _dbm->SelectFormworkSystemsByPhotoId(selectedFormworks, photoId);
+}
+
+bool PhotoSearcher::SelectedFeatures(QVector<Feature> &selectedFeatures, const QString& features)
+{
+    QString elemId = "";
+    for (int i = 0; i < features.length(); i++)
+    {
+        if (features[i] != ';')
+        {
+            elemId += features[i];
+        }
+        else
+        {
+            int photoId = elemId.toInt();
+            for (int i = 0; i < _features.length(); i++)
+            {
+                if (_features[i].GetID() == photoId)
+                {
+                    selectedFeatures.push_back(_features[i]);
+                }
+            }
+            elemId = "";
+        }
+    }
+
+    //for last or only one
+    int photoId = elemId.toInt();
+    for (int i = 0; i < _features.length(); i++)
+    {
+        if (_features[i].GetID() == photoId)
+        {
+            selectedFeatures.push_back(_features[i]);
+        }
+    }
+
+    return true;
 }
 
 bool PhotoSearcher::SelectedFeatures(QVector<Feature> &selectedFeatures, int photoId)

@@ -11,8 +11,10 @@
 #include "projectname.h"
 #include "fileinfostruct.h"
 
-class DatabaseManager
+class DatabaseManager : public QObject
 {
+    Q_OBJECT
+
 public:
     DatabaseManager();
     ~DatabaseManager();
@@ -84,6 +86,9 @@ public:
     int CheckProjectNo(const QString& projectNo);
     int CheckPhoto(const QString& fileName);
     bool CheckTable(const QString& tableName);
+
+signals:
+    void AddSearchResultToTable(int row, SearchResult fnp);
 
 private:
 
