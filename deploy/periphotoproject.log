@@ -2903,3 +2903,25 @@ db connect result  true
 QMetaObject::connectSlotsByName: No matching signal for on_tableWidgetPhotosSearch_doubleClicked(QModelIndex)
 Init search page
 QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+30 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x750+8+30 (frame: 8, 30, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x575, maximum size: 16777215x16777215).
+Вс фев 25 10:58:33 2018 prject dir  "C:/Романенко Артем"
+Вс фев 25 10:58:33 2018 remote dir  "//HROMANNOTE/Test"
+Вс фев 25 10:58:33 2018 last folder  "C:/Users/Public/Pictures/Sample Pictures"
+Вс фев 25 10:58:33 2018 compression rate  80
+Вс фев 25 10:58:33 2018 edit DB tab  false
+Вс фев 25 10:58:33 2018 delete button  false
+Вс фев 25 10:58:33 2018 delete password  "ZjkzNjg4ZTExNDc1Yjg5OWM2MTczZjM5OTI3ODg4ZTI="
+Вс фев 25 10:58:33 2018 filepath column false
+Вс фев 25 10:58:50 2018 QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work.
+Вс фев 25 10:58:50 2018 QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
+Вс фев 25 10:58:51 2018 " "
+Вс фев 25 10:58:51 2018 " "
+Вс фев 25 10:58:51 2018 "ALTER TABLE Projects ADD CompanyName VARCHAR(50)"
+Вс фев 25 10:58:51 2018 "duplicate column name: CompanyName Unable to execute statement"
+Вс фев 25 10:58:51 2018 "ALTER TABLE Projects ADD Address VARCHAR(200)"
+Вс фев 25 10:58:51 2018 "duplicate column name: Address Unable to execute statement"
+Вс фев 25 10:58:51 2018 "ALTER TABLE Photos ALTER COLUMN FilePath VARCHAR(MAX)"
+Вс фев 25 10:58:51 2018 "near \"ALTER\": syntax error Unable to execute statement"
+Вс фев 25 10:58:51 2018 db connect result  true
+Вс фев 25 10:58:51 2018 QMetaObject::connectSlotsByName: No matching signal for on_tableWidgetPhotosSearch_doubleClicked(QModelIndex)
+Вс фев 25 10:58:51 2018 Init search page
+Вс фев 25 10:58:51 2018 QWindowsWindow::setGeometry: Unable to set geometry 1024x768+8+30 on QWidgetWindow/'MainWindowWindow'. Resulting geometry:  1024x750+8+30 (frame: 8, 30, 8, 8, custom margin: 0, 0, 0, 0, minimum size: 788x575, maximum size: 16777215x16777215).
