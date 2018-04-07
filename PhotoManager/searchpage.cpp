@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QProcessEnvironment>
 
+#include <qt_windows.h>
+
 #include "resultcontextmenu.h"
 #include "attributeseditdialog.h"
 #include "confirmdeletedialog.h"
@@ -17,11 +19,11 @@ SearchPage::SearchPage(DatabaseManager *databaseManager, FileManager *fileManage
     : Page(databaseManager, fileManager, cfg, parent)
 {
     connect(databaseManager, SIGNAL(AddSearchResultToTable(int,SearchResult)), this, SLOT(addSearchResultToTable(int,SearchResult)));
+    connect(databaseManager, SIGNAL(FinishSearch()), this, SLOT(finishSearch()));
 }
 
 SearchPage::~SearchPage()
 {
-
 }
 
 void SearchPage::CreateLoader()
@@ -84,18 +86,7 @@ void SearchPage::SearchPhotos()
         return;
     }
 
-
-
     qDebug() << "Search result " << _searchResult.length();
-
-    qDebug() << "begin showing results " << QTime::currentTime().toString();
-
-   // for (int i = 0; i < _searchResult.length(); i++)
-  //  {
-   //     addSearchResultToTable(i, _searchResult[i]);
-   // }
-
-    qDebug() << "end showing results " << QTime::currentTime().toString();
 
     QHeaderView* header = _tableResults->verticalHeader();
     header->setSectionResizeMode(QHeaderView::Fixed);
@@ -416,20 +407,29 @@ void SearchPage::showSelected(QTableWidgetItem *item)
         const QString explorer = QLatin1String("explorer.exe");
         QString param = QLatin1String("/select,");
         QString filePath = _searchResult[index].filePath;
+
+        qDebug() << "File path before " << filePath;
+
         //delete all duplicates //
         while (filePath.indexOf("//") != -1)
         {
-            filePath.replace("//", "/");
+            filePath = filePath.replace(QString("//"), QString("/"));
         }
+
+        qDebug() << "File path after " << filePath;
 
         if (filePath[0] == '/')
         {
             filePath = "/" + filePath;
         }
+
+        filePath = "\"" + filePath + "\"";
+
         param += QDir::toNativeSeparators(filePath);
         QString command = explorer + " " + param;
         qDebug() << "Show command " << command;
-        QProcess::startDetached(command);
+
+        ShellExecute(0, L"open", L"explorer.exe", param.toStdWString().c_str(), 0, SW_NORMAL);
     }
     catch (QException& exp)
     {
@@ -557,4 +557,9 @@ void SearchPage::fillSearchResultTable(int searchResultCount)
     if (_cfg->ShowFilePathColumn()) headers << tr("File path");
 
     _tableResults->setHorizontalHeaderLabels(headers);
+}
+
+void SearchPage::finishSearch()
+{
+    emit searchFinished();
 }

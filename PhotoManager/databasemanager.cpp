@@ -5,8 +5,8 @@
 DatabaseManager::DatabaseManager()
 {
     _db = QSqlDatabase::addDatabase("QODBC");
-    _dateTimeFormat = "dd-MM-yyyy";
-    //_dateTimeFormat = "yyyy-MM-dd";
+    //_dateTimeFormat = "dd-MM-yyyy";
+    _dateTimeFormat = "yyyy-MM-dd";
 }
 
 DatabaseManager::~DatabaseManager()
@@ -510,7 +510,10 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.description = query.value("Description").toString();
             fnp.formworksSystems = query.value("FormworkSystems").toString();
             fnp.features = query.value("Features").toString();
+            fnp.previewPath = SelectPreview(fnp.photoId);
+
             emit AddSearchResultToTable(rowIndex, fnp);
+
             photos.push_back(fnp);
             rowIndex += 1;
         }
@@ -521,9 +524,26 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     qDebug() << query.lastError().text();
     qDebug() << "end geting results " << QTime::currentTime().toString();
 
-    SelectPreviews(photos);
+    emit FinishSearch();
 
-    qDebug() << "end selecting previews " << QTime::currentTime().toString();
+    return result;
+}
+
+QString DatabaseManager::SelectPreview(int photoId)
+{
+    QString result = "";
+    QString sqlQuery = "SELECT FilePath FROM Previews WHERE PhotoID = " + QString::number(photoId);
+    QSqlQuery query;
+    if (query.exec(sqlQuery))
+    {
+        while (query.next())
+        {
+            result = query.value("FilePath").toString();
+        }
+    }
+
+    qDebug() << sqlQuery;
+    qDebug() << query.lastError().text();
 
     return result;
 }

@@ -42,6 +42,7 @@ public:
                       const QDate& intervalEnd,
                       QVector<SearchResult>& photos);
     bool SelectPreviews(QVector<SearchResult>& photos);
+    QString SelectPreview(int photoId);
     bool SelectFormworkSystemsByPhotoId(QVector<FormworkSystem>& elems, int photoId);
     bool SelectFeaturesByPhotoId(QVector<Feature>& elems, int photoId);
     bool SelectCategoriesByPhotoId(QVector<Categorie>& elems, int photoId);
@@ -89,6 +90,7 @@ public:
 
 signals:
     void AddSearchResultToTable(int row, SearchResult fnp);
+    void FinishSearch();
 
 private:
 

@@ -14,6 +14,8 @@
 #include "searchpage.h"
 #include "editdbpage.h"
 
+#include "busyindicator.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -88,6 +90,8 @@ private slots:
 
     void on_tableWidgetSearchResult_doubleClicked(const QModelIndex &index);
 
+    void finishSearch();
+
 private:
     void InitDatabase();
     void InitInterface();
@@ -111,6 +115,8 @@ private:
     AdditionPage* _addPage;
     SearchPage* _searchPage;
     EditDBPage* _editDBPage;
+
+    BusyIndicator* _busy;
 };
 
 #endif // MAINWINDOW_H

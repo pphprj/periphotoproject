@@ -11,8 +11,8 @@ AboutWindow::AboutWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QString version = "1.4.7";
-    QString build = "build 2018-02-25 11:00";
+    QString version = "1.4.8";
+    QString build = "build 2018-04-07 21:00";
     ui->labelVersion->setText(version + " " + build);
 
     ui->labelIcon->setPixmap(QPixmap(":/periphotoproject.ico"));

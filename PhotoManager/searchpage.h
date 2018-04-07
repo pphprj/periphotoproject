@@ -20,7 +20,6 @@ public:
     void InitSearchPageInterface(QDateEdit* beginInterval, QDateEdit* endInterval, QTableWidget* tableResults,
                                  const QVector<QCheckBox*>& filterCategories, QCheckBox* filterByDate, QDateEdit* filterDate);
 
-    void SearchPhotos();
     void SavePhotos();
     void PrintPhotos();
     void DeletePhotos();
@@ -35,9 +34,9 @@ public:
     int GetSearchResultIndexByItem(QTableWidgetItem* item);
     QTableWidgetItem* GetItemByIndex(int index);
 
-
-
 public slots:
+    void SearchPhotos();
+
     void showContextMenu(QPoint pos);
 
     void saveSelected(QTableWidgetItem* item);
@@ -51,8 +50,12 @@ public slots:
 
     void addSearchResultToTable(int rowIndex, SearchResult fnp);
     void fillSearchResultTable(int searchResultCount);
+    void finishSearch();
 private:
     void RemoveItem(QTableWidgetItem* item);
+
+signals:
+    void searchFinished();
 
 private:
     QDateEdit* _beginInterval;

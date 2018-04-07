@@ -134,6 +134,8 @@ void MainWindow::InitInterface()
 
     _editDBPage = new EditDBPage(_dbm, _cfg, this);
     _editDBPage->InitInterface(ui->tableWidgetSystems, ui->tableWidgetFeatures);
+
+    connect(_searchPage, SIGNAL(searchFinished()), this, SLOT(finishSearch()));
 }
 
 void MainWindow::LoadDatabase()
@@ -366,6 +368,9 @@ void MainWindow::on_pushButtonSearch_clicked()
 {
     ClearInterface(1);
 
+    _busy = new BusyIndicator(this);
+    _busy->show();
+
     _searchPage->SearchPhotos();
 }
 
@@ -492,4 +497,10 @@ void MainWindow::on_tableWidgetSearchResult_doubleClicked(const QModelIndex &ind
 {
     QTableWidgetItem* item = ui->tableWidgetSearchResult->item(index.row(), index.column());
     _searchPage->ShowItemPreview(item);
+}
+
+void MainWindow::finishSearch()
+{
+    _busy->close();
+    delete _busy;
 }
