@@ -7,7 +7,7 @@ PhotoSearcher::PhotoSearcher(DatabaseManager* manager, QObject* parent) :
 
 }
 
-bool PhotoSearcher::SearchPhotos(QString &projectNo,
+void PhotoSearcher::SearchPhotos(QString &projectNo,
                                  QString &projectName,
                                  QDate &projectDate,
                                  QString& companyName,
@@ -17,9 +17,21 @@ bool PhotoSearcher::SearchPhotos(QString &projectNo,
                                  QVector<Categorie> &selectedCategories,
                                  QDate& intervalBegin,
                                  QDate& intervalEnd,
-                                 QVector<SearchResult>& photos)
+                                 QVector<SearchResult>* photos)
 {
-    bool result = _dbm->SelectPhotos(projectNo,
+    _projectNo = projectNo;
+    _projectName = projectName;
+    _projectDate = projectDate;
+    _companyName = companyName;
+    _address = address;
+    _selectedFormworks = selectedFormworks;
+    _selectedFeatures = selectedFeatures;
+    _selectedCategories = selectedCategories;
+    _intervalBegin = intervalBegin;
+    _intervalEnd = intervalEnd;
+    _photos = photos;
+
+   /* bool result = _dbm->SelectPhotos(projectNo,
                                      projectName,
                                      projectDate,
                                      companyName,
@@ -29,9 +41,8 @@ bool PhotoSearcher::SearchPhotos(QString &projectNo,
                                              selectedCategories,
                                              intervalBegin,
                                              intervalEnd,
-                                             photos);
+                                             photos);*/
 
-    return result;
 }
 
 bool PhotoSearcher::SelectedFormworkSystems(QVector<FormworkSystem> &selectedFormworks, const QString& formworksSystems)
@@ -132,3 +143,18 @@ bool PhotoSearcher::UpdatePhotoAttributes(QVector<FormworkSystem> &selectedFormw
     return _dbm->UpdatePhotoAttributes(selectedFws, selectedFts, selectedCtgs, photoId);
 }
 
+void PhotoSearcher::process()
+{
+    bool result = _dbm->SelectPhotos(_projectNo,
+                                     _projectName,
+                                     _projectDate,
+                                     _companyName,
+                                     _address,
+                                     _selectedFormworks,
+                                     _selectedFeatures,
+                                     _selectedCategories,
+                                     _intervalBegin,
+                                     _intervalEnd,
+                                     _photos);
+    emit finished();
+}

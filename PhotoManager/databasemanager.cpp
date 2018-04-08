@@ -339,7 +339,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
                                    const QVector<Categorie> &categories,
                                    const QDate &intervalBegin,
                                    const QDate &intervalEnd,
-                                   QVector<SearchResult> &photos)
+                                   QVector<SearchResult> *photos)
 {
     if (!_db.isOpen()) return false;
 
@@ -512,9 +512,9 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
             fnp.features = query.value("Features").toString();
             fnp.previewPath = SelectPreview(fnp.photoId);
 
-            emit AddSearchResultToTable(rowIndex, fnp);
+           // emit AddSearchResultToTable(rowIndex, fnp);
 
-            photos.push_back(fnp);
+            photos->push_back(fnp);
             rowIndex += 1;
         }
         result = true;
@@ -524,7 +524,7 @@ bool DatabaseManager::SelectPhotos(const QString &projectNo,
     qDebug() << query.lastError().text();
     qDebug() << "end geting results " << QTime::currentTime().toString();
 
-    emit FinishSearch();
+ //   emit FinishSearch();
 
     return result;
 }

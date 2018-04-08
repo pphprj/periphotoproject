@@ -75,24 +75,19 @@ void SearchPage::SearchPhotos()
 
     fillSearchResultTable(0);
 
-    bool result = _searcher->SearchPhotos(projectNo, projectName, projectDate, company, address,
+     _searcher->SearchPhotos(projectNo, projectName, projectDate, company, address,
                                             _selectedSystems, _selectedFeatures, GetSelectedCategories(),
                                             intervalBegin, intervalEnd,
-                                            _searchResult);
+                                            &_searchResult);
 
-    if (!result)
-    {
-        qDebug() << "Search was crashed";
-        return;
-    }
+    QThread* thread = new QThread();
+    _searcher->moveToThread(thread);
+    connect(thread, SIGNAL(started()), _searcher, SLOT(process()));
+    connect(_searcher, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(_searcher, SIGNAL(finished()), this, SLOT(finishSearch()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
-    qDebug() << "Search result " << _searchResult.length();
-
-    QHeaderView* header = _tableResults->verticalHeader();
-    header->setSectionResizeMode(QHeaderView::Fixed);
-    header->setDefaultSectionSize(100);
-    _tableResults->resizeColumnsToContents();
-    _tableResults->setColumnHidden(0, true);
+    thread->start();
 }
 
 void SearchPage::SavePhotos()
@@ -561,5 +556,16 @@ void SearchPage::fillSearchResultTable(int searchResultCount)
 
 void SearchPage::finishSearch()
 {
+    for (int i = 0; i < _searchResult.length(); i++)
+    {
+        addSearchResultToTable(i, _searchResult[i]);
+    }
+
+    QHeaderView* header = _tableResults->verticalHeader();
+    header->setSectionResizeMode(QHeaderView::Fixed);
+    header->setDefaultSectionSize(100);
+    _tableResults->resizeColumnsToContents();
+    _tableResults->setColumnHidden(0, true);
+
     emit searchFinished();
 }
